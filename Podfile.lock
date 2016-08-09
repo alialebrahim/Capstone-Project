@@ -1,0 +1,33 @@
+PODS:
+  - Alamofire (3.4.0)
+  - Cosmos (1.2.2)
+  - RAMAnimatedTabBarController (1.4.0)
+  - SwiftyJSON (2.3.2)
+  - TextFieldEffects (1.2.0)
+
+DEPENDENCIES:
+  - Alamofire (~> 3.4)
+  - Cosmos (~> 1.2)
+  - RAMAnimatedTabBarController
+  - SwiftyJSON (from `https://github.com/SwiftyJSON/SwiftyJSON.git`)
+  - TextFieldEffects
+
+EXTERNAL SOURCES:
+  SwiftyJSON:
+    :git: https://github.com/SwiftyJSON/SwiftyJSON.git
+
+CHECKOUT OPTIONS:
+  SwiftyJSON:
+    :commit: 73670b94292b8d8496c398a973f56ac67789ba9f
+    :git: https://github.com/SwiftyJSON/SwiftyJSON.git
+
+SPEC CHECKSUMS:
+  Alamofire: c19a627cefd6a95f840401c49ab1f124e07f54ee
+  Cosmos: 87c49100c69d2cb2eebfa4eb8d1e801fe29ff774
+  RAMAnimatedTabBarController: 6f221d7dc647b4266c9e05618c84b5639f190297
+  SwiftyJSON: 04ccea08915aa0109039157c7974cf0298da292a
+  TextFieldEffects: bc4fd3bd557321bd61a0762f3f50965477a36f62
+
+PODFILE CHECKSUM: 84459167c224ebd7e8cc09f5141c4416c5333a4d
+
+COCOAPODS: 1.0.0
