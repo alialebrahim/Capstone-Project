@@ -6,13 +6,18 @@
 //  Copyright © 2016 Ali Alebrahim. All rights reserved.
 //
 
+
+//TODO: UIViewController with UITableView instead
+
 import UIKit
 
 protocol PredefinedServicesDelegate {
     func didSwipeRight()
 }
-class PredefinedServicesVC: UITableViewController {
+class OfferedServicesVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
+    //MARK: IBOutlets
+    @IBOutlet weak var tableView: UITableView!
     //MARK: Variables
     let cellID = "ServiceCell"
     let cellSpacingHeight: CGFloat = 10
@@ -26,7 +31,9 @@ class PredefinedServicesVC: UITableViewController {
         
         return label
     }()
-    var tableData = [Int]()//["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15"]
+    var tableData = ["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15"]
+    lazy var refreshControl = UIRefreshControl()
+    
     var serviceID = -2
     
     // MARK: ViewController lifecycle
@@ -34,6 +41,7 @@ class PredefinedServicesVC: UITableViewController {
         super.viewDidLoad()
         setup()
         setupTableView()
+        congigureNavigationBar()
     }
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
@@ -46,24 +54,38 @@ class PredefinedServicesVC: UITableViewController {
     }
     // MARK: Functions
     func setup() {
+        automaticallyAdjustsScrollViewInsets = false
         
         //swipe gesture needed to navigate between tabs
-        let rightSwipeGesture = UISwipeGestureRecognizer(target: self, action:#selector(PredefinedServicesVC.rightSwipeAction))
-        rightSwipeGesture.direction = .Right
-        view.addGestureRecognizer(rightSwipeGesture)
+//        let rightSwipeGesture = UISwipeGestureRecognizer(target: self, action:#selector(PredefinedServicesVC.rightSwipeAction))
+//        rightSwipeGesture.direction = .Right
+//        view.addGestureRecognizer(rightSwipeGesture)
         /*if there is no entry create a label to nofify the user to add services*/
         if tableData.count == 0 {
             addMessageLabel()
         }
     }
-    func setupTableView() {
+    func congigureNavigationBar() {
+        navigationItem.title = "Offered Services"
         
+        let addBarItem = UIBarButtonItem(barButtonSystemItem: .Add, target: self, action: #selector(addService))
+        
+        navigationItem.rightBarButtonItem = addBarItem
+    }
+    func setupTableView() {
+        tableView.delegate = self
+        tableView.dataSource = self
         //register the cell xib file for this tableview
         tableView.registerNib(UINib(nibName: "predefinedServiceCell", bundle: nil), forCellReuseIdentifier: "ServiceCell")
         tableView.rowHeight = 129
-        //setting refresh controller
-        refreshControl?.attributedTitle = NSAttributedString(string: "Pull to refresh")
-        refreshControl?.addTarget(self, action: #selector(PredefinedServicesVC.refreshTableView), forControlEvents: .ValueChanged)
+        //TODO: refresh controller
+        refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh")
+        refreshControl.addTarget(self, action: #selector(refreshTableView), forControlEvents: .ValueChanged)
+        tableView.addSubview(refreshControl)
+    }
+    func addService() {
+        print("adding a service")
+        performSegueWithIdentifier("addPredefinedServiceVC", sender: self)
     }
     func addMessageLabel() {
         view.addSubview(addServiceLabel)
@@ -86,13 +108,13 @@ class PredefinedServicesVC: UITableViewController {
     }
     
     //MARK: TableView Delegate Functions.
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
     }
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return tableData.count
     }
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let myCell = tableView.dequeueReusableCellWithIdentifier(cellID, forIndexPath: indexPath) as! PredefinedServicesCell
         
         //Configure cell
@@ -102,10 +124,10 @@ class PredefinedServicesVC: UITableViewController {
         myCell.serviceDescription.text = "This is a service description This is a service description This is a service description This is a service description This is a service description This is a service description This is a service description This is a service description This is a service description"
         return myCell
     }
-    override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+    func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
         return true
     }
-    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         //swipe to delete row
         if editingStyle == .Delete {
             tableView.beginUpdates()
@@ -118,7 +140,7 @@ class PredefinedServicesVC: UITableViewController {
         }
         
     }
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         serviceID = indexPath.row
         performSegueWithIdentifier("DetailedPredefinedServiceSegue", sender: nil)
     }

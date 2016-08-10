@@ -9,7 +9,7 @@
 import UIKit
 //TODO: dynamic content size
 //TODO: delegate to remove picture
-class addPredefinedService: UIViewController, UITextViewDelegate, iCarouselDelegate, iCarouselDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIPopoverPresentationControllerDelegate, AvailableServiceHoursDelegate, AvailableServiceDaysDelegate {
+class addService: UIViewController, UITextViewDelegate, iCarouselDelegate, iCarouselDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIPopoverPresentationControllerDelegate, AvailableServiceHoursDelegate, AvailableServiceDaysDelegate {
     
     //MARK: Outlets
     @IBOutlet weak var daysTakenTextField: UITextField!
@@ -147,7 +147,7 @@ class addPredefinedService: UIViewController, UITextViewDelegate, iCarouselDeleg
     //MARK: Functions
     func setup() {
 
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(addPredefinedService.keyboardWillShow(_:)), name: UIKeyboardDidChangeFrameNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIKeyboardDidChangeFrameNotification, object: nil)
         
         automaticallyAdjustsScrollViewInsets = false
         
@@ -177,14 +177,12 @@ class addPredefinedService: UIViewController, UITextViewDelegate, iCarouselDeleg
         //setup textfields and textview textColor
         titleTextField.textColor = UIColor.darkTextColor()
         
-        daysTakenTextField.placeholder = "0"
         daysTakenTextField.keyboardType = .NumberPad
         
-        hoursTakenTextField.placeholder = "0"
         hoursTakenTextField.keyboardType = .NumberPad
     }
     func configureNavigationBar() {
-        let addBarButtonItem = UIBarButtonItem(title: buttonName, style: .Plain , target: self, action: #selector(addPredefinedService.addService))
+        let addBarButtonItem = UIBarButtonItem(title: buttonName, style: .Plain , target: self, action: #selector(addService))
         navigationItem.rightBarButtonItem = addBarButtonItem
         navigationItem.title = "Add Service"
     }

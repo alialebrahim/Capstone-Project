@@ -31,18 +31,18 @@ class WelcomeVC: UIViewController {
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         //TODO: delete
-        //signUpTest()
-        //tokenTest()
+        //loginTest()
+        addingPredefinedTest()
     }
     // MARK: IBActions
     @IBAction func signupAsProviderButtonPressed() {
         //performSegueWithIdentifier("SignUpVC", sender: nil)
         //TODO: delete
         if counter == 1 {
-            tokenTest()
+            signUpTest()
             counter = counter + 1
         }else if counter == 2 {
-            predefinedServiceTest()
+            loginTest()
             counter = counter + 1
         }
     }
@@ -54,11 +54,11 @@ class WelcomeVC: UIViewController {
     }
     
     //MARK: Backend testing.
-    func tokenTest() {
-        let URL = "http://capstone-dev-clone.us-west-2.elasticbeanstalk.com/token/"
+    func loginTest() {
+        let URL = "http://capstone-dev-clone.us-west-2.elasticbeanstalk.com/login/"
         let parameters = [
-            "username": "testUser",
-            "password": "testPassword"
+            "username": "alebrahim",
+            "password": "AliAlebrahim100"
         ]
         Alamofire.request(.POST, URL, parameters: parameters, encoding: .JSON).validate().response { (request, response, data, error) in
             print("request")
@@ -79,8 +79,9 @@ class WelcomeVC: UIViewController {
     func signUpTest() {
         let URL = "http://capstone-dev-clone.us-west-2.elasticbeanstalk.com/signup/"
         let parameters = [
-            "username": "testUser",
-            "password": "testPassword"
+            "username": "alebrahim",
+            "password": "AliAlebrahim100",
+            "email": "alebrahimcs@gmail.com"
         ]
         
         Alamofire.request(.POST, URL, parameters: parameters, encoding: .JSON).validate().response { (request, response, data, error) in
@@ -98,19 +99,59 @@ class WelcomeVC: UIViewController {
             print(error)
         }
     }
-    func predefinedServiceTest() {
+    func addingPredefinedTest() {
+        let URL = "http://capstone-dev-clone.us-west-2.elasticbeanstalk.com/predefinedservice/"
+        var images = [UIImage]()
+        for _ in 1...4 {
+            images.append(UIImage(named: "profileImagePlaceholder")!)
+        }
+        let imagesData = imagesToBase64(images)
+        let parameters = [
+            "title": "service 1 title",
+            "description": "service 1 description",
+            "price": "11",
+            "images": imagesData
+        ]
+        
+        Alamofire.request(.POST, URL, parameters: parameters as! [String : AnyObject], encoding: .JSON).validate().response { (request, response, data, error) in
+            print("request")
+            print(request)
+            print("response")
+            print(response)
+            print("data")
+            print(data)
+            print("string data")
+            if let dataString = String(data: data!, encoding: NSUTF8StringEncoding) {
+                print(dataString)
+            }
+            print("error")
+            print(error)
+        }
+            
+        
+    }
+    func imagesToBase64(images: [UIImage]) -> [String]{
+        var imagesData = [String]()
+        for image in images {
+            let imageData = UIImagePNGRepresentation(image)
+            let base64String = imageData!.base64EncodedStringWithOptions(.Encoding64CharacterLineLength)
+            imagesData.append(base64String)
+        }
+        return imagesData
+    }
+    func feedTest() {
         
         print("this is the token im sending in the header : \(token)")
-        let headers = [
-            "Authorization": token
-        ]
+//        let headers = [
+//            "Authorization": token
+//        ]
         let URL = "http://capstone-dev-clone.us-west-2.elasticbeanstalk.com/predefinedservice/"
         let parameters = [
             "username": "testUser",
             "password": "testPassword"
         ]
         
-        Alamofire.request(.GET, URL, parameters: nil, headers: headers).responseJSON { response in
+        Alamofire.request(.GET, URL, parameters: nil/**, headers: headers*/).responseJSON { response in
             print(response.request)  // original URL request
             print(response.response) // URL response
             print(response.data)     // server data
@@ -121,11 +162,5 @@ class WelcomeVC: UIViewController {
             }
         }
     }
-    
-    func predefinedServiceWithImagesTest() {
-        let imageArray = [UIImage]()
-        for _ in 1...10 {
-            
-        }
-    }
+
 }

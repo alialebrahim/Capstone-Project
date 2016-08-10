@@ -18,7 +18,7 @@ import Foundation
     //UIView that will go over the selected item (Label)
     var selectedItemView = UIView()
     //title of segmented control items.
-    var segmentedControlItems = ["Info","My Services"] {
+    var segmentedControlItems = ["Requests","Working on"] {
         didSet {
             setUpLabels()
         }

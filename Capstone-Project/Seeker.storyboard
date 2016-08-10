@@ -9,7 +9,7 @@
         <!--Provider InfoVC-->
         <scene sceneID="m4b-Ew-ohL">
             <objects>
-                <viewController storyboardIdentifier="providerInfoVC" id="10i-dq-RKX" customClass="ProviderInfoVC" customModule="Khedmat" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="providerInfoVC" id="10i-dq-RKX" customClass="ProviderInfoVC" customModule="Capstone_Project" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="HWE-g7-jZy"/>
                         <viewControllerLayoutGuide type="bottom" id="UhH-4G-IkF"/>
@@ -24,7 +24,7 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Wjb-bL-BW2">
                                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                                         <subviews>
-                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="profileImagePlaceholder" translatesAutoresizingMaskIntoConstraints="NO" id="5RZ-sP-5Mr" customClass="CircularImageView" customModule="Khedmat" customModuleProvider="target">
+                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="profileImagePlaceholder" translatesAutoresizingMaskIntoConstraints="NO" id="5RZ-sP-5Mr" customClass="CircularImageView" customModule="Capstone_Project" customModuleProvider="target">
                                                 <rect key="frame" x="240" y="8" width="120" height="120"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="120" id="Y2N-lf-0ip"/>
@@ -237,7 +237,7 @@
         <!--Add Predefined Service-->
         <scene sceneID="Gmb-pn-eCD">
             <objects>
-                <viewController id="9ss-Gi-98G" customClass="addPredefinedService" customModule="Khedmat" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="9ss-Gi-98G" customClass="addPredefinedService" customModule="Capstone_Project" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="nXl-sU-uSY"/>
                         <viewControllerLayoutGuide type="bottom" id="tDy-6J-Xcb"/>
@@ -503,7 +503,7 @@
         <!--Available Service DaysVC-->
         <scene sceneID="uS9-Ff-LLO">
             <objects>
-                <viewController id="XCd-Gh-qdc" customClass="AvailableServiceDaysVC" customModule="Khedmat" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="XCd-Gh-qdc" customClass="AvailableServiceDaysVC" customModule="Capstone_Project" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="9k5-zj-Zfd"/>
                         <viewControllerLayoutGuide type="bottom" id="F31-f9-r2J"/>
@@ -585,7 +585,7 @@
         <!--Image Preview-->
         <scene sceneID="ErC-1l-No5">
             <objects>
-                <viewController id="K6V-rV-d21" customClass="ImagePreview" customModule="Khedmat" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="K6V-rV-d21" customClass="ImagePreview" customModule="Capstone_Project" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="bfw-e1-82q"/>
                         <viewControllerLayoutGuide type="bottom" id="B8S-F4-Ije"/>
@@ -617,7 +617,7 @@
         <!--Available Service HoursVC-->
         <scene sceneID="dGl-3w-ITt">
             <objects>
-                <viewController storyboardIdentifier="availableTimesVC" id="Loa-0m-wWW" customClass="AvailableServiceHoursVC" customModule="Khedmat" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="availableTimesVC" id="Loa-0m-wWW" customClass="AvailableServiceHoursVC" customModule="Capstone_Project" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="W9t-vk-NtF"/>
                         <viewControllerLayoutGuide type="bottom" id="6bT-Kj-iDX"/>
@@ -632,7 +632,7 @@
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="66i-IW-KFc">
                                         <rect key="frame" x="0.0" y="0.0" width="280" height="237"/>
                                         <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="From" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vRs-ny-9zM">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="From" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vRs-ny-9zM">
                                                 <rect key="frame" x="120" y="0.0" width="40" height="21"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -741,7 +741,7 @@
         <!--Predefined ServicesVC-->
         <scene sceneID="Jeg-2h-vZw">
             <objects>
-                <tableViewController storyboardIdentifier="providerPredefinedServicesVC" id="RtF-Zb-YtM" customClass="PredefinedServicesVC" customModule="Khedmat" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="providerPredefinedServicesVC" id="RtF-Zb-YtM" customClass="PredefinedServicesVC" customModule="Capstone_Project" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="129" sectionHeaderHeight="28" sectionFooterHeight="28" id="Z2h-86-LUg">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -765,7 +765,7 @@
         <!--Data Source-->
         <scene sceneID="aWW-E7-gha">
             <objects>
-                <viewController id="PAo-vx-gy7" customClass="SeekerDetailedPredefinedServiceVC" customModule="Khedmat" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="PAo-vx-gy7" customClass="SeekerDetailedPredefinedServiceVC" customModule="Capstone_Project" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="F92-fI-I8P"/>
                         <viewControllerLayoutGuide type="bottom" id="Gi4-pL-fSv"/>
@@ -814,7 +814,7 @@
                                                     <constraint firstAttribute="height" constant="128" id="6B1-E8-r9Z"/>
                                                 </constraints>
                                                 <prototypes>
-                                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="Cell" rowHeight="50" id="YVZ-Hj-ydZ" customClass="WorkingHoursCell" customModule="Khedmat" customModuleProvider="target">
+                                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="Cell" rowHeight="50" id="YVZ-Hj-ydZ" customClass="WorkingHoursCell" customModule="Capstone_Project" customModuleProvider="target">
                                                         <rect key="frame" x="0.0" y="28" width="560" height="50"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="YVZ-Hj-ydZ" id="Kmz-JU-wwt">
@@ -977,7 +977,7 @@
         <!--Feed-->
         <scene sceneID="xRg-0x-iye">
             <objects>
-                <viewController id="QJr-ap-oPu" customClass="SeekerFeedVC" customModule="Khedmat" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="QJr-ap-oPu" customClass="SeekerFeedVC" customModule="Capstone_Project" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="1eK-66-NQF"/>
                         <viewControllerLayoutGuide type="bottom" id="jPy-fj-JEi"/>
