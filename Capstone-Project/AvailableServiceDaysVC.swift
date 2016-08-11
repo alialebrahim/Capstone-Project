@@ -71,7 +71,7 @@ class AvailableServiceDaysVC: UIViewController, UITableViewDelegate, UITableView
                 days.append(index) //add selected days to the array
                 let rowToSelect:NSIndexPath = NSIndexPath(forRow: index, inSection: 0)
                 //add checkmark next to selected row
-                tableView.cellForRowAtIndexPath(rowToSelect)?.accessoryType = UITableViewCellAccessoryType.Checkmark
+                tableView.cellForRowAtIndexPath(rowToSelect)?.accessoryType = .Checkmark
             }
             allSelected = true
             sender.setTitle("Deselect All Days", forState: .Normal)
@@ -112,12 +112,12 @@ class AvailableServiceDaysVC: UIViewController, UITableViewDelegate, UITableView
         days.append(indexPath.row)
         days.sortInPlace() { $0 < $1 }
         //add checkmark next to selected row
-        tableView.cellForRowAtIndexPath(indexPath)?.accessoryType = UITableViewCellAccessoryType.Checkmark
+        tableView.cellForRowAtIndexPath(indexPath)?.accessoryType = .Checkmark
     }
     
     func tableView(tableView: UITableView, didDeselectRowAtIndexPath indexPath: NSIndexPath) {
         days = days.filter() { $0 != indexPath.row }
         //remove checkmark next to selected row
-        tableView.cellForRowAtIndexPath(indexPath)?.accessoryType = UITableViewCellAccessoryType.None
+        tableView.cellForRowAtIndexPath(indexPath)?.accessoryType = .None
     }
 }

@@ -112,3 +112,19 @@ extension NSDate {
         return false
     }
 }
+
+//MARK: Array
+extension Array {
+    //This method works with any object that implements the Equatable protocol
+    mutating func removeObject<U: Equatable>(object: U) -> Bool {
+        for (idx, objectToCompare) in self.enumerate() {
+            if let to = objectToCompare as? U {
+                if object == to {
+                    self.removeAtIndex(idx)
+                    return true
+                }
+            }
+        }
+        return false
+    }
+}

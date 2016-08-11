@@ -32,7 +32,7 @@ class WelcomeVC: UIViewController {
         super.viewDidAppear(animated)
         //TODO: delete
         //loginTest()
-        addingPredefinedTest()
+        //addingPredefinedTest()
     }
     // MARK: IBActions
     @IBAction func signupAsProviderButtonPressed() {
@@ -55,12 +55,13 @@ class WelcomeVC: UIViewController {
     
     //MARK: Backend testing.
     func loginTest() {
-        let URL = "http://capstone-dev-clone.us-west-2.elasticbeanstalk.com/login/"
+        let URL = "http://capstone-dev-clone.us-west-2.elasticbeanstalk.com/token/"
         let parameters = [
-            "username": "alebrahim",
-            "password": "AliAlebrahim100"
+            "username": "testUser",
+            "password": "testPass"
         ]
-        Alamofire.request(.POST, URL, parameters: parameters, encoding: .JSON).validate().response { (request, response, data, error) in
+        Alamofire.request(.POST, URL, parameters: parameters, encoding: .JSON).validate().response {
+            (request, response, data, error) in
             print("request")
             print(request)
             print("response")
@@ -102,7 +103,7 @@ class WelcomeVC: UIViewController {
     func addingPredefinedTest() {
         let URL = "http://capstone-dev-clone.us-west-2.elasticbeanstalk.com/predefinedservice/"
         var images = [UIImage]()
-        for _ in 1...4 {
+        for _ in 1...1 {
             images.append(UIImage(named: "profileImagePlaceholder")!)
         }
         let imagesData = imagesToBase64(images)
@@ -112,7 +113,7 @@ class WelcomeVC: UIViewController {
             "price": "11",
             "images": imagesData
         ]
-        
+        print(images.count)
         Alamofire.request(.POST, URL, parameters: parameters as! [String : AnyObject], encoding: .JSON).validate().response { (request, response, data, error) in
             print("request")
             print(request)
@@ -127,7 +128,7 @@ class WelcomeVC: UIViewController {
             print("error")
             print(error)
         }
-            
+        
         
     }
     func imagesToBase64(images: [UIImage]) -> [String]{

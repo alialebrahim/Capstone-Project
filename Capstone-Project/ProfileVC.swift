@@ -119,7 +119,7 @@ class ProfileVC: UIViewController, UIScrollViewDelegate {
         ratingView.settings.filledBorderColor = color
         ratingView.settings.filledColor = color
         ratingView.text = "(0)" //TODO: obtain from the backend
-        ratingView.rating = 5 //TODO: obtain this from the backend
+        ratingView.rating = 0 //TODO: obtain this from the backend
         ratingView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(ratingView)
 

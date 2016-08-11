@@ -30,7 +30,7 @@ class PredefinedServicesCell: UITableViewCell {
         selectionStyle = .None
         containerView.layer.borderColor = UIColor(hex: 0x3399CC).CGColor
         containerView.layer.borderWidth = 1
-        containerView.layer.cornerRadius = 10
+        //containerView.layer.cornerRadius = 10
         containerView.clipsToBounds = true
     }
 }

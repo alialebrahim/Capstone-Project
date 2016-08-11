@@ -64,14 +64,10 @@ class ServicesVC: UIViewController {
                 //TODO: Get username from the server
                 navigationItem.title = "Requests"
                 let myVC = vc as! RequestedServicesVC
-                let editProfileItem = UIBarButtonItem(barButtonSystemItem: .Edit, target: self, action: #selector(editProfileAction))
-                navigationItem.rightBarButtonItem = editProfileItem
                 //myVC.delegate = self
             }else if tabIndex == 1{
                 navigationItem.title = "Working on"
                 let myVC = vc as! WorkingOnVC
-                let addServiceItem = UIBarButtonItem(barButtonSystemItem: .Add, target: self, action: #selector(addNewServiceAction))
-                navigationItem.rightBarButtonItem = addServiceItem
 //                myVC.delegate = self
             }
             self.addChildViewController(vc)
@@ -81,16 +77,10 @@ class ServicesVC: UIViewController {
             self.currentViewController = vc
         }
     }
-    func addNewServiceAction() {
-        performSegueWithIdentifier("addPredefinedServiceVC", sender: self)
-    }
-    func editProfileAction() {
-        performSegueWithIdentifier("editProvidersProfileVC", sender: self)
-    }
     /*
         Segment control target function
-        each time the tab changes, first remove the old view controller
-        then display the new tab view controller
+        each time the tab changes, first remove the old ViewController's view
+        then display the new tab ViewController's view
      */
     func segmentedControlValueChanged() {
         /*removing the child ViewController is more memory effecient*/

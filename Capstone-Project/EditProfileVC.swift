@@ -9,7 +9,7 @@
 import UIKit
 
 //TODO: add description text view placeholder
-class editProvidersProfile: UIViewController, UITextViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class editProvidersProfile: UIViewController, UITextViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIPopoverPresentationControllerDelegate, CategoriesVCDelegate {
     
     //MARK: IBOutlets
     @IBOutlet weak var profileImage: UIImageView!
@@ -24,6 +24,7 @@ class editProvidersProfile: UIViewController, UITextViewDelegate, UIImagePickerC
     
     //MARK: Variables
     var imagePicker = UIImagePickerController()
+    var categories = [String]()
     
     //MARK: ViewControllers lifecycle
     override func viewDidLoad() {
@@ -36,8 +37,8 @@ class editProvidersProfile: UIViewController, UITextViewDelegate, UIImagePickerC
     }
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(editProvidersProfile.keyboardWillShow(_:)), name: UIKeyboardWillChangeFrameNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(editProvidersProfile.keyboardWillHide(_:)), name: UIKeyboardWillHideNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIKeyboardWillChangeFrameNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIKeyboardWillHideNotification, object: nil)
         navigationItem.title = "Edit Profile"
         
     }
@@ -45,6 +46,9 @@ class editProvidersProfile: UIViewController, UITextViewDelegate, UIImagePickerC
         super.viewDidAppear(animated)
         scrollView.userInteractionEnabled = true
         adjustContentViewHeight()
+        
+        //TODO: Delete (testing only)
+        performSegueWithIdentifier("CategoriesVC", sender: nil)
     }
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
@@ -78,6 +82,7 @@ class editProvidersProfile: UIViewController, UITextViewDelegate, UIImagePickerC
         descriptionTextView.text = "A well-organized paragraph supports or develops a single controlling idea, which is expressed in a sentence called the topic sentence. A topic sentence has several important functions: it substantiates or supports an essay’s thesis statement; it unifies the content of a paragraph and directs the order of the sentences; and it advises the reader of the subject to be discussed and how the paragraph will discuss it. Readers generally look to the first few sentences in a paragraph to determine the subject and perspective of the paragraph. That’s why it’s often best to put the topic sentence at the very beginning of the paragraph. In some cases, however, it’s more effective to place another sentence before the topic sentence—for example, a sentence linking the current paragraph to the previous one, or one providing background information.A well-organized paragraph supports or develops a single controlling idea, which is expressed in a sentence called the topic sentence. A topic sentence has several important functions: it substantiates or supports an essay’s thesis statement; it unifies the content of a paragraph and directs the order of the sentences; and it advises the reader of the subject to be discussed and how the paragraph will discuss it. Readers generally look to the first few sentences in a paragraph to determine the subject and perspective of the paragraph. That’s why it’s often best to put the topic sentence at the very beginning of the paragraph. In some cases, however, it’s more effective to place another sentence before the topic sentence—for example, a sentence linking the current paragraph to the previous one, or one providing background information."
     }
     func setupNavigationBar() {
+        navigationItem.title = "Edit Profile"
         let doneItem = UIBarButtonItem(barButtonSystemItem: .Done, target: self, action: #selector(editProvidersProfile.doneEditing))
         let cancelItem = UIBarButtonItem(barButtonSystemItem: .Cancel, target: self, action: #selector(editProvidersProfile.cancelEditing))
         navigationItem.rightBarButtonItem = doneItem
@@ -129,5 +134,35 @@ class editProvidersProfile: UIViewController, UITextViewDelegate, UIImagePickerC
         }
         
         contentViewHeight.constant = contentRect.size.height + 20
+    }
+    func adaptivePresentationStyleForPresentationController(controller: UIPresentationController) -> UIModalPresentationStyle {
+        return .None
+    }
+    //MARK: CategoriesVC delegate function
+    func shouldDismissCategoriesView(categories: [String]) {
+        print(categories)
+        presentedViewController?.dismissViewControllerAnimated(true, completion: { 
+            print("dismissed")
+        })
+    }
+    //MARK: Segue functions
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "CategoriesVC" {
+            if let vc = segue.destinationViewController as? CategoriesVC {
+                vc.delegate = self
+                 vc.modalInPopover = true
+                 //to change poped over view:
+                 //vc.preferredContentSize.width = self.view.frame.size.width-20
+                if let controller = vc.popoverPresentationController {
+                    controller.delegate = self
+                    let height = (navigationController?.navigationBar.frame.height)! + UIApplication.sharedApplication().statusBarFrame.height
+                    controller.sourceRect = CGRectMake(CGRectGetMidX(self.view.bounds), height,0,0)
+                    controller.passthroughViews = nil
+                    //set it to zero to remove arrow
+                    controller.permittedArrowDirections = UIPopoverArrowDirection(rawValue: 1)
+                 }
+                
+            }
+        }
     }
 }

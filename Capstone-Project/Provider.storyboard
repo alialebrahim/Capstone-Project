@@ -561,6 +561,9 @@
                         <outlet property="scrollView" destination="XRu-uu-ban" id="YgP-rn-uuP"/>
                         <outlet property="usernameTextField" destination="Apv-Tc-f7c" id="qfX-sW-WVq"/>
                         <outlet property="workingFieldsTextField" destination="jJM-xH-Sip" id="GmH-Za-IJ1"/>
+                        <segue destination="cX4-Ch-kaI" kind="popoverPresentation" identifier="CategoriesVC" popoverAnchorView="ssQ-9T-Trs" id="lbk-Dt-UTf">
+                            <popoverArrowDirection key="popoverArrowDirection" up="YES" down="YES" left="YES" right="YES"/>
+                        </segue>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cW3-sA-j9X" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -833,6 +836,72 @@
             </objects>
             <point key="canvasLocation" x="3891" y="1326"/>
         </scene>
+        <!--CategoriesVC-->
+        <scene sceneID="17C-ba-EPp">
+            <objects>
+                <viewController id="cX4-Ch-kaI" customClass="CategoriesVC" customModule="Capstone_Project" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="MYS-WY-IgF"/>
+                        <viewControllerLayoutGuide type="bottom" id="TsV-N3-3bx"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="bBY-YM-Dtf">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="FJc-eq-azz">
+                                <rect key="frame" x="0.0" y="20" width="600" height="520"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="CategoryCell" textLabel="xMj-ul-ySy" style="IBUITableViewCellStyleDefault" id="hqf-01-8aJ">
+                                        <rect key="frame" x="0.0" y="28" width="600" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="hqf-01-8aJ" id="yxg-9i-2M8">
+                                            <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="xMj-ul-ySy">
+                                                    <rect key="frame" x="15" y="0.0" width="570" height="43"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </prototypes>
+                            </tableView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PAg-e9-206">
+                                <rect key="frame" x="0.0" y="540" width="600" height="40"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="U9K-3E-cYs"/>
+                                </constraints>
+                                <state key="normal" title="Cancel"/>
+                                <connections>
+                                    <action selector="CancelSaveButtonPressed" destination="cX4-Ch-kaI" eventType="touchUpInside" id="v2W-Dw-xlL"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="PAg-e9-206" secondAttribute="trailing" id="2lG-Lw-XSF"/>
+                            <constraint firstItem="FJc-eq-azz" firstAttribute="top" secondItem="MYS-WY-IgF" secondAttribute="bottom" id="6vS-Lk-0iX"/>
+                            <constraint firstItem="PAg-e9-206" firstAttribute="top" secondItem="FJc-eq-azz" secondAttribute="bottom" id="CpV-0P-DkW"/>
+                            <constraint firstItem="TsV-N3-3bx" firstAttribute="top" secondItem="PAg-e9-206" secondAttribute="bottom" constant="20" id="PY3-bk-YIi"/>
+                            <constraint firstAttribute="trailing" secondItem="FJc-eq-azz" secondAttribute="trailing" id="in6-rj-GlT"/>
+                            <constraint firstItem="FJc-eq-azz" firstAttribute="leading" secondItem="bBY-YM-Dtf" secondAttribute="leading" id="nrP-2g-btE"/>
+                            <constraint firstItem="PAg-e9-206" firstAttribute="leading" secondItem="bBY-YM-Dtf" secondAttribute="leading" id="zQS-qk-oWe"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="saveCancelButton" destination="PAg-e9-206" id="Y8O-ED-GPj"/>
+                        <outlet property="tableView" destination="FJc-eq-azz" id="rOa-I2-sdN"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="nYi-cW-00b" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3165" y="2062"/>
+        </scene>
         <!--Available Service DaysVC-->
         <scene sceneID="uS9-Ff-LLO">
             <objects>
@@ -945,7 +1014,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Qe7-6c-l97" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3194" y="2304"/>
+            <point key="canvasLocation" x="4609" y="124"/>
         </scene>
         <!--Available Service HoursVC-->
         <scene sceneID="dGl-3w-ITt">

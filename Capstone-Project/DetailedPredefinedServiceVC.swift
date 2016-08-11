@@ -114,7 +114,7 @@ class DetailedPredefinedServiceVC: UIViewController , UITableViewDelegate , UITa
     }
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "editPredefinedServiceSegue" {
-            if let destination = segue.destinationViewController as? addPredefinedService {
+            if let destination = segue.destinationViewController as? addService {
                 destination.serviceID = ServiceID
                 destination.buttonName = "Save"
             }
