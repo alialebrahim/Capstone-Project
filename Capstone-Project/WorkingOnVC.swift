@@ -12,7 +12,7 @@ class WorkingOnVC: UIViewController, UITableViewDelegate, UITableViewDataSource 
     
     //MARK: Variables
     var requestedServices = [String]()
-    var CellID = "RequestedServiceCell"
+    var CellID = "WorkingOnServiceCell"
     lazy var refreshControl = UIRefreshControl()
     
     //MARK: IBOutlets
@@ -42,7 +42,7 @@ class WorkingOnVC: UIViewController, UITableViewDelegate, UITableViewDataSource 
     
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.registerNib(UINib(nibName: "RequestedServiceCell", bundle: nil), forCellReuseIdentifier: CellID)
+        tableView.registerNib(UINib(nibName: "WorkingOnServiceCell", bundle: nil), forCellReuseIdentifier: CellID)
         tableView.rowHeight = 173
         
         //add refresh controller programmativcally.

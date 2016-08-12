@@ -32,7 +32,7 @@ class WelcomeVC: UIViewController {
         super.viewDidAppear(animated)
         //TODO: delete
         //loginTest()
-        //addingPredefinedTest()
+        addingPredefinedTest()
     }
     // MARK: IBActions
     @IBAction func signupAsProviderButtonPressed() {
@@ -114,7 +114,7 @@ class WelcomeVC: UIViewController {
             "images": imagesData
         ]
         print(images.count)
-        Alamofire.request(.POST, URL, parameters: parameters as! [String : AnyObject], encoding: .JSON).validate().response { (request, response, data, error) in
+        Alamofire.request(.POST, URL, parameters: parameters as! [String : AnyObject]).validate().response { (request, response, data, error) in
             print("request")
             print(request)
             print("response")
@@ -138,6 +138,7 @@ class WelcomeVC: UIViewController {
             let base64String = imageData!.base64EncodedStringWithOptions(.Encoding64CharacterLineLength)
             imagesData.append(base64String)
         }
+        print(imagesData[0])
         return imagesData
     }
     func feedTest() {
