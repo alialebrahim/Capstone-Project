@@ -17,17 +17,15 @@ class DetailedPredefinedServiceVC: UIViewController , UITableViewDelegate , UITa
     @IBOutlet weak var CarouselView: iCarousel!
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var contentView: UIView!
-
     @IBOutlet weak var contentViewHeightConstraint: NSLayoutConstraint!
-    @IBOutlet weak var requestButton: UIButton!
     
-    var ServiceID = 5
+    var ServiceID = 5 //getting it from server
     var UserType = 0
-    var ServiceTitle = "Building iOS Application"
+    var ServiceTitle = "Building iOS Application" //getting it from server
 
-    var ServiceDescription = "This is a service description This is a service description This is a service description This is a service description This is a service description This is a service description This is a service description This is a service description This is a service description This is a service description This is a service description This is a service description This is a service description This is a service description This is a service description This is a service description This is a service description This is a service description This is a service description This is a service description This is a service description This is a service description This is a service description This is a service description This is a service description This is a service description This is a service description This is a service description This is a service description This is a service description This is a service description This is a service description This is a service description This is a service description This is a service description This is a service description This is a service description This is a service description This is a service description This is a service description This is a service description This is a service description This is a service description This is a service description This is a service description This is a service description This is a service description This is a service description This is a service description This is a service description This is a service description This is a service description This is a service description This is a service description"
-    var ServicePrice = "7 KWD"
-    var Images = [UIImage]()
+    var ServiceDescription = "This is a service description." //getting it from server
+    var ServicePrice = "7 KWD" //getting it from server
+    var Images = [UIImage]() //getting it from server
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -36,32 +34,13 @@ class DetailedPredefinedServiceVC: UIViewController , UITableViewDelegate , UITa
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-        //TODO: put it in a function.
-        scrollView.userInteractionEnabled = true
-        var contentRect = CGRectZero;
-
-        for view in self.contentView.subviews {
-            contentRect = CGRectUnion(contentRect, view.frame)
-        }
-        contentViewHeightConstraint.constant = contentRect.size.height + 20
-        
-        
-        
+        scrollViewSetting()
     }
+    
     override func viewDidLoad() {
         if UserType == 0 {
             let editPredefinedServiceItem = UIBarButtonItem(barButtonSystemItem: .Edit, target: self,   action: #selector(DetailedPredefinedServiceVC.editPredefineService))
             self.navigationItem.rightBarButtonItem = editPredefinedServiceItem
-            
-            requestButton.hidden = true
-        }else {
-            requestButton.setTitleColor(UIColor(hex: 0x3399CC), forState: .Normal)
-            requestButton.layer.cornerRadius = 7
-            requestButton.layer.borderWidth = 2.0
-            requestButton.layer.borderColor = UIColor(hex: 0x3399CC).CGColor
-        
-//            let addBarButtonItem = UIBarButtonItem(title: "Request", style: .Plain , target: self, action: #selector(DetailedPredefinedServiceVC.requestPredefineService))
-//            self.navigationItem.rightBarButtonItem = addBarButtonItem
         }
         
         
@@ -70,12 +49,12 @@ class DetailedPredefinedServiceVC: UIViewController , UITableViewDelegate , UITa
         ServiceTitleLabel.text = ServiceTitle
         ServiceDescriptionTextView.text = ServiceDescription
         ServicePriceLabel.text = ServicePrice
-        //  CarouselView.type = .CoverFlow
     }
     
     
     @IBAction func requestPressed() {
-        requestPredefineService()
+        //request predefined service from the server
+        self.navigationController?.popViewControllerAnimated(true)
     }
     
 
@@ -97,21 +76,34 @@ class DetailedPredefinedServiceVC: UIViewController , UITableViewDelegate , UITa
         if option == iCarouselOption.Spacing {
             return value*1.1
         }
+        
         return value
     }
     
     func carousel(carousel: iCarousel, didSelectItemAtIndex index: Int) {
         performSegueWithIdentifier("ImagePreviewSegue", sender: index)
     }
+    
     func LabelsSetting (){
         ServiceTitleLabel.textColor = UIColor(hex: 0x3399CC)
-        //        ServiceDescriptionTextView.font = UIFont(name: (ServiceDescriptionTextView?.font!.fontName)!, size: 20)
         ServiceDescriptionTextView.editable = false
         ServiceDescriptionTextView.layer.cornerRadius = 7
         ServiceDescriptionTextView.layer.borderWidth = 1
         ServiceDescriptionTextView.layer.borderColor = UIColor(hex: 0x3399CC).CGColor
         ServicePriceLabel.textColor = UIColor(hex: 0x3399CC)
     }
+    
+    func scrollViewSetting () {
+        scrollView.userInteractionEnabled = true
+        var contentRect = CGRectZero;
+        
+        for view in self.contentView.subviews {
+            contentRect = CGRectUnion(contentRect, view.frame)
+        }
+        
+        contentViewHeightConstraint.constant = contentRect.size.height + 20
+    }
+    
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "editPredefinedServiceSegue" {
             if let destination = segue.destinationViewController as? addService {
@@ -130,17 +122,14 @@ class DetailedPredefinedServiceVC: UIViewController , UITableViewDelegate , UITa
             }
         }
     }
+    
     func editPredefineService () {
         performSegueWithIdentifier("editPredefinedServiceSegue", sender: nil)
     }
     
-    func requestPredefineService () {
-        //request predefined service from the server
-        self.navigationController?.popViewControllerAnimated(true)
-    }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 12
+        return 3
     }
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = self.WorkingHoursTableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as! WorkingHoursCell

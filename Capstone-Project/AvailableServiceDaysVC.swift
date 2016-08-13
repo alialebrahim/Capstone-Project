@@ -35,6 +35,8 @@ class AvailableServiceDaysVC: UIViewController, UITableViewDelegate, UITableView
     
     //MARK: Variables
     var days = [Int]()
+    var availableDays = [0 , 1 , 2 , 3 , 4 , 5 , 6]
+    var provider = true
     var CellID = "DayCell"
     var daysString = ["Saterday","Sunday","Monday","Tuesday","Wednesday","Thursday","Friday"]
     var allSelected = false
@@ -46,8 +48,14 @@ class AvailableServiceDaysVC: UIViewController, UITableViewDelegate, UITableView
         tableView.delegate = self
         tableView.dataSource = self
         tableView.allowsMultipleSelection = true
+        if !provider {
+            selectAllDaysButton.hidden = true
+            saveButton.hidden = true
+        }
         
     }
+    @IBOutlet weak var selectAllDaysButton: UIButton!
+    @IBOutlet weak var saveButton: UIButton!
 
     //MARK: IBActions
     @IBAction func saveButtonPressed() {
@@ -67,6 +75,7 @@ class AvailableServiceDaysVC: UIViewController, UITableViewDelegate, UITableView
                 otherwise do the opposite
          */
         if !allSelected {
+            days.removeAll()
             for index in 0..<daysString.count {
                 days.append(index) //add selected days to the array
                 let rowToSelect:NSIndexPath = NSIndexPath(forRow: index, inSection: 0)
@@ -99,18 +108,36 @@ class AvailableServiceDaysVC: UIViewController, UITableViewDelegate, UITableView
         if let myCell = tableView.dequeueReusableCellWithIdentifier(CellID) {
             myCell.textLabel?.text = "\(daysString[indexPath.row])"
             myCell.selectionStyle = .None
+            if !availableDays.contains(indexPath.row){
+               myCell.textLabel?.textColor = UIColor.grayColor()
+            }
             return myCell
         }else {
             let myCell = UITableViewCell(style: .Default, reuseIdentifier: CellID)
             myCell.textLabel?.text = "\(daysString[indexPath.row])"
             myCell.selectionStyle = .None
+            if !availableDays.contains(indexPath.row){
+               myCell.textLabel?.textColor = UIColor.grayColor()
+            }
             return myCell
         }
         
     }
+    
+    func tableView(tableView: UITableView, shouldHighlightRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+        if !availableDays.contains(indexPath.row){
+            return false
+        }
+        return true
+    }
+    
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         days.append(indexPath.row)
         days.sortInPlace() { $0 < $1 }
+        if !provider {
+            delegate?.shouldDismissDaysView(days)
+            self.navigationController?.popViewControllerAnimated(true)
+        }
         //add checkmark next to selected row
         tableView.cellForRowAtIndexPath(indexPath)?.accessoryType = .Checkmark
     }
