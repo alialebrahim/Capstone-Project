@@ -32,7 +32,7 @@ class WelcomeVC: UIViewController {
         super.viewDidAppear(animated)
         //TODO: delete
         //loginTest()
-        addingPredefinedTest()
+        //addingPredefinedTest()
     }
     // MARK: IBActions
     @IBAction func signupAsProviderButtonPressed() {

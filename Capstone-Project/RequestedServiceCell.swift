@@ -1,31 +1,18 @@
 //
 //  RequestedServiceCell.swift
-//  Khedmat
+//  Capstone-Project
 //
-//  Created by Ali Alibrahim on 7/26/16.
+//  Created by Ali Alibrahim on 8/13/16.
 //  Copyright © 2016 Ali Alebrahim. All rights reserved.
 //
 
 import UIKit
 
-class RequestedServiceCell: UITableViewCell {
+class RequestedServiceCell: UICollectionViewCell {
     
-    @IBOutlet weak var statusLabel: UILabel!
-    @IBOutlet weak var dueToLabel: UILabel!
-    @IBOutlet weak var requestedOnLabel: UILabel!
-    @IBOutlet weak var seekerUsernameButton: UIButton!
-    @IBOutlet weak var indicatorView: UIView!
-    @IBOutlet weak var titleLabel: UILabel!
     override func awakeFromNib() {
-        super.awakeFromNib()
-        // Initialization code
+        self.layer.borderColor = UIColor(hex: 0x3399CC).CGColor
+        self.layer.borderWidth = 1
     }
-    override func setSelected(selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-        // Configure the view for the selected state
-    }
-    @IBAction func seekerUsernameButtonPressed() {
-        print("seeker username was pressed")
-    }
-
+    
 }

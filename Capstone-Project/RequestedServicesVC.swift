@@ -26,8 +26,8 @@ class RequestedServicesVC: UIViewController, UICollectionViewDelegate, UICollect
         super.viewDidLoad()
         collectionView.delegate = self
         collectionView.dataSource = self
-        
-        //collectionView.registerNib(UINib(nibName: "RequestCell", bundle: nil), forCellWithReuseIdentifier: "RequestCell")
+        collectionView.backgroundColor = UIColor.whiteColor()
+        collectionView.registerNib(UINib(nibName: "RequestedServiceCell", bundle: nil), forCellWithReuseIdentifier: "RequestedServiceCell")
     }
     
     //MARK: UICollectionView delegate funciton
@@ -43,8 +43,8 @@ class RequestedServicesVC: UIViewController, UICollectionViewDelegate, UICollect
     }
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         
-        //let cell = collectionView.dequeueReusableCellWithReuseIdentifier("RequestCell", forIndexPath: indexPath)
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("cell", forIndexPath: indexPath)
+        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("RequestedServiceCell", forIndexPath: indexPath)
+//        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("cell", forIndexPath: indexPath)
         if indexPath.row == 0 && isFirstTimeTransform { //prevent to load scaling transform on the first cell for the first time only
             isFirstTimeTransform = false
         }else {
@@ -57,6 +57,9 @@ class RequestedServicesVC: UIViewController, UICollectionViewDelegate, UICollect
         cellWidth = collectionView.frame.size.width-100
         cellHeight = collectionView.frame.size.height - collectionView.frame.size.height/4
         return CGSize(width: cellWidth, height: cellHeight)
+    }
+    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+        print(indexPath.row)
     }
     func scrollViewWillEndDragging(scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
         
