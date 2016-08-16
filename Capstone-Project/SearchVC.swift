@@ -8,7 +8,7 @@
 
 import UIKit
 
-class SearchVC: UIViewController, ChooseCategoriesVCDelegate {
+class SearchVC: UIViewController, ChooseCategoriesVCDelegate, ChooseRatingVCDelegate {
     
     //Variables
     let containerView: UIView = {
@@ -45,8 +45,16 @@ class SearchVC: UIViewController, ChooseCategoriesVCDelegate {
     let chooseRatingButton: UIButton = {
        let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("Choose rating", forState: .Normal)
+        button.setTitle("Choose rating  >", forState: .Normal)
         button.showsTouchWhenHighlighted = true
+        return button
+    }()
+    let searchButton: UIButton = {
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setTitle("Search", forState: .Normal)
+        //button.showsTouchWhenHighlighted = true
+        button.setTitleColor(UIColor.redColor(), forState: .Highlighted)
         return button
     }()
     override func viewDidLoad() {
@@ -61,6 +69,7 @@ class SearchVC: UIViewController, ChooseCategoriesVCDelegate {
         setupCategoryButton()
         setupChooseRatingLabel()
         setupeRatingButton()
+        setupSearchButton()
     }
     func setupNavigationBar() {
         navigationItem.title = "Search"
@@ -105,21 +114,39 @@ class SearchVC: UIViewController, ChooseCategoriesVCDelegate {
         chooseRatingButton.trailingAnchor.constraintEqualToAnchor(containerView.trailingAnchor, constant: -8).active = true
         
     }
+    func setupSearchButton() {
+        searchButton.addTarget(self, action: #selector(searchButtonPressed), forControlEvents: .TouchUpInside)
+        containerView.addSubview(searchButton)
+        searchButton.leadingAnchor.constraintEqualToAnchor(containerView.leadingAnchor, constant: 8).active = true
+        searchButton.trailingAnchor.constraintEqualToAnchor(containerView.trailingAnchor, constant: -8).active = true
+        searchButton.bottomAnchor.constraintEqualToAnchor(containerView.bottomAnchor, constant: -20).active = true
+    }
     func chooseCategoryButtonPressed() {
-        print("im here")
         performSegueWithIdentifier("ChooseCategoriesVC", sender: nil)
     }
     func setupChooseRatingButtonPressed() {
-        print("Ayat")
+        performSegueWithIdentifier("ChooseRatingVC", sender: nil)
+    }
+    func searchButtonPressed() {
+        performSegueWithIdentifier("ShowProviders", sender: nil)
     }
     //MARK: ChooseCategoriesDelegate function
     func didSelectCategory(category: String) {
         chooseCategoryButton.setTitle("\(category)  >", forState: .Normal)
     }
+    
+    //MARK: ChooseRatingDelegate function
+    func didSelectRating(rating: Int) {
+        chooseRatingButton.setTitle("\(rating) & Up  >", forState: .Normal)
+    }
     //MARK: Segue functions
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "ChooseCategoriesVC" {
             if let vc = segue.destinationViewController as? ChooseCategoriesVC {
+                vc.delegate = self
+            }
+        }else if segue.identifier == "ChooseRatingVC" {
+            if let vc = segue.destinationViewController as? ChooseRatingVC {
                 vc.delegate = self
             }
         }

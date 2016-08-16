@@ -6,9 +6,6 @@
 //  Copyright © 2016 Ali Alebrahim. All rights reserved.
 //
 
-
-//TODO: UIViewController with UITableView instead
-
 import UIKit
 
 protocol PredefinedServicesDelegate {
@@ -130,13 +127,21 @@ class OfferedServicesVC: UIViewController, UITableViewDelegate, UITableViewDataS
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         //swipe to delete row
         if editingStyle == .Delete {
-            tableView.beginUpdates()
-            tableData.removeAtIndex(indexPath.row)
-            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Right)
-            tableView.endUpdates()
-            if tableData.isEmpty{
-                addMessageLabel()
-            }
+            let alertControl = UIAlertController(title: "Confirmation", message: "Are you sure you want to delete this service?", preferredStyle: .Alert)
+            let deleteAction = UIAlertAction(title: "Delete", style: .Destructive, handler: { (UIAlertAction) in
+                tableView.beginUpdates()
+                self.tableData.removeAtIndex(indexPath.row)
+                tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Right)
+                tableView.endUpdates()
+                if self.tableData.isEmpty{
+                    self.addMessageLabel()
+                }
+            })
+            let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
+            alertControl.addAction(deleteAction)
+            alertControl.addAction(cancelAction)
+            
+            presentViewController(alertControl, animated: true, completion: nil)
         }
         
     }

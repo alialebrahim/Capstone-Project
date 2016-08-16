@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="ProviderCell" rowHeight="137" id="GwR-VW-Pip" customClass="ProviderCell" customModule="Capstone_Project" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="486" height="137"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="GwR-VW-Pip" id="EpA-Z5-6JU">
+                <rect key="frame" x="0.0" y="0.0" width="486" height="136"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="d4P-0s-woO" customClass="CosmosView" customModule="Cosmos">
+                        <rect key="frame" x="183" y="37" width="120" height="20"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="20" id="Enj-dj-exS"/>
+                        </constraints>
+                    </view>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Ali Alebrahim" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zpH-6c-NGH">
+                        <rect key="frame" x="190" y="8" width="106" height="21"/>
+                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="18"/>
+                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="749" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="9" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HC3-9b-2ye">
+                        <rect key="frame" x="99" y="65" width="387" height="55"/>
+                        <string key="text">This is the biography or the providerThis is the biography or the providerThis is the biography or the providerThis is the biography or the providerThis is the biography or the provider</string>
+                        <fontDescription key="fontDescription" name="HelveticaNeue-LightItalic" family="Helvetica Neue" pointSize="17"/>
+                        <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="profileImagePlaceholder" translatesAutoresizingMaskIntoConstraints="NO" id="jQW-tc-XU0" customClass="CircularImageView" customModule="Capstone_Project" customModuleProvider="target">
+                        <rect key="frame" x="8" y="26" width="83" height="83"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="83" id="ghc-ST-N9y"/>
+                            <constraint firstAttribute="height" constant="83" id="sJr-cb-qNj"/>
+                        </constraints>
+                    </imageView>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="jQW-tc-XU0" firstAttribute="leading" secondItem="EpA-Z5-6JU" secondAttribute="leadingMargin" id="5Uc-Sg-Qsn"/>
+                    <constraint firstItem="jQW-tc-XU0" firstAttribute="centerY" secondItem="EpA-Z5-6JU" secondAttribute="centerY" id="IAM-pW-rkL"/>
+                    <constraint firstItem="HC3-9b-2ye" firstAttribute="trailing" secondItem="EpA-Z5-6JU" secondAttribute="trailingMargin" constant="8" id="QWh-TF-0tq"/>
+                    <constraint firstItem="zpH-6c-NGH" firstAttribute="top" secondItem="EpA-Z5-6JU" secondAttribute="topMargin" id="UGU-SD-4AO"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="HC3-9b-2ye" secondAttribute="bottom" constant="8" id="dtE-ew-0xP"/>
+                    <constraint firstItem="d4P-0s-woO" firstAttribute="centerX" secondItem="EpA-Z5-6JU" secondAttribute="centerX" id="e8M-fa-LEx"/>
+                    <constraint firstItem="d4P-0s-woO" firstAttribute="top" secondItem="zpH-6c-NGH" secondAttribute="bottom" constant="8" id="iNL-ya-yJy"/>
+                    <constraint firstItem="zpH-6c-NGH" firstAttribute="centerX" secondItem="EpA-Z5-6JU" secondAttribute="centerX" id="oG2-Vh-qJT"/>
+                    <constraint firstItem="HC3-9b-2ye" firstAttribute="top" secondItem="d4P-0s-woO" secondAttribute="bottom" constant="8" id="tKS-Cb-VI1"/>
+                    <constraint firstItem="HC3-9b-2ye" firstAttribute="leading" secondItem="jQW-tc-XU0" secondAttribute="trailing" constant="8" id="tXp-KZ-Soo"/>
+                </constraints>
+            </tableViewCellContentView>
+            <point key="canvasLocation" x="266" y="226.5"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="profileImagePlaceholder" width="360" height="360"/>
+    </resources>
+</document>

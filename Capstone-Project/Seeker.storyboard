@@ -320,11 +320,46 @@
                     <navigationItem key="navigationItem" id="KLj-yC-l6s"/>
                     <connections>
                         <segue destination="iB3-lV-1xw" kind="show" identifier="ChooseCategoriesVC" id="xST-6U-YNe"/>
+                        <segue destination="e37-6k-uVq" kind="show" identifier="ChooseRatingVC" id="mhc-zE-noa"/>
+                        <segue destination="FgI-z4-XIW" kind="show" identifier="ShowProviders" id="lsv-ha-u38"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="JtZ-pu-bsG" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="224" y="907"/>
+            <point key="canvasLocation" x="190" y="907"/>
+        </scene>
+        <!--Providers SearchVC-->
+        <scene sceneID="ub8-Gm-t6Q">
+            <objects>
+                <viewController id="FgI-z4-XIW" customClass="ProvidersSearchVC" customModule="Capstone_Project" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="OHJ-yV-Aid"/>
+                        <viewControllerLayoutGuide type="bottom" id="9Jh-zk-3Ch"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Ac2-rh-kWZ">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="8CN-6v-LbC">
+                                <rect key="frame" x="0.0" y="64" width="600" height="487"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="8CN-6v-LbC" firstAttribute="leading" secondItem="Ac2-rh-kWZ" secondAttribute="leading" id="IMS-EY-7vs"/>
+                            <constraint firstAttribute="trailing" secondItem="8CN-6v-LbC" secondAttribute="trailing" id="S9Q-2h-Lm5"/>
+                            <constraint firstItem="8CN-6v-LbC" firstAttribute="top" secondItem="OHJ-yV-Aid" secondAttribute="bottom" id="XjL-ix-J9X"/>
+                            <constraint firstItem="9Jh-zk-3Ch" firstAttribute="top" secondItem="8CN-6v-LbC" secondAttribute="bottom" id="pQl-jD-XBg"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="tableView" destination="8CN-6v-LbC" id="bNy-f4-5mD"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="0j6-hu-Fs7" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="900" y="907"/>
         </scene>
         <!--Choose CategoriesVC-->
         <scene sceneID="FNt-1Y-xci">
@@ -353,7 +388,7 @@
                                                     <rect key="frame" x="15" y="0.0" width="570" height="43"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
@@ -376,12 +411,12 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Zc6-eg-u9g" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="900" y="907"/>
+            <point key="canvasLocation" x="678" y="1685"/>
         </scene>
-        <!--View Controller-->
+        <!--Choose RatingVC-->
         <scene sceneID="8yw-Vb-KhL">
             <objects>
-                <viewController id="e37-6k-uVq" sceneMemberID="viewController">
+                <viewController id="e37-6k-uVq" customClass="ChooseRatingVC" customModule="Capstone_Project" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="edk-pf-pK6"/>
                         <viewControllerLayoutGuide type="bottom" id="y6E-iN-Iuj"/>
@@ -389,12 +424,27 @@
                     <view key="view" contentMode="scaleToFill" id="lKg-ag-Ltm">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Syr-7T-HhM">
+                                <rect key="frame" x="0.0" y="64" width="600" height="487"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </tableView>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="y6E-iN-Iuj" firstAttribute="top" secondItem="Syr-7T-HhM" secondAttribute="bottom" id="8lt-XS-upM"/>
+                            <constraint firstItem="Syr-7T-HhM" firstAttribute="leading" secondItem="lKg-ag-Ltm" secondAttribute="leading" id="G7h-p9-0Xu"/>
+                            <constraint firstItem="Syr-7T-HhM" firstAttribute="top" secondItem="edk-pf-pK6" secondAttribute="bottom" id="LEv-ah-8Nc"/>
+                            <constraint firstAttribute="trailing" secondItem="Syr-7T-HhM" secondAttribute="trailing" id="hwL-7m-CLz"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="tableView" destination="Syr-7T-HhM" id="QUW-en-opb"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="18p-ej-6wE" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="900" y="1591"/>
+            <point key="canvasLocation" x="-128" y="1685"/>
         </scene>
         <!--Animated Tab Bar Controller-->
         <scene sceneID="W1O-39-7p0">
