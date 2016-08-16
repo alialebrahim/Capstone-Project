@@ -90,6 +90,7 @@ class SeekerFeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource
 //    }
     //MARK: Functions
     func setupTablevVieW() {
+        automaticallyAdjustsScrollViewInsets = false
         tableView.delegate = self
         tableView.dataSource = self
         tableView.registerNib(UINib(nibName: "predefinedServiceCell", bundle: nil), forCellReuseIdentifier: "ServiceCell")
@@ -102,7 +103,7 @@ class SeekerFeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         tableView.addSubview(refreshControl)
     }
     func configureNavigationBar() {
-        parentViewController?.navigationItem.title = "Feed"
+        navigationItem.title = "Feed"
     }
     func configureSearchController() {
         //creating and configurating custom search bar

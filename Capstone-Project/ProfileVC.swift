@@ -9,10 +9,7 @@
 import UIKit
 import Cosmos
 
-//MARK: Protocol
-//protocol ProviderInfoDelegate: class {
-//    func didSwipeLeft()
-//}
+//provider tabs (profile, feed, services, chat?)
 class ProfileVC: UIViewController, UIScrollViewDelegate {
     
     //MARK: IBOutlets
@@ -25,7 +22,7 @@ class ProfileVC: UIViewController, UIScrollViewDelegate {
     @IBOutlet weak var workingFields: UILabel!
     @IBOutlet weak var providersMobileNumber: UIButton!
     @IBOutlet weak var providersEmailAddress: UIButton!
-
+    @IBOutlet weak var address: UILabel!
     @IBOutlet weak var contentViewHeight: NSLayoutConstraint!
     
     //MARK: Variables

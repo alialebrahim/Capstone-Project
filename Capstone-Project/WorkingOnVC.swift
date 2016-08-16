@@ -14,7 +14,7 @@ class WorkingOnVC: UIViewController, UITableViewDelegate, UITableViewDataSource 
     var requestedServices = [String]()
     var CellID = "WorkingOnServiceCell"
     lazy var refreshControl = UIRefreshControl()
-    
+    var data = [0,1,2,3,4,5,6,7,8,9,10]
     //MARK: IBOutlets
     @IBOutlet weak var tableView: UITableView!
     override func viewDidLoad() {
@@ -29,14 +29,41 @@ class WorkingOnVC: UIViewController, UITableViewDelegate, UITableViewDataSource 
         return 1
     }
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 10
-        //return requestedServices.count
+        return data.count
     }
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(CellID)
+        let cell = tableView.dequeueReusableCellWithIdentifier(CellID) as? WorkingOnServiceCell
+        cell?.titleLabel.text = "\(data[indexPath.row])"
         return cell!
     }
-    
+    func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [UITableViewRowAction]? {
+        
+        let done = UITableViewRowAction(style: .Normal, title: "Done") { action, index in
+
+            let alertController = UIAlertController(title: "Confirmation", message: "Are you sure you want to mark this service as \"Done\"?  \nMarking this service \"Done\" the seeker will get the confirmation", preferredStyle: .Alert)
+            let doneAction = UIAlertAction(title: "Done", style: .Destructive, handler: { (UIAlertAction) in
+                //TODO: mark this service as done and delete this
+                self.tableView.beginUpdates()
+                self.data.removeAtIndex(indexPath.row)
+                self.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+                self.tableView.reloadData()
+                self.tableView.endUpdates()
+                
+            })
+            let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
+            
+            alertController.addAction(doneAction)
+            alertController.addAction(cancelAction)
+            
+            self.presentViewController(alertController, animated: true, completion: nil)
+        }
+        done.backgroundColor = UIColor(hex: 0x009900)
+        
+        return [done]
+    }
+    func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+        return true
+    }
     //MARK: Functions
     func setupTableView() {
     

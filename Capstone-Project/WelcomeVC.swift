@@ -33,6 +33,8 @@ class WelcomeVC: UIViewController {
         //TODO: delete
         //loginTest()
         //addingPredefinedTest()
+        //feedTest()
+        
     }
     // MARK: IBActions
     @IBAction func signupAsProviderButtonPressed() {
@@ -101,33 +103,57 @@ class WelcomeVC: UIViewController {
         }
     }
     func addingPredefinedTest() {
+        
         let URL = "http://capstone-dev-clone.us-west-2.elasticbeanstalk.com/predefinedservice/"
+        var imagesDictonaryList = [[String : AnyObject]]()
         var images = [UIImage]()
-        for _ in 1...1 {
+        for _ in 1...3 {
             images.append(UIImage(named: "profileImagePlaceholder")!)
         }
         let imagesData = imagesToBase64(images)
+        for index in 0..<3 {
+            var myDictionary = [String:AnyObject]()
+            myDictionary["name"] = "\(index)"
+            myDictionary["image"] = imagesData[index]
+            imagesDictonaryList.append(myDictionary)
+        }
+        print(imagesDictonaryList)
         let parameters = [
             "title": "service 1 title",
             "description": "service 1 description",
             "price": "11",
-            "images": imagesData
+            "images": imagesDictonaryList
         ]
-        print(images.count)
-        Alamofire.request(.POST, URL, parameters: parameters as! [String : AnyObject]).validate().response { (request, response, data, error) in
-            print("request")
-            print(request)
-            print("response")
-            print(response)
-            print("data")
-            print(data)
-            print("string data")
-            if let dataString = String(data: data!, encoding: NSUTF8StringEncoding) {
+        Alamofire.request(.POST, URL, parameters: parameters as? [String : AnyObject], encoding: .JSON).responseJSON { response in
+            print(response.request)  // original URL request
+            print(response.response) // URL response
+            print(response.data)     // server data
+            print(response.result)   // result of response serialization
+            if let dataString = String(data: response.data!, encoding: NSUTF8StringEncoding) {
                 print(dataString)
             }
-            print("error")
-            print(error)
+            if let JSON = response.result.value {
+                print("JSON: \(JSON)")
+            }
         }
+        
+        
+        /*
+         .validate().response { (request, response, data, error) in
+         print("request")
+         print(request)
+         print("response")
+         print(response)
+         print("data")
+         print(data)
+         print("string data")
+         if let dataString = String(data: data!, encoding: NSUTF8StringEncoding) {
+         print(dataString)
+         }
+         print("error")
+         print(error)
+         }
+         */
         
         
     }
@@ -138,7 +164,6 @@ class WelcomeVC: UIViewController {
             let base64String = imageData!.base64EncodedStringWithOptions(.Encoding64CharacterLineLength)
             imagesData.append(base64String)
         }
-        print(imagesData[0])
         return imagesData
     }
     func feedTest() {
@@ -152,8 +177,10 @@ class WelcomeVC: UIViewController {
             "username": "testUser",
             "password": "testPassword"
         ]
-        
-        Alamofire.request(.GET, URL, parameters: nil/**, headers: headers*/).responseJSON { response in
+        let p = [
+            "query_last": 5
+        ]
+        Alamofire.request(.GET, URL, parameters: p/**, headers: headers*/).responseJSON { response in
             print(response.request)  // original URL request
             print(response.response) // URL response
             print(response.data)     // server data

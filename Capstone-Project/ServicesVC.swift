@@ -8,6 +8,11 @@
 
 import UIKit
 
+protocol ServicesVCDelegate: class {
+    func didRefresh()
+}
+
+
 class ServicesVC: UIViewController {
     
     // MARK: IBOutlets
@@ -16,6 +21,7 @@ class ServicesVC: UIViewController {
     
     // MARK: Variables
     var currentViewController: UIViewController?
+    weak var delegate: ServicesVCDelegate?
     
     // MARK: ViewController life cycle
     override func viewDidLoad() {
@@ -59,12 +65,13 @@ class ServicesVC: UIViewController {
         self.navigationItem.rightBarButtonItem = nil
         
         if let vc = viewControllerForSelectedSegmentIndex(tabIndex) {
-//            navigationItem.rightBarButtonItem = nil
+            navigationItem.rightBarButtonItem = nil
             if tabIndex == 0 {
                 //TODO: Get username from the server
                 navigationItem.title = "Requests"
                 let myVC = vc as! RequestedServicesVC
                 //myVC.delegate = self
+                navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Refresh, target: self, action: #selector(refreshView))
             }else if tabIndex == 1{
                 navigationItem.title = "Working on"
                 let myVC = vc as! WorkingOnVC
@@ -96,12 +103,8 @@ class ServicesVC: UIViewController {
         segmentedControlValueChanged() function, the current viewController
         will not be removed from memeory and both views will overlay
      */
-    func didSwipeLeft() {
-        segmentedControl.selectedIndex = 1
-        segmentedControlValueChanged()
+    func refreshView() {
+        delegate?.didRefresh()
     }
-    func didSwipeRight() {
-        segmentedControl.selectedIndex = 0
-        segmentedControlValueChanged()
-    }
+    
 }

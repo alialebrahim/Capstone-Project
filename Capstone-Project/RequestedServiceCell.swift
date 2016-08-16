@@ -8,11 +8,42 @@
 
 import UIKit
 
+protocol RequestServiceCellDelegate: class {
+    func acceptButtonTapped(cell: RequestedServiceCell)
+    func declineButtonTapped(cell: RequestedServiceCell)
+}
+
 class RequestedServiceCell: UICollectionViewCell {
     
+    //MARK: IBOutlets
+    @IBOutlet weak var declineButton: UIButton!
+    @IBOutlet weak var acceptButton: UIButton!
+    @IBOutlet weak var priceLabel: UILabel!
+    @IBOutlet weak var dueToLabel: UILabel!
+    @IBOutlet weak var requestDateLabel: UILabel!
+    @IBOutlet weak var serviceTitleLabel: UILabel!
+    @IBOutlet weak var requestNumberLabel: UILabel!
+    
+    //MARK: Variables
+    weak var delegate: RequestServiceCellDelegate?
+    
+    //MARK: IBActions
+    @IBAction func acceptButtonPressed(sender: AnyObject) {
+        self.delegate?.acceptButtonTapped(self)
+    }
+    @IBAction func declineButtonPressed(sender: AnyObject) {
+        self.delegate?.declineButtonTapped(self)
+    }
+    
+    //Functions
     override func awakeFromNib() {
         self.layer.borderColor = UIColor(hex: 0x3399CC).CGColor
         self.layer.borderWidth = 1
     }
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        self.delegate = nil
+    }
+
     
 }
