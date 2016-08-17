@@ -160,7 +160,7 @@
         <!--ProfileVC-->
         <scene sceneID="m4b-Ew-ohL">
             <objects>
-                <viewController id="10i-dq-RKX" customClass="ProfileVC" customModule="Capstone_Project" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ProviderProfile" id="10i-dq-RKX" customClass="ProfileVC" customModule="Capstone_Project" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="HWE-g7-jZy"/>
                         <viewControllerLayoutGuide type="bottom" id="UhH-4G-IkF"/>
@@ -301,13 +301,13 @@
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Address:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PlO-dk-zlE">
                                                 <rect key="frame" x="8" y="438" width="584" height="21"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Kuwait, dkhbs ksdbhkd ldj" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nJu-qC-xCx">
                                                 <rect key="frame" x="8" y="467" width="584" height="17"/>
                                                 <fontDescription key="fontDescription" name="HelveticaNeue-Italic" family="Helvetica Neue" pointSize="14"/>
-                                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                         </subviews>
@@ -404,7 +404,7 @@
         <!--Offered ServicesVC-->
         <scene sceneID="2SX-9h-bXn">
             <objects>
-                <viewController id="S5M-Mq-Ysz" customClass="OfferedServicesVC" customModule="Capstone_Project" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="OfferedServices" id="S5M-Mq-Ysz" customClass="OfferedServicesVC" customModule="Capstone_Project" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Uqd-H3-PDb"/>
                         <viewControllerLayoutGuide type="bottom" id="fN0-qQ-2q8"/>
@@ -642,11 +642,11 @@
                         <viewControllerLayoutGuide type="bottom" id="tDy-6J-Xcb"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="pOy-IY-WIm">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="800"/>
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iUJ-rr-uDV">
-                                <rect key="frame" x="0.0" y="64" width="600" height="736"/>
+                                <rect key="frame" x="0.0" y="64" width="600" height="536"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Rhd-vb-AJY" userLabel="contentView">
                                         <rect key="frame" x="0.0" y="0.0" width="600" height="536"/>
@@ -1097,7 +1097,7 @@
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="66i-IW-KFc">
                                         <rect key="frame" x="0.0" y="0.0" width="280" height="237"/>
                                         <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="From" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vRs-ny-9zM">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="From" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vRs-ny-9zM">
                                                 <rect key="frame" x="120" y="0.0" width="40" height="21"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -1474,7 +1474,7 @@
         <image name="profileImagePlaceholder" width="360" height="360"/>
     </resources>
     <inferredMetricsTieBreakers>
+        <segue reference="LSp-p0-sEE"/>
         <segue reference="DHR-ZF-69w"/>
-        <segue reference="pYa-Ce-IAM"/>
     </inferredMetricsTieBreakers>
 </document>

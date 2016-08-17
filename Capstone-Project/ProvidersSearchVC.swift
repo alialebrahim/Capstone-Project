@@ -31,6 +31,9 @@ class ProvidersSearchVC: UIViewController, UITableViewDelegate, UITableViewDataS
         let cell = tableView.dequeueReusableCellWithIdentifier(CellID)
         return cell!
     }
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        performSegueWithIdentifier("SearchedProvider", sender: nil)
+    }
     //MARK: Functions
     func setup(){
         automaticallyAdjustsScrollViewInsets = false

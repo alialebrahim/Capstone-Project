@@ -355,11 +355,67 @@
                     </view>
                     <connections>
                         <outlet property="tableView" destination="8CN-6v-LbC" id="bNy-f4-5mD"/>
+                        <segue destination="NFB-dz-IpW" kind="show" identifier="SearchedProvider" id="dG9-4U-O4r"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0j6-hu-Fs7" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="900" y="907"/>
+        </scene>
+        <!--Searched ProviderVC-->
+        <scene sceneID="YE1-mL-2Xd">
+            <objects>
+                <viewController id="NFB-dz-IpW" customClass="SearchedProviderVC" customModule="Capstone_Project" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Gm8-32-Sog"/>
+                        <viewControllerLayoutGuide type="bottom" id="shJ-tD-IIS"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="0fC-xf-Oi9">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yLo-ke-HwG" customClass="CustomSegmentedControl" customModule="Capstone_Project" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="64" width="600" height="36"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="36" id="Z5m-ui-meN"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="selectedLabelColor">
+                                        <color key="value" red="0.68235294120000001" green="0.5" blue="0.78823529410000004" alpha="1" colorSpace="calibratedRGB"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="unselectedLabelColor">
+                                        <color key="value" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="lineViewColor">
+                                        <color key="value" red="0.68235294120000001" green="0.5" blue="0.78823529410000004" alpha="1" colorSpace="calibratedRGB"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fWS-6l-hxz">
+                                <rect key="frame" x="0.0" y="100" width="600" height="451"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="yLo-ke-HwG" firstAttribute="top" secondItem="Gm8-32-Sog" secondAttribute="bottom" id="17B-6k-6H3"/>
+                            <constraint firstItem="yLo-ke-HwG" firstAttribute="leading" secondItem="0fC-xf-Oi9" secondAttribute="leading" id="DSY-vU-TCm"/>
+                            <constraint firstAttribute="trailing" secondItem="fWS-6l-hxz" secondAttribute="trailing" id="FnI-g3-0dV"/>
+                            <constraint firstItem="shJ-tD-IIS" firstAttribute="top" secondItem="fWS-6l-hxz" secondAttribute="bottom" id="LNe-fw-Xee"/>
+                            <constraint firstItem="fWS-6l-hxz" firstAttribute="leading" secondItem="0fC-xf-Oi9" secondAttribute="leading" id="VQb-dW-K97"/>
+                            <constraint firstAttribute="trailing" secondItem="yLo-ke-HwG" secondAttribute="trailing" id="XYR-pF-yi6"/>
+                            <constraint firstItem="fWS-6l-hxz" firstAttribute="top" secondItem="yLo-ke-HwG" secondAttribute="bottom" id="afd-fS-Xfb"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="contentView" destination="fWS-6l-hxz" id="Sme-h3-4q7"/>
+                        <outlet property="segmentedControl" destination="yLo-ke-HwG" id="iNu-SA-BHH"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="0ph-ka-b1X" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1603" y="907"/>
         </scene>
         <!--Choose CategoriesVC-->
         <scene sceneID="FNt-1Y-xci">

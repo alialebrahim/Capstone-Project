@@ -69,13 +69,9 @@ class ServicesVC: UIViewController {
             if tabIndex == 0 {
                 //TODO: Get username from the server
                 navigationItem.title = "Requests"
-                let myVC = vc as! RequestedServicesVC
-                //myVC.delegate = self
                 navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Refresh, target: self, action: #selector(refreshView))
             }else if tabIndex == 1{
                 navigationItem.title = "Working on"
-                let myVC = vc as! WorkingOnVC
-//                myVC.delegate = self
             }
             self.addChildViewController(vc)
             vc.didMoveToParentViewController(self)
