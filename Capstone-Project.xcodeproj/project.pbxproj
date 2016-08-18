@@ -221,12 +221,12 @@
 			isa = PBXGroup;
 			children = (
 				4136DB421D59CAB50030A685 /* ProfileVC.swift */,
+				4136DB431D59CAB50030A685 /* OfferedServicesVC.swift */,
 				4136DB461D59CAB50030A685 /* EditProfileVC.swift */,
 				4136DB7A1D5B19F80030A685 /* CategoriesVC.swift */,
 				4136DB411D59CAB50030A685 /* ServicesVC.swift */,
 				4136DB781D5A510F0030A685 /* RequestedServicesVC.swift */,
 				4136DB4A1D59CAB50030A685 /* WorkingOnVC.swift */,
-				4136DB431D59CAB50030A685 /* OfferedServicesVC.swift */,
 				4136DB441D59CAB50030A685 /* DetailedPredefinedServiceVC.swift */,
 				4136DB451D59CAB50030A685 /* addPredefinedService.swift */,
 				4136DB471D59CAB50030A685 /* AvailableServiceHoursVC.swift */,

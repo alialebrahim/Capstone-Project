@@ -8,7 +8,7 @@
 
 import UIKit
 
-class SearchedProviderVC: UIViewController {
+class SearchedProviderVC: UIViewController, ProfileDelegate, OfferedServicesDelegate {
     
     //MARK: IBOutlets
     @IBOutlet weak var contentView: UIView!
@@ -26,6 +26,7 @@ class SearchedProviderVC: UIViewController {
     //MARK: Functions
     func setup() {
         automaticallyAdjustsScrollViewInsets = false
+        view.userInteractionEnabled = true
         segmentedControl.segmentedControlItems = ["Provider","Offered Services"]
         segmentedControl.selectedIndex = 0
         displayCurrentTab(segmentedControl.selectedIndex)
@@ -40,10 +41,12 @@ class SearchedProviderVC: UIViewController {
         let storyboard = UIStoryboard(name: "Provider", bundle: nil)
         switch index {
             case 0:
-                let vc = storyboard.instantiateViewControllerWithIdentifier("ProviderProfile")
+                let vc = storyboard.instantiateViewControllerWithIdentifier("ProviderProfile") as! ProfileVC
+                vc.delegate = self
                 return vc
             case 1:
-                let vc = storyboard.instantiateViewControllerWithIdentifier("OfferedServices")
+                let vc = storyboard.instantiateViewControllerWithIdentifier("OfferedServices") as! OfferedServicesVC
+                vc.delegate = self
                 return vc
             default: break
         }
@@ -59,5 +62,16 @@ class SearchedProviderVC: UIViewController {
             currentViewController = vc
         }
         
+    }
+    
+    //MARK: Profile Delegate
+    func didSwipeLeft() {
+        segmentedControl.selectedIndex = 1
+        displayCurrentTab(segmentedControl.selectedIndex)
+    }
+    //MARK: OfferedServices Delegate
+    func didSwipeRight() {
+        segmentedControl.selectedIndex = 0
+        displayCurrentTab(segmentedControl.selectedIndex)
     }
 }

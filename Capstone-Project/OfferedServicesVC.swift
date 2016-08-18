@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol PredefinedServicesDelegate {
+protocol OfferedServicesDelegate: class{
     func didSwipeRight()
 }
 class OfferedServicesVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
@@ -18,7 +18,7 @@ class OfferedServicesVC: UIViewController, UITableViewDelegate, UITableViewDataS
     //MARK: Variables
     let cellID = "ServiceCell"
     let cellSpacingHeight: CGFloat = 10
-    var delegate: PredefinedServicesDelegate?
+    weak var delegate: OfferedServicesDelegate?
     let addServiceLabel: UILabel = {
         let label = UILabel()
         label.text = "Click '+' to add new services"
@@ -53,10 +53,10 @@ class OfferedServicesVC: UIViewController, UITableViewDelegate, UITableViewDataS
     func setup() {
         automaticallyAdjustsScrollViewInsets = false
         
-        //swipe gesture needed to navigate between tabs
-//        let rightSwipeGesture = UISwipeGestureRecognizer(target: self, action:#selector(PredefinedServicesVC.rightSwipeAction))
-//        rightSwipeGesture.direction = .Right
-//        view.addGestureRecognizer(rightSwipeGesture)
+        //swipe gesture needed to navigate between tabs for the seeker
+        let rightSwipeGesture = UISwipeGestureRecognizer(target: self, action:#selector(rightSwipeAction))
+        rightSwipeGesture.direction = .Right
+        view.addGestureRecognizer(rightSwipeGesture)
         /*if there is no entry create a label to nofify the user to add services*/
         if tableData.count == 0 {
             addMessageLabel()

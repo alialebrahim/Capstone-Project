@@ -9,6 +9,10 @@
 import UIKit
 import Cosmos
 
+protocol ProfileDelegate: class{
+    func didSwipeLeft()
+}
+
 //provider tabs (profile, feed, services, chat?)
 class ProfileVC: UIViewController, UIScrollViewDelegate {
     
@@ -26,7 +30,7 @@ class ProfileVC: UIViewController, UIScrollViewDelegate {
     @IBOutlet weak var contentViewHeight: NSLayoutConstraint!
     
     //MARK: Variables
-//    weak var delegate: ProviderInfoDelegate?
+    weak var delegate: ProfileDelegate?
     
     //MARK: ViewController lifecycle
     override func viewDidLoad() {
@@ -85,10 +89,10 @@ class ProfileVC: UIViewController, UIScrollViewDelegate {
         
         workingFields.text = "Teaching, App Development, Web Development"
         
-        //swipe gesture needed to navigate between tabs
-//        let swipeGesture = UISwipeGestureRecognizer(target: self, action: #selector(swipeAction))
-//        swipeGesture.direction = .Left
-//        view.addGestureRecognizer(swipeGesture)
+        //swipe gesture needed to navigate between tabs for the seeker
+        let swipeGesture = UISwipeGestureRecognizer(target: self, action: #selector(leftSwipeAction))
+        swipeGesture.direction = .Left
+        view.addGestureRecognizer(swipeGesture)
     }
     func configureNavigationBar() {
         let editProfileItem = UIBarButtonItem(barButtonSystemItem: .Edit, target: self, action: #selector(editProfile))
@@ -123,11 +127,11 @@ class ProfileVC: UIViewController, UIScrollViewDelegate {
         ratingView.topAnchor.constraintEqualToAnchor(username.bottomAnchor, constant: 8).active = true
         ratingView.centerXAnchor.constraintEqualToAnchor(view.centerXAnchor).active = true
     }
-//    func swipeAction() {
-//        delegate?.didSwipeLeft()
-//    }
+    func leftSwipeAction() {
+        print("im here")
+        delegate?.didSwipeLeft()
+    }
     func adjustContentViewHeight() {
-        
         var contentRect = CGRectZero;
         for view in self.contentView.subviews {
             contentRect = CGRectUnion(contentRect, view.frame)
@@ -135,7 +139,6 @@ class ProfileVC: UIViewController, UIScrollViewDelegate {
         if contentRect.size.height > contentViewHeight.constant {
             contentViewHeight.constant = contentRect.size.height + 20
         }
-        
     }
 }
 
