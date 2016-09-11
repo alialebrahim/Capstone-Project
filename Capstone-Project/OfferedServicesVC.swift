@@ -30,7 +30,6 @@ class OfferedServicesVC: UIViewController, UITableViewDelegate, UITableViewDataS
     }()
     var tableData = ["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15"]
     lazy var refreshControl = UIRefreshControl()
-    
     var serviceID = -2
     
     // MARK: ViewController lifecycle
@@ -48,6 +47,11 @@ class OfferedServicesVC: UIViewController, UITableViewDelegate, UITableViewDataS
                 tableView.alwaysBounceVertical = true
             }
         }
+        animateTableViewCells()
+    }
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        
     }
     // MARK: Functions
     func setup() {
@@ -61,6 +65,9 @@ class OfferedServicesVC: UIViewController, UITableViewDelegate, UITableViewDataS
         if tableData.count == 0 {
             addMessageLabel()
         }
+        
+        let colors = [UIColor(hex: 0xB39DDB), UIColor(hex: 0x7E57C2)]
+        self.view.setGradientBackground(colors)
     }
     func congigureNavigationBar() {
         navigationItem.title = "Offered Services"
@@ -68,17 +75,43 @@ class OfferedServicesVC: UIViewController, UITableViewDelegate, UITableViewDataS
         let addBarItem = UIBarButtonItem(barButtonSystemItem: .Add, target: self, action: #selector(addService))
         
         navigationItem.rightBarButtonItem = addBarItem
+        navigationController?.navigationBar.tintColor = UIColor.whiteColor()
+        navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.whiteColor()]
     }
     func setupTableView() {
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.backgroundColor = UIColor.clearColor()
         //register the cell xib file for this tableview
         tableView.registerNib(UINib(nibName: "predefinedServiceCell", bundle: nil), forCellReuseIdentifier: "ServiceCell")
         tableView.rowHeight = 129
         //TODO: refresh controller
-        refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh")
+        refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh", attributes: [NSForegroundColorAttributeName: UIColor.whiteColor()])
+        refreshControl.tintColor = UIColor.whiteColor()
         refreshControl.addTarget(self, action: #selector(refreshTableView), forControlEvents: .ValueChanged)
         tableView.addSubview(refreshControl)
+    }
+    func animateTableViewCells() {
+        tableView.reloadData()
+        
+        let cells = tableView.visibleCells
+        let tableHeight: CGFloat = tableView.bounds.size.height
+        
+        for i in cells {
+            let cell: UITableViewCell = i as UITableViewCell
+            cell.transform = CGAffineTransformMakeTranslation(0, tableHeight)
+        }
+        
+        var index = 0
+        
+        for a in cells {
+            let cell: UITableViewCell = a as UITableViewCell
+            UIView.animateWithDuration(1.5, delay: 0.05 * Double(index), usingSpringWithDamping: 0.8, initialSpringVelocity: 0, options: [], animations: {
+                cell.transform = CGAffineTransformMakeTranslation(0, 0);
+                }, completion: nil)
+            
+            index += 1
+        }
     }
     func addService() {
         print("adding a service")

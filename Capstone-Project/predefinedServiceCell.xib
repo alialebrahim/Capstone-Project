@@ -15,7 +15,7 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hTE-B7-5dd" userLabel="containerView">
-                        <rect key="frame" x="20" y="5" width="560" height="118"/>
+                        <rect key="frame" x="10" y="5" width="580" height="118"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DrJ-ul-aXl" userLabel="priceView">
                                 <rect key="frame" x="0.0" y="0.0" width="54" height="118"/>
@@ -51,7 +51,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
-                                <color key="backgroundColor" red="0.20000000000000001" green="0.59999999999999998" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstItem="NjX-tv-z54" firstAttribute="top" secondItem="DQR-3B-DXQ" secondAttribute="bottom" constant="8" id="3HT-aQ-2Ve"/>
                                     <constraint firstAttribute="width" constant="54" id="C9U-uj-2Ha"/>
@@ -66,37 +66,38 @@
                                 </constraints>
                             </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Service Title" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="15" translatesAutoresizingMaskIntoConstraints="NO" id="hMl-z5-Uzs">
-                                <rect key="frame" x="236" y="8" width="88" height="19"/>
+                                <rect key="frame" x="241" y="8" width="99" height="19"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="19" id="GJm-jr-BFf"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="16"/>
-                                <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="18"/>
+                                <color key="textColor" white="1" alpha="0.10000000000000001" colorSpace="custom" customColorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="arow" translatesAutoresizingMaskIntoConstraints="NO" id="68J-Y5-e1C">
-                                <rect key="frame" x="542" y="51" width="10" height="16"/>
+                                <rect key="frame" x="562" y="51" width="10" height="16"/>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="16" id="P1C-w4-SGV"/>
                                     <constraint firstAttribute="width" constant="10" id="hYt-So-3h5"/>
                                 </constraints>
                             </imageView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Bn6-DI-Rq6" userLabel="seperatorView">
-                                <rect key="frame" x="533" y="0.0" width="1" height="118"/>
-                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                <rect key="frame" x="553" y="0.0" width="1" height="118"/>
+                                <color key="backgroundColor" red="0.50588235294117645" green="0.40784313725490196" blue="0.68235294117647061" alpha="0.70150862068965514" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="1" id="nl8-ax-zxL"/>
                                 </constraints>
                             </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" minimumFontSize="15" translatesAutoresizingMaskIntoConstraints="NO" id="Wi3-VQ-hFE">
-                                <rect key="frame" x="62" y="35" width="463" height="75"/>
+                                <rect key="frame" x="62" y="35" width="483" height="75"/>
                                 <string key="text">Service DescriptionService DescriptionService DescriptionService DescriptionService DescriptionService DescriptionService DescriptionService DescriptionService DescriptionService DescriptionService DescriptionService DescriptionService DescriptionService DescriptionService DescriptionService DescriptionService Description</string>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-Italic" family="Helvetica Neue" pointSize="17"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
                                 <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <view hidden="YES" alpha="0.20000000298023224" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8Gm-7q-gEQ" userLabel="selectionView">
-                                <rect key="frame" x="0.0" y="0.0" width="560" height="118"/>
+                                <rect key="frame" x="0.0" y="0.0" width="580" height="118"/>
                                 <color key="backgroundColor" red="0.21960784310000001" green="0.63921568630000003" blue="0.86666666670000003" alpha="1" colorSpace="calibratedRGB"/>
                             </view>
                         </subviews>
@@ -123,13 +124,14 @@
                     </view>
                 </subviews>
                 <constraints>
-                    <constraint firstAttribute="trailing" secondItem="hTE-B7-5dd" secondAttribute="trailing" constant="20" id="BOp-4S-SSm"/>
+                    <constraint firstAttribute="trailing" secondItem="hTE-B7-5dd" secondAttribute="trailing" constant="10" id="BOp-4S-SSm"/>
                     <constraint firstAttribute="bottom" secondItem="hTE-B7-5dd" secondAttribute="bottom" constant="5" id="CE4-rk-p3U"/>
-                    <constraint firstItem="hTE-B7-5dd" firstAttribute="leading" secondItem="xZB-2M-YEg" secondAttribute="leading" constant="20" id="qmx-6M-P5f"/>
+                    <constraint firstItem="hTE-B7-5dd" firstAttribute="leading" secondItem="xZB-2M-YEg" secondAttribute="leading" constant="10" id="qmx-6M-P5f"/>
                     <constraint firstItem="hTE-B7-5dd" firstAttribute="top" secondItem="xZB-2M-YEg" secondAttribute="top" constant="5" id="tmW-dA-nvm"/>
                 </constraints>
             </tableViewCellContentView>
             <connections>
+                <outlet property="arrowImageView" destination="68J-Y5-e1C" id="p9B-qg-Cnc"/>
                 <outlet property="containerView" destination="hTE-B7-5dd" id="LdI-x1-iXb"/>
                 <outlet property="priceView" destination="DrJ-ul-aXl" id="K4S-6B-vH6"/>
                 <outlet property="selectionView" destination="8Gm-7q-gEQ" id="phZ-aO-v5p"/>

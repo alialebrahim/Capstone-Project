@@ -12,20 +12,15 @@ import UIKit
 class editProvidersProfile: UIViewController, UITextViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIPopoverPresentationControllerDelegate, CategoriesVCDelegate {
     
     //MARK: IBOutlets
-    @IBOutlet weak var profileImage: UIImageView!
-    @IBOutlet weak var usernameTextField: UITextField!
-    @IBOutlet weak var workingFieldsTextField: UITextField!
-    @IBOutlet weak var descriptionTextView: customTextView!
-    @IBOutlet weak var emailTextField: UITextField!
-    @IBOutlet weak var mobileNumberTextField: UITextField!
+    @IBOutlet weak var profileImage: CircularImageView!
     @IBOutlet weak var contentView: UIView!
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var contentViewHeight: NSLayoutConstraint!
-    
+    @IBOutlet weak var containerView: UIView!
+    @IBOutlet weak var containerViewHeightConstraint: NSLayoutConstraint!
     //MARK: Variables
-    var imagePicker = UIImagePickerController()
+    //var imagePicker = UIImagePickerController()
     var categories = [String]()
-    
     //MARK: ViewControllers lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,7 +28,8 @@ class editProvidersProfile: UIViewController, UITextViewDelegate, UIImagePickerC
         //TODO: add keyboard will hide notification
         setup()
         setupNavigationBar()
-        
+        displayViewController()
+        //imagePicker.navigationController?.navigationBar.tintColor = UIColor.whiteColor()
     }
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
@@ -41,18 +37,18 @@ class editProvidersProfile: UIViewController, UITextViewDelegate, UIImagePickerC
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIKeyboardWillHideNotification, object: nil)
         navigationItem.title = "Edit Profile"
         
+        containerViewHeightConstraint.constant = (44*8) + 80
     }
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         scrollView.userInteractionEnabled = true
         adjustContentViewHeight()
-        
         //TODO: Delete (testing only)
-        performSegueWithIdentifier("CategoriesVC", sender: nil)
+        //performSegueWithIdentifier("CategoriesVC", sender: nil)
     }
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        descriptionTextView.addBottomBorderWith(Color: UIColor.grayColor(), width: 1)
+        
     }
     //MARK: TextView delegates functions
     //adjusting the scrollview each time the textfield changes
@@ -62,24 +58,51 @@ class editProvidersProfile: UIViewController, UITextViewDelegate, UIImagePickerC
         adjustContentViewHeight()
 
     }
+    //MARK: IBActions
+    @IBAction func chanegProfileImageButtonPressed() {
+        let alert = UIAlertController(title: nil, message: "Choose option", preferredStyle: .ActionSheet)
+        let cameraAction = UIAlertAction(title: "Camera", style: .Default) { (UIAlertAction) in
+            
+            if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera) {
+                let imagePicker = UIImagePickerController()
+                imagePicker.delegate = self
+                imagePicker.sourceType = UIImagePickerControllerSourceType.Camera;
+                imagePicker.allowsEditing = false
+                imagePicker.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.whiteColor()]
+                self.presentViewController(imagePicker, animated: true, completion: nil)
+            }else {
+                print("camera not available")
+            }
+        }
+        let photoAction = UIAlertAction(title: "Choose Photo", style: .Default) { (UIAlertAction) in
+            let imagePicker = UIImagePickerController()
+            imagePicker.delegate = self
+            imagePicker.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.whiteColor()]
+            self.presentViewController(imagePicker, animated: true, completion: nil)
+            
+            
+        }
+        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
+        
+        alert.addAction(cameraAction)
+        alert.addAction(photoAction)
+        alert.addAction(cancelAction)
+        
+        presentViewController(alert, animated: true, completion: nil)
+
+    }
     //MARK: functions
     func setup() {
         self.automaticallyAdjustsScrollViewInsets = false
-        
+        let hideKeyboardGesture = UITapGestureRecognizer(target: self, action: #selector(hideKeyboardAction))
+        view.addGestureRecognizer(hideKeyboardGesture)
         //setup tap gesture for image selection
-        imagePicker.delegate = self
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(editProvidersProfile.selectImage))
+        //imagePicker.delegate = self
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(selectImage))
         profileImage.addGestureRecognizer(tapGesture)
         profileImage.userInteractionEnabled = true
         profileImage.contentMode = .ScaleAspectFill
-       
-        //setup outlets
-        emailTextField.keyboardType = .EmailAddress
-        
-        mobileNumberTextField.keyboardType = .PhonePad
-        
-        descriptionTextView.delegate = self
-        descriptionTextView.text = "A well-organized paragraph supports or develops a single controlling idea, which is expressed in a sentence called the topic sentence. A topic sentence has several important functions: it substantiates or supports an essay’s thesis statement; it unifies the content of a paragraph and directs the order of the sentences; and it advises the reader of the subject to be discussed and how the paragraph will discuss it. Readers generally look to the first few sentences in a paragraph to determine the subject and perspective of the paragraph. That’s why it’s often best to put the topic sentence at the very beginning of the paragraph. In some cases, however, it’s more effective to place another sentence before the topic sentence—for example, a sentence linking the current paragraph to the previous one, or one providing background information.A well-organized paragraph supports or develops a single controlling idea, which is expressed in a sentence called the topic sentence. A topic sentence has several important functions: it substantiates or supports an essay’s thesis statement; it unifies the content of a paragraph and directs the order of the sentences; and it advises the reader of the subject to be discussed and how the paragraph will discuss it. Readers generally look to the first few sentences in a paragraph to determine the subject and perspective of the paragraph. That’s why it’s often best to put the topic sentence at the very beginning of the paragraph. In some cases, however, it’s more effective to place another sentence before the topic sentence—for example, a sentence linking the current paragraph to the previous one, or one providing background information."
+       containerView.backgroundColor = UIColor.clearColor()
     }
     func setupNavigationBar() {
         navigationItem.title = "Edit Profile"
@@ -87,6 +110,21 @@ class editProvidersProfile: UIViewController, UITextViewDelegate, UIImagePickerC
         let cancelItem = UIBarButtonItem(barButtonSystemItem: .Cancel, target: self, action: #selector(editProvidersProfile.cancelEditing))
         navigationItem.rightBarButtonItem = doneItem
         navigationItem.leftBarButtonItem = cancelItem
+        navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.whiteColor()]
+    }
+    func getViewController() -> UIViewController? {
+        let storyboard = UIStoryboard(name: "Provider", bundle: nil)
+        let vc = storyboard.instantiateViewControllerWithIdentifier("ProviderInfoTable") as! ProviderInfoTVC
+        return vc
+    }
+    func displayViewController() {
+        if let vc = getViewController() {
+            addChildViewController(vc)
+            didMoveToParentViewController(self)
+            vc.view.frame = contentView.bounds
+            containerView.clipsToBounds = true
+            containerView.addSubview(vc.view)
+        }
     }
     func keyboardWillShow(notification: NSNotification) {
         //TODO: content offset is not correct when emoj keyboard appear.
@@ -102,7 +140,36 @@ class editProvidersProfile: UIViewController, UITextViewDelegate, UIImagePickerC
         
     }
     func selectImage() {
-        presentViewController(imagePicker, animated: true, completion: nil)
+//        presentViewController(imagePicker, animated: true, completion: nil)
+        let alert = UIAlertController(title: nil, message: "Choose option", preferredStyle: .ActionSheet)
+        let cameraAction = UIAlertAction(title: "Camera", style: .Default) { (UIAlertAction) in
+            
+            if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera) {
+                let imagePicker = UIImagePickerController()
+                imagePicker.delegate = self
+                imagePicker.sourceType = UIImagePickerControllerSourceType.Camera;
+                imagePicker.allowsEditing = false
+                imagePicker.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.whiteColor()]
+                self.presentViewController(imagePicker, animated: true, completion: nil)
+            }else {
+                print("camera not available")
+            }
+        }
+        let photoAction = UIAlertAction(title: "Choose Photo", style: .Default) { (UIAlertAction) in
+            let imagePicker = UIImagePickerController()
+            imagePicker.delegate = self
+            imagePicker.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.whiteColor()]
+            self.presentViewController(imagePicker, animated: true, completion: nil)
+            
+            
+        }
+        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
+        
+        alert.addAction(cameraAction)
+        alert.addAction(photoAction)
+        alert.addAction(cancelAction)
+        
+        presentViewController(alert, animated: true, completion: nil)
     }
     func doneEditing() {
         print("done editing")
@@ -132,11 +199,15 @@ class editProvidersProfile: UIViewController, UITextViewDelegate, UIImagePickerC
         for view in self.contentView.subviews {
             contentRect = CGRectUnion(contentRect, view.frame)
         }
+        contentViewHeight.constant = contentRect.size.height + 30
         
-        contentViewHeight.constant = contentRect.size.height + 20
+        
     }
     func adaptivePresentationStyleForPresentationController(controller: UIPresentationController) -> UIModalPresentationStyle {
         return .None
+    }
+    func hideKeyboardAction() {
+        view.endEditing(true)
     }
     //MARK: CategoriesVC delegate function
     func shouldDismissCategoriesView(categories: [String]) {

@@ -9,7 +9,10 @@
 import UIKit
 import SwiftyJSON
 import Alamofire
-class SignUpVC: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate {
+import NVActivityIndicatorView
+import ImageIO
+
+class SignUpVC: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate, SubmitButtonDelegate {
     
     // MARK: IBOutlets
     @IBOutlet weak var profileImage: CircularImageView!
@@ -18,18 +21,19 @@ class SignUpVC: UIViewController, UIImagePickerControllerDelegate, UINavigationC
     @IBOutlet weak var userNameTextField: UITextField!
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var contentView: UIView!
+    @IBOutlet weak var profileImageButton: UIButton!
     @IBOutlet weak var contentViewHeightConstraint: NSLayoutConstraint!
-    
+    @IBOutlet weak var seekerProviderSegmentedControl: UISegmentedControl!
+    @IBOutlet weak var registerButton: SubmitButton!
     // MARK: Variables
-    let imagePicker = UIImagePickerController()
+    //let imagePicker = UIImagePickerController()
     var userCountry = ""
     var errorButtons = [String: ErrorButton]()
-    
+    var userType: String!
     // MARK: ViewController life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
-        configureNavigationBar()
         detectUserCountry()
         
         //set up textfield delegate 
@@ -52,7 +56,52 @@ class SignUpVC: UIViewController, UIImagePickerControllerDelegate, UINavigationC
         super.viewWillDisappear(animated)
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
+    //MARK: IBActions
+    
+    @IBAction func profileImageButtonPressed(sender: AnyObject) {
+        //presentViewController(imagePicker, animated: true, completion: nil)
+        let alert = UIAlertController(title: nil, message: "Choose option", preferredStyle: .ActionSheet)
+        let cameraAction = UIAlertAction(title: "Camera", style: .Default) { (UIAlertAction) in
+            
+            if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera) {
+                let imagePicker = UIImagePickerController()
+                imagePicker.delegate = self
+                imagePicker.sourceType = UIImagePickerControllerSourceType.Camera;
+                imagePicker.allowsEditing = false
+                self.presentViewController(imagePicker, animated: true, completion: nil)
+            }else {
+                print("camera not available")
+            }
+        }
+        let photoAction = UIAlertAction(title: "Choose Photo", style: .Default) { (UIAlertAction) in
+            let imagePicker = UIImagePickerController()
+            imagePicker.delegate = self
+            self.presentViewController(imagePicker, animated: true, completion: nil)
+            
+            
+        }
+        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
+        
+        alert.addAction(cameraAction)
+        alert.addAction(photoAction)
+        alert.addAction(cancelAction)
+        
+        presentViewController(alert, animated: true, completion: nil)
 
+        
+    }
+    @IBAction func seekerProviderSegmentedControlAction(sender: AnyObject) {
+        let segmentedControl = sender as! UISegmentedControl
+        if segmentedControl.selectedSegmentIndex == 0 {
+            userType = "S"
+        }else {
+            userType = "P"
+        }
+    }
+    
+    @IBAction func registerButtonPresser(sender: AnyObject) {
+        registerButton.startLoadingAnimation()
+    }
     // MARK: TextField Delegate functions
     
     /*
@@ -82,13 +131,42 @@ class SignUpVC: UIViewController, UIImagePickerControllerDelegate, UINavigationC
     }
     // MARK: Image picker controller delegate function.
     func selectProfileImage() {
-        presentViewController(imagePicker, animated: true, completion: nil)
+        //presentViewController(imagePicker, animated: true, completion: nil)
+        let alert = UIAlertController(title: nil, message: "Choose option", preferredStyle: .ActionSheet)
+        let cameraAction = UIAlertAction(title: "Camera", style: .Default) { (UIAlertAction) in
+            
+            if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera) {
+                let imagePicker = UIImagePickerController()
+                imagePicker.delegate = self
+                imagePicker.sourceType = UIImagePickerControllerSourceType.Camera;
+                imagePicker.allowsEditing = false
+                self.presentViewController(imagePicker, animated: true, completion: nil)
+            }else {
+                print("camera not available")
+            }
+        }
+        let photoAction = UIAlertAction(title: "Choose Photo", style: .Default) { (UIAlertAction) in
+            let imagePicker = UIImagePickerController()
+            imagePicker.delegate = self
+            self.presentViewController(imagePicker, animated: true, completion: nil)
+            
+            
+        }
+        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
+        
+        alert.addAction(cameraAction)
+        alert.addAction(photoAction)
+        alert.addAction(cancelAction)
+        
+        presentViewController(alert, animated: true, completion: nil)
     }
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
         //grabing the selected image
         if let pickedImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
-            profileImage.contentMode = .ScaleAspectFill
+            profileImageButton.hidden = true
+            //profileImage.contentMode = .ScaleAspectFill
             profileImage.image = pickedImage
+            //centerImageViewOnFace(profileImage)
         }
         
         dismissViewControllerAnimated(true, completion: nil)
@@ -214,17 +292,6 @@ class SignUpVC: UIViewController, UIImagePickerControllerDelegate, UINavigationC
         let contentInset:UIEdgeInsets = UIEdgeInsetsZero
         self.scrollView.contentInset = contentInset
     }
-    func configureNavigationBar() {
-        navigationItem.title = "Sign up"
-        let signUpItem = UIBarButtonItem(title: "Sign up", style: .Plain, target: self, action: #selector(signUpAction))
-        let cancelItem = UIBarButtonItem(barButtonSystemItem: .Cancel, target: self, action: #selector(cancelAction))
-        
-        navigationItem.rightBarButtonItem = signUpItem
-        navigationItem.leftBarButtonItem = cancelItem
-    }
-    func cancelAction() {
-        navigationController?.popViewControllerAnimated(true)
-    }
     func signUpAction() {
         print("sign up pressed")
         /*
@@ -250,14 +317,29 @@ class SignUpVC: UIViewController, UIImagePickerControllerDelegate, UINavigationC
     }
     
     func adjustContentViewHeight() {
+        
         var contentRect = CGRectZero;
         for view in self.contentView.subviews {
             contentRect = CGRectUnion(contentRect, view.frame)
         }
-        contentViewHeightConstraint.constant = contentRect.size.height + 20
+        if contentRect.size.height > contentViewHeightConstraint.constant {
+            contentViewHeightConstraint.constant = contentRect.size.height + 20
+        }else {
+            contentViewHeightConstraint.constant = self.view.frame.height - 50
+        }
+        
     }
     
     func setup() {
+        /*
+         *setting up view
+         */
+        let colors = [UIColor(hex: 0xB39DDB), UIColor(hex: 0x7E57C2)]
+        self.view.setGradientBackground(colors)
+        self.view.bringSubviewToFront(scrollView)
+        self.view.bringSubviewToFront(contentView)
+        
+        contentView.backgroundColor = UIColor.clearColor()
         /*
          tap gesture on an image is used when the user press on the image
          an image picker will present for the use to choose his profile
@@ -265,18 +347,108 @@ class SignUpVC: UIViewController, UIImagePickerControllerDelegate, UINavigationC
          */
         let imageTapGesture = UITapGestureRecognizer(target: self, action: #selector(selectProfileImage))
         profileImage.addGestureRecognizer(imageTapGesture)
-        imagePicker.delegate = self
+        //imagePicker.delegate = self
         
         
         // tap gesture to dismiss the keyboard
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         view.addGestureRecognizer(tapGesture)
         
+        /*
+        *
+        *setup profile image view
+        */
+        profileImage.backgroundColor = UIColor.whiteColor().colorWithAlphaComponent(0.5)
+         profileImage.addBorderWith(color: UIColor.whiteColor().colorWithAlphaComponent(0.7), borderWidth: 4)
+        
+        /*
+         *
+         *setup select profile image button background image
+         */
+        let origImage = profileImageButton.imageView?.image!
+        let tintedImage = origImage!.imageWithRenderingMode(.AlwaysTemplate)
+        profileImageButton.setImage(tintedImage, forState: .Normal)
+        profileImageButton.tintColor = UIColor.whiteColor().colorWithAlphaComponent(0.5)
+        profileImageButton.contentMode = .ScaleAspectFit
+        
+        /*
+         *
+         *setup textfields
+         */
+        userNameTextField.textColor = UIColor.whiteColor().colorWithAlphaComponent(0.7)
         passwordTextfield.secureTextEntry = true
+        passwordTextfield.textColor = UIColor.whiteColor().colorWithAlphaComponent(0.7)
         emailTextfield.becomeFirstResponder()
+        emailTextfield.textColor = UIColor.whiteColor().colorWithAlphaComponent(0.7)
         scrollView.userInteractionEnabled = true
-
+        
+        /*
+         *
+         *setup Segmented Control
+         */
+        let segAttributes: NSDictionary = [
+            NSForegroundColorAttributeName: UIColor(hex: 0x7E57C2)
+        ]
+        
+        seekerProviderSegmentedControl.setTitleTextAttributes(segAttributes as [NSObject : AnyObject], forState: UIControlState.Selected)
+        seekerProviderSegmentedControl.selectedSegmentIndex = 0
+        userType = "S"
+        seekerProviderSegmentedControl.tintColor = UIColor.whiteColor().colorWithAlphaComponent(0.7)
+        
+        /*
+         *
+         *setup register Button
+         */
+        registerButton.setTitle("Register", forState: .Normal)
+        registerButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+        registerButton.backgroundColor = UIColor.whiteColor().colorWithAlphaComponent(0.5)
+        registerButton.delegate = self
+        registerButton.layer.cornerRadius = self.registerButton.frame.height / 2
+        
+    }
+    func didAnimate(frame: CGRect) {
+        let activity = NVActivityIndicatorView(frame: frame, type: .BallClipRotateMultiple, color: UIColor.whiteColor())
+        contentView.addSubview(activity)
+        contentView.bringSubviewToFront(activity)
+        activity.startAnimation()
+    }
+    override func preferredStatusBarStyle() -> UIStatusBarStyle {
+        return .LightContent
     }
     
-
+    ////////////////////
+    //MARK: Face Recognition
+    ////////////////////
+    ////////////////////
+    //TODO: FIX ERRORS!
+    ////////////////////
+//    func centerImageViewOnFace(imageView: UIImageView) {
+//        let context = CIContext(options: nil)
+//        let options = [CIDetectorAccuracy: CIDetectorAccuracyLow]
+//        let detector = CIDetector(ofType: CIDetectorTypeFace, context: context, options: options)
+//        let faceImage = imageView.image
+//        let ciImage = CIImage(CGImage: (faceImage?.CGImage)!)
+//        let features = detector.featuresInImage(ciImage)
+//        
+//        if features.count > 0 {
+//            var face: CIFaceFeature!
+//            for rect in features {
+//                face = rect as! CIFaceFeature
+//            }
+//            var faceRect = face.bounds
+//            faceRect.origin.x -= 20
+//            faceRect.origin.y -= 30
+//            faceRect.size.width += 40
+//            faceRect.size.height += 60
+//            
+//            //converting from faceRect coordinate to UIImageView coordinate
+//            let x = faceRect.origin.x / (faceImage?.size.width)!
+//            let y = ((faceImage?.size.height)!-faceRect.origin.y-faceRect.size.height) / (faceImage?.size.height)!
+//            let width = faceRect.size.width / (faceImage?.size.width)!
+//            let height = faceRect.size.height / (faceImage?.size.height)!
+//            
+//            imageView.layer.contentsRect = CGRectMake(x, y, width, height)
+//        }
+//    }
+    
 }

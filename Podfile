@@ -12,5 +12,6 @@ target 'Capstone-Project' do
   pod "TextFieldEffects" # there is swift3 support
   pod 'Cosmos', '~> 1.2' #there is swift3 support
   pod 'RAMAnimatedTabBarController'
-
+  pod 'NVActivityIndicatorView'
+  
 end

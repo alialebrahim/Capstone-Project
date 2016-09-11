@@ -62,12 +62,40 @@ extension UIView {
         self.layer.borderColor = color.CGColor
         self.layer.borderWidth = width
     }
+    func addLeadingBorderWithColor(color: UIColor, width: CGFloat) {
+        let border = CALayer()
+        border.backgroundColor = color.CGColor
+        border.frame = CGRectMake(0, 0, width, self.frame.size.height)
+        self.layer.addSublayer(border)
+        self.layer.masksToBounds = false
+    }
+    func addTopBorderWithColor(color: UIColor, width: CGFloat) {
+        let border = CALayer()
+        border.backgroundColor = color.CGColor
+        border.frame = CGRectMake(0, 0, self.frame.width, width)
+        self.layer.addSublayer(border)
+        self.layer.masksToBounds = false
+    }
     func addBottomBorderWithColor(color: UIColor, width: CGFloat) {
         let border = CALayer()
         border.backgroundColor = color.CGColor
         border.frame = CGRectMake(0, self.frame.size.height - width, self.frame.size.width, width)
         self.layer.addSublayer(border)
         self.layer.masksToBounds = false
+    }
+    func setGradientBackground(colors: [UIColor]) {
+        var gradientColors = [CGColor]()
+        for color in colors {
+            gradientColors.append(color.CGColor)
+        }
+        let gradientLayer = CAGradientLayer()
+        gradientLayer.colors = gradientColors
+        gradientLayer.locations = [ 0.0, 1.0]
+//        gradientLayer.startPoint = CGPointMake(1,0)
+//        gradientLayer.endPoint = CGPointMake(0,1)
+        gradientLayer.frame = self.bounds
+        self.layer.insertSublayer(gradientLayer, atIndex: 0)
+        //self.layer.addSublayer(gradientLayer)
     }
 
 }
@@ -128,3 +156,20 @@ extension Array {
         return false
     }
 }
+//MARK: NSTimer
+extension NSTimer {
+    class func schedule(delay delay: NSTimeInterval, handler: NSTimer! -> Void) -> NSTimer {
+        let fireDate = delay + CFAbsoluteTimeGetCurrent()
+        let timer = CFRunLoopTimerCreateWithHandler(kCFAllocatorDefault, fireDate, 0, 0, 0, handler)
+        CFRunLoopAddTimer(CFRunLoopGetCurrent(), timer, kCFRunLoopCommonModes)
+        return timer
+    }
+    
+    class func schedule(repeatInterval interval: NSTimeInterval, handler: NSTimer! -> Void) -> NSTimer {
+        let fireDate = interval + CFAbsoluteTimeGetCurrent()
+        let timer = CFRunLoopTimerCreateWithHandler(kCFAllocatorDefault, fireDate, interval, 0, 0, handler)
+        CFRunLoopAddTimer(CFRunLoopGetCurrent(), timer, kCFRunLoopCommonModes)
+        return timer
+    }
+}
+

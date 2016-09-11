@@ -42,10 +42,12 @@ class addService: UIViewController, UITextViewDelegate, iCarouselDelegate, iCaro
     let imagePicker = UIImagePickerController()
     var buttonName = "Add"
     var serviceID = -1
-    
+    var dimView: UIView!
     //MARK: ViewController lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        dimView = UIView(frame: self.view.bounds)
+        dimView.backgroundColor = UIColor.whiteColor().colorWithAlphaComponent(0.7)
         /*
             1-this is done in the storyboard and it is needed!:
                 descriptionTextView.scrollEnabled = false
@@ -60,7 +62,7 @@ class addService: UIViewController, UITextViewDelegate, iCarouselDelegate, iCaro
     }
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
-        addLine(UIColor(hex: 0xC7C7CD), width: 1)
+        //addLine(UIColor(hex: 0xC7C7CD), width: 1)
         titleTextField.addBottomBorderWithColor(UIColor(hex: 0xC7C7CD), width: 1)
         priceTextField.addBottomBorderWithColor(UIColor(hex: 0xC7C7CD), width: 1)
     }
@@ -87,6 +89,7 @@ class addService: UIViewController, UITextViewDelegate, iCarouselDelegate, iCaro
     
     //MARK: available service hours delegate function
     func shouldDismissHoursView(times: [(from: NSDate, to: NSDate)]) {
+        dimView.removeFromSuperview()
         if !times.isEmpty {
             var from: String
             var to: String
@@ -113,6 +116,7 @@ class addService: UIViewController, UITextViewDelegate, iCarouselDelegate, iCaro
     
     //MARK: available service days delegate function
     func shouldDismissDaysView(days: [Int]) {
+        dimView.removeFromSuperview()
         if !days.isEmpty {
             availableServiceDays = days
             print(availableServiceDays)
@@ -202,18 +206,18 @@ class addService: UIViewController, UITextViewDelegate, iCarouselDelegate, iCaro
         descriptionTextView.text = "text view description bla bla bla text view description bla bla bla text view description bla bla bla text view description bla bla bla text view description bla bla bla."
         priceTextField.text = "55"
     }
-    func addLine(color: UIColor, width: CGFloat) {
-        if border != nil {
-            border.removeFromSuperview()
-            border = nil
-        }
-        
-        border = UIView()
-        border.frame = CGRectMake(descriptionTextView.frame.origin.x, descriptionTextView.frame.origin.y+descriptionTextView.frame.height-width, descriptionTextView.frame.width, width)
-        border.backgroundColor = color
-        descriptionTextView.superview!.insertSubview(border, aboveSubview: descriptionTextView)
-        descriptionTextView.layoutIfNeeded()
-    }
+//    func addLine(color: UIColor, width: CGFloat) {
+//        if border != nil {
+//            border.removeFromSuperview()
+//            border = nil
+//        }
+//        
+//        border = UIView()
+//        border.frame = CGRectMake(descriptionTextView.frame.origin.x, descriptionTextView.frame.origin.y+descriptionTextView.frame.height-width, descriptionTextView.frame.width, width)
+//        border.backgroundColor = color
+//        descriptionTextView.superview!.insertSubview(border, aboveSubview: descriptionTextView)
+//        descriptionTextView.layoutIfNeeded()
+//    }
     func keyboardWillShow(notification: NSNotification) {
         var userInfo = notification.userInfo!
         let keyboardFrame = (userInfo[UIKeyboardFrameBeginUserInfoKey] as! NSValue).CGRectValue()
@@ -300,6 +304,7 @@ class addService: UIViewController, UITextViewDelegate, iCarouselDelegate, iCaro
     
     //MARK: Segue functions
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        self.view.addSubview(dimView)
         let myIndex = sender as? Int
         if segue.identifier == "ImagePreviewVC" {
             if let vc = segue.destinationViewController as? ImagePreview {

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		411879D41D6876BA00A23DD6 /* SubmitButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 411879D31D6876BA00A23DD6 /* SubmitButton.swift */; };
+		411879F81D6C3FBB00A23DD6 /* ProviderInfoTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 411879F71D6C3FB500A23DD6 /* ProviderInfoTVC.swift */; };
 		4136DB2A1D59C9AA0030A685 /* predefinedServiceCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4136DB221D59C9AA0030A685 /* predefinedServiceCell.xib */; };
 		4136DB2B1D59C9AA0030A685 /* WorkingOnServiceCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4136DB231D59C9AA0030A685 /* WorkingOnServiceCell.xib */; };
 		4136DB2C1D59C9AA0030A685 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4136DB241D59C9AA0030A685 /* Main.storyboard */; };
@@ -64,6 +66,8 @@
 
 /* Begin PBXFileReference section */
 		26287226B2656FFFE3435268 /* Pods-Capstone-Project.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Capstone-Project.release.xcconfig"; path = "Pods/Target Support Files/Pods-Capstone-Project/Pods-Capstone-Project.release.xcconfig"; sourceTree = "<group>"; };
+		411879D31D6876BA00A23DD6 /* SubmitButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubmitButton.swift; sourceTree = "<group>"; };
+		411879F71D6C3FB500A23DD6 /* ProviderInfoTVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProviderInfoTVC.swift; sourceTree = "<group>"; };
 		4136DB0B1D59C81E0030A685 /* Capstone-Project.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Capstone-Project.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4136DB1A1D59C81F0030A685 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4136DB211D59C9A80030A685 /* Capstone-Project-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Capstone-Project-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -168,9 +172,9 @@
 			children = (
 				4136DB3C1D59CA4F0030A685 /* countries.txt */,
 				4136DB201D59C9950030A685 /* Views */,
+				4136DB321D59C9EE0030A685 /* Supporting Files */,
 				4136DB3F1D59CA6D0030A685 /* Controllers */,
 				4136DB611D59CAF80030A685 /* Models */,
-				4136DB321D59C9EE0030A685 /* Supporting Files */,
 			);
 			path = "Capstone-Project";
 			sourceTree = "<group>";
@@ -211,8 +215,8 @@
 			isa = PBXGroup;
 			children = (
 				4136DB5A1D59CAD50030A685 /* Main */,
-				4136DB551D59CABB0030A685 /* Seeker */,
 				4136DB401D59CA780030A685 /* Provider */,
+				4136DB551D59CABB0030A685 /* Seeker */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -232,6 +236,7 @@
 				4136DB471D59CAB50030A685 /* AvailableServiceHoursVC.swift */,
 				4136DB481D59CAB50030A685 /* AvailableServiceDaysVC.swift */,
 				4136DB491D59CAB50030A685 /* ImagePreview.swift */,
+				411879F71D6C3FB500A23DD6 /* ProviderInfoTVC.swift */,
 			);
 			name = Provider;
 			sourceTree = "<group>";
@@ -277,6 +282,7 @@
 				414777731D5F13470097D34D /* RequestedServiceCell.swift */,
 				4147777D1D63304B0097D34D /* RatingCell.swift */,
 				4147777F1D6393450097D34D /* ProviderCell.swift */,
+				411879D31D6876BA00A23DD6 /* SubmitButton.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -445,6 +451,8 @@
 				4136DB4E1D59CAB50030A685 /* DetailedPredefinedServiceVC.swift in Sources */,
 				414777821D63936D0097D34D /* ProvidersSearchVC.swift in Sources */,
 				4136DB7B1D5B19F80030A685 /* CategoriesVC.swift in Sources */,
+				411879D41D6876BA00A23DD6 /* SubmitButton.swift in Sources */,
+				411879F81D6C3FBB00A23DD6 /* ProviderInfoTVC.swift in Sources */,
 				4136DB591D59CACA0030A685 /* SeekerDetailedPredefinedServiceVC.swift in Sources */,
 				4136DB741D59CB060030A685 /* CustomSearchBar.swift in Sources */,
 				4136DB581D59CACA0030A685 /* SeekerFeedVC.swift in Sources */,

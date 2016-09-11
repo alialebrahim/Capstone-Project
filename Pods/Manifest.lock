@@ -1,6 +1,7 @@
 PODS:
   - Alamofire (3.4.0)
   - Cosmos (1.2.2)
+  - NVActivityIndicatorView (2.6)
   - RAMAnimatedTabBarController (1.4.0)
   - SwiftyJSON (2.3.2)
   - TextFieldEffects (1.2.0)
@@ -8,6 +9,7 @@ PODS:
 DEPENDENCIES:
   - Alamofire (~> 3.4)
   - Cosmos (~> 1.2)
+  - NVActivityIndicatorView
   - RAMAnimatedTabBarController
   - SwiftyJSON (from `https://github.com/SwiftyJSON/SwiftyJSON.git`)
   - TextFieldEffects
@@ -24,10 +26,11 @@ CHECKOUT OPTIONS:
 SPEC CHECKSUMS:
   Alamofire: c19a627cefd6a95f840401c49ab1f124e07f54ee
   Cosmos: 87c49100c69d2cb2eebfa4eb8d1e801fe29ff774
+  NVActivityIndicatorView: b8207b369c012af32da0916a8346a56d16a5fbbe
   RAMAnimatedTabBarController: 6f221d7dc647b4266c9e05618c84b5639f190297
   SwiftyJSON: 04ccea08915aa0109039157c7974cf0298da292a
   TextFieldEffects: bc4fd3bd557321bd61a0762f3f50965477a36f62
 
-PODFILE CHECKSUM: 84459167c224ebd7e8cc09f5141c4416c5333a4d
+PODFILE CHECKSUM: 6dee8894b0b9f96c466a369171dbd0012a0717b0
 
 COCOAPODS: 1.0.0

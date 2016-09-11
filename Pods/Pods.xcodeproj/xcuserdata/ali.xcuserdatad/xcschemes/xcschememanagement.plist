@@ -14,6 +14,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>NVActivityIndicatorView.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Pods-Capstone-Project.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -37,7 +42,17 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>19F62ECABFA49DB33CEC947B45482165</key>
+		<key>1F657B5E99F54170851985FF196542C0</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>1FAA66831DC8481C51F2C406DB9315B0</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>41F1E2955C7279EFD2D89D65602B9D4F</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -47,22 +62,17 @@
 			<key>primary</key>
 			<true/>
 		</dict>
+		<key>626D49AD18621B0A3059EE726B27AE89</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>79C040AFDDCE1BCBF6D8B5EB0B85887F</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>93DEACC34A9DAE7FD6B7D968D68AAE1A</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>AECDE26B8B970CEF7A099ACE18D590D5</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>DD0BFE4568EEF1C9BD9BEE8F84C737A6</key>
+		<key>E6F0A3F101FBA6E276385D11FB47BE4E</key>
 		<dict>
 			<key>primary</key>
 			<true/>
