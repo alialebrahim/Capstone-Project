@@ -41,7 +41,7 @@ class LoginVC: UIViewController, SubmitButtonDelegate {
     }
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-        offeredServiceCreation()
+        updatingOfferedService()
     }
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
@@ -400,6 +400,21 @@ class LoginVC: UIViewController, SubmitButtonDelegate {
             
         }
     }
+    func gettingOfferedService() {
+        let URL = "http://81.4.110.27/offeredservice/"
+        Alamofire.request(.GET, URL, parameters: nil, encoding: .JSON).responseJSON { response in
+            print(response.request)  // original URL request
+            print(response.response) // URL response
+            print(response.data)     // server data
+            print(response.result)   // result of response serialization
+            if let dataString = String(data: response.data!, encoding: NSUTF8StringEncoding) {
+                print(dataString)
+            }
+            if let JSON = response.result.value {
+                print("JSON: \(JSON)")
+            }
+        }
+    }
     func offeredServiceCreation() {
         
         let URL = "http://81.4.110.27/offeredservice/"
@@ -447,6 +462,43 @@ class LoginVC: UIViewController, SubmitButtonDelegate {
             imagesData.append(base64String)
         }
         return imagesData
+    }
+    
+    func updatingOfferedService() {
+        if let myToken = defaults.objectForKey("userToken") as? String{
+            print(myToken)
+            let headers = [
+                "Authorization": myToken
+            ]
+            let URL = "http://81.4.110.27/offeredservice/2/"
+            
+            let category = "IDK Services"
+            let service : [String: AnyObject] = [
+                "title" : "kkkkkkkkk",
+                "description" : "this is a service description ksdhfks",
+                "price" : 33.2
+            ]
+            
+            let parameters = [
+                "category": category,
+                "service": service,
+                "serviceimage_set": []
+            ]
+            
+            Alamofire.request(.PUT, URL, parameters: parameters as? [String : AnyObject], headers: headers, encoding: .JSON).responseJSON { response in
+                print(response.request)  // original URL request
+                print(response.response) // URL response
+                print(response.data)     // server data
+                print(response.result)   // result of response serialization
+                if let mydata = String(data: response.data!, encoding: NSUTF8StringEncoding) {
+                    print(mydata)
+                }
+                if let JSON = response.result.value {
+                    print("JSON: \(JSON)")
+                }
+            }
+            
+        }
     }
 
 }
