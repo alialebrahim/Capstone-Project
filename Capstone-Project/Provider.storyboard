@@ -1073,7 +1073,7 @@
         <!--CategoriesVC-->
         <scene sceneID="17C-ba-EPp">
             <objects>
-                <viewController id="cX4-Ch-kaI" customClass="CategoriesVC" customModule="Capstone_Project" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="CategoryVC" id="cX4-Ch-kaI" customClass="CategoriesVC" customModule="Capstone_Project" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="MYS-WY-IgF"/>
                         <viewControllerLayoutGuide type="bottom" id="TsV-N3-3bx"/>
@@ -1230,8 +1230,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="800"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="92v-Qc-bvs">
-                                <rect key="frame" x="0.0" y="64" width="600" height="736"/>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="92v-Qc-bvs">
+                                <rect key="frame" x="0.0" y="64" width="600" height="687"/>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -1583,6 +1583,7 @@
                     <connections>
                         <segue destination="nDl-Kz-U1K" kind="relationship" relationship="viewControllers" id="QNG-4l-zQH"/>
                         <segue destination="k8L-kp-usN" kind="relationship" relationship="viewControllers" id="GC7-HE-Fjs"/>
+                        <segue destination="nME-Qa-egu" kind="relationship" relationship="viewControllers" id="Nyq-Rh-7sf"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bj4-lM-I3S" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1637,8 +1638,67 @@
             </objects>
             <point key="canvasLocation" x="273" y="2844"/>
         </scene>
+        <!--Feed-->
+        <scene sceneID="jT6-c3-YKl">
+            <objects>
+                <viewController id="e2a-at-MvR" customClass="Feed" customModule="Capstone_Project" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Tcw-44-Iow"/>
+                        <viewControllerLayoutGuide type="bottom" id="IKC-Lb-hEL"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="OQC-LK-mRU">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="q75-O8-Djs">
+                                <rect key="frame" x="0.0" y="64" width="600" height="487"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="q75-O8-Djs" firstAttribute="top" secondItem="Tcw-44-Iow" secondAttribute="bottom" id="UNn-OO-Hm3"/>
+                            <constraint firstItem="IKC-Lb-hEL" firstAttribute="top" secondItem="q75-O8-Djs" secondAttribute="bottom" id="bie-LR-bWw"/>
+                            <constraint firstAttribute="trailing" secondItem="q75-O8-Djs" secondAttribute="trailing" id="eK2-Vx-f6o"/>
+                            <constraint firstItem="q75-O8-Djs" firstAttribute="leading" secondItem="OQC-LK-mRU" secondAttribute="leading" id="xXd-Hr-8N5"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="Fsj-2U-6sQ"/>
+                    <connections>
+                        <outlet property="tableView" destination="q75-O8-Djs" id="9DL-Mf-LIR"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="62i-er-4Yf" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1085" y="3660"/>
+        </scene>
+        <!--Feed-->
+        <scene sceneID="w4U-Ia-2wb">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="nME-Qa-egu" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Feed" image="Feed" id="Ycd-Y5-8qX" customClass="RAMAnimatedTabBarItem" customModule="RAMAnimatedTabBarController">
+                        <connections>
+                            <outlet property="animation" destination="IdJ-cq-2Ef" id="uys-i7-h3P"/>
+                        </connections>
+                    </tabBarItem>
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="FOv-wo-3T7">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="e2a-at-MvR" kind="relationship" relationship="rootViewController" id="re9-J8-sWq"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="CpH-Mh-ug1" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <customObject id="IdJ-cq-2Ef" customClass="RAMBounceAnimation" customModule="RAMAnimatedTabBarController"/>
+            </objects>
+            <point key="canvasLocation" x="273" y="3660"/>
+        </scene>
     </scenes>
     <resources>
+        <image name="Feed" width="30" height="30"/>
         <image name="Profile" width="30" height="30"/>
         <image name="Services" width="30" height="30"/>
         <image name="arow" width="50" height="50"/>

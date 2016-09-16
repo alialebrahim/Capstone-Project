@@ -56,6 +56,7 @@ class CategoriesVC: UIViewController, UITableViewDelegate, UITableViewDataSource
     //MARK: Functions
     func setup() {
         saveCancelButton.setTitleColor(UIColor.redColor(), forState: .Normal)
+        automaticallyAdjustsScrollViewInsets = false
     }
     func setupTableView() {
         tableView.delegate = self

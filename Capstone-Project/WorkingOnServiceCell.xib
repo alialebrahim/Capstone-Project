@@ -18,10 +18,10 @@
                         <rect key="frame" x="10" y="5" width="580" height="201"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8i5-SR-ATD">
-                                <rect key="frame" x="0.0" y="0.0" width="20" height="201"/>
+                                <rect key="frame" x="0.0" y="0.0" width="11" height="201"/>
                                 <color key="backgroundColor" red="0.21960784310000001" green="0.63921568630000003" blue="0.86666666670000003" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="20" id="53g-yF-uN0"/>
+                                    <constraint firstAttribute="width" constant="11" id="53g-yF-uN0"/>
                                 </constraints>
                             </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="This is requested service title" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IAa-XK-2Ug">

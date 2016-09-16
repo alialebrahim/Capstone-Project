@@ -61,6 +61,11 @@
 		414777821D63936D0097D34D /* ProvidersSearchVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 414777811D63936D0097D34D /* ProvidersSearchVC.swift */; };
 		414777841D63938E0097D34D /* ProviderCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 414777831D63938E0097D34D /* ProviderCell.xib */; };
 		418CA4291D64A0B7007852F6 /* SearchedProviderVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 418CA4281D64A0B7007852F6 /* SearchedProviderVC.swift */; };
+		41A8A78C1D87F50D00F7E1AC /* PublicServiceCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 41A8A78B1D87F50D00F7E1AC /* PublicServiceCell.xib */; };
+		41A8A78E1D8800B800F7E1AC /* PublicServiceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41A8A78D1D8800B800F7E1AC /* PublicServiceCell.swift */; };
+		41ACDE111D86C87F00CA7438 /* Feed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41ACDE101D86C87F00CA7438 /* Feed.swift */; };
+		41ACDE131D86C8AB00CA7438 /* PublicServiceRequestVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41ACDE121D86C8AB00CA7438 /* PublicServiceRequestVC.swift */; };
+		41ACDE151D86C94A00CA7438 /* RequestLogVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41ACDE141D86C94A00CA7438 /* RequestLogVC.swift */; };
 		5F93EA9111551AC7F07222B9 /* Pods_Capstone_Project.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A1262E72DABFBDAC57CAA06 /* Pods_Capstone_Project.framework */; };
 /* End PBXBuildFile section */
 
@@ -124,6 +129,11 @@
 		414777811D63936D0097D34D /* ProvidersSearchVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProvidersSearchVC.swift; sourceTree = "<group>"; };
 		414777831D63938E0097D34D /* ProviderCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ProviderCell.xib; sourceTree = "<group>"; };
 		418CA4281D64A0B7007852F6 /* SearchedProviderVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchedProviderVC.swift; sourceTree = "<group>"; };
+		41A8A78B1D87F50D00F7E1AC /* PublicServiceCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PublicServiceCell.xib; sourceTree = "<group>"; };
+		41A8A78D1D8800B800F7E1AC /* PublicServiceCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PublicServiceCell.swift; sourceTree = "<group>"; };
+		41ACDE101D86C87F00CA7438 /* Feed.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Feed.swift; sourceTree = "<group>"; };
+		41ACDE121D86C8AB00CA7438 /* PublicServiceRequestVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PublicServiceRequestVC.swift; sourceTree = "<group>"; };
+		41ACDE141D86C94A00CA7438 /* RequestLogVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestLogVC.swift; sourceTree = "<group>"; };
 		9A1262E72DABFBDAC57CAA06 /* Pods_Capstone_Project.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Capstone_Project.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D2697E035B9466973F2B46CC /* Pods-Capstone-Project.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Capstone-Project.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Capstone-Project/Pods-Capstone-Project.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -193,6 +203,7 @@
 				414777711D5F0F640097D34D /* RequestedServiceCell.xib */,
 				4147777B1D6325220097D34D /* RatingCell.xib */,
 				414777831D63938E0097D34D /* ProviderCell.xib */,
+				41A8A78B1D87F50D00F7E1AC /* PublicServiceCell.xib */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -237,6 +248,7 @@
 				4136DB481D59CAB50030A685 /* AvailableServiceDaysVC.swift */,
 				4136DB491D59CAB50030A685 /* ImagePreview.swift */,
 				411879F71D6C3FB500A23DD6 /* ProviderInfoTVC.swift */,
+				41ACDE101D86C87F00CA7438 /* Feed.swift */,
 			);
 			name = Provider;
 			sourceTree = "<group>";
@@ -251,6 +263,8 @@
 				414777791D6320C70097D34D /* ChooseRatingVC.swift */,
 				414777811D63936D0097D34D /* ProvidersSearchVC.swift */,
 				418CA4281D64A0B7007852F6 /* SearchedProviderVC.swift */,
+				41ACDE121D86C8AB00CA7438 /* PublicServiceRequestVC.swift */,
+				41ACDE141D86C94A00CA7438 /* RequestLogVC.swift */,
 			);
 			name = Seeker;
 			sourceTree = "<group>";
@@ -283,6 +297,7 @@
 				4147777D1D63304B0097D34D /* RatingCell.swift */,
 				4147777F1D6393450097D34D /* ProviderCell.swift */,
 				411879D31D6876BA00A23DD6 /* SubmitButton.swift */,
+				41A8A78D1D8800B800F7E1AC /* PublicServiceCell.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -367,6 +382,7 @@
 				4147777C1D6325230097D34D /* RatingCell.xib in Resources */,
 				4136DB2A1D59C9AA0030A685 /* predefinedServiceCell.xib in Resources */,
 				4136DB2D1D59C9AA0030A685 /* Seeker.storyboard in Resources */,
+				41A8A78C1D87F50D00F7E1AC /* PublicServiceCell.xib in Resources */,
 				4136DB3D1D59CA4F0030A685 /* countries.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -428,6 +444,7 @@
 			files = (
 				414777801D6393450097D34D /* ProviderCell.swift in Sources */,
 				414777741D5F13470097D34D /* RequestedServiceCell.swift in Sources */,
+				41ACDE131D86C8AB00CA7438 /* PublicServiceRequestVC.swift in Sources */,
 				4136DB771D59CB060030A685 /* ErrorButton.swift in Sources */,
 				4136DB6F1D59CB060030A685 /* Extensions.swift in Sources */,
 				4136DB4D1D59CAB50030A685 /* OfferedServicesVC.swift in Sources */,
@@ -455,7 +472,9 @@
 				411879F81D6C3FBB00A23DD6 /* ProviderInfoTVC.swift in Sources */,
 				4136DB591D59CACA0030A685 /* SeekerDetailedPredefinedServiceVC.swift in Sources */,
 				4136DB741D59CB060030A685 /* CustomSearchBar.swift in Sources */,
+				41A8A78E1D8800B800F7E1AC /* PublicServiceCell.swift in Sources */,
 				4136DB581D59CACA0030A685 /* SeekerFeedVC.swift in Sources */,
+				41ACDE151D86C94A00CA7438 /* RequestLogVC.swift in Sources */,
 				4136DB731D59CB060030A685 /* CustomSearchController.swift in Sources */,
 				4136DB701D59CB060030A685 /* Reachability.swift in Sources */,
 				4136DB511D59CAB50030A685 /* AvailableServiceHoursVC.swift in Sources */,
@@ -463,6 +482,7 @@
 				4136DB601D59CAE30030A685 /* LoginVC.swift in Sources */,
 				4136DB541D59CAB50030A685 /* WorkingOnVC.swift in Sources */,
 				4136DB6D1D59CB060030A685 /* CircularImageView.swift in Sources */,
+				41ACDE111D86C87F00CA7438 /* Feed.swift in Sources */,
 				4136DB351D59C9FD0030A685 /* iCarousel.m in Sources */,
 				418CA4291D64A0B7007852F6 /* SearchedProviderVC.swift in Sources */,
 				4136DB721D59CB060030A685 /* customTextView.swift in Sources */,

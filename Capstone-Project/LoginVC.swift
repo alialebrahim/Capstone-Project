@@ -41,7 +41,15 @@ class LoginVC: UIViewController, SubmitButtonDelegate {
     }
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-        updatingOfferedService()
+        //loginTest()
+        //deleteOfferedService()
+        //deleteOfferedServiceImage()
+        offeredServiceCreation()
+        //publicServiceCreation()
+        //placeABid()
+        //signUpTest()
+        //getPublicService()
+        //getBids()
     }
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
@@ -52,6 +60,8 @@ class LoginVC: UIViewController, SubmitButtonDelegate {
     @IBAction func loginButtonPressed(sender: AnyObject) {
         loginButton.startLoadingAnimation()
         NSTimer.schedule(delay: 1) { (timer) in
+            //ProfileVC
+            //self.performSegueWithIdentifier("SeekerFeedVC", sender: nil)
             self.performSegueWithIdentifier("ProfileVC", sender: nil)
         }
         
@@ -262,7 +272,7 @@ class LoginVC: UIViewController, SubmitButtonDelegate {
             
             let category = "car Services"
             let service : [String: AnyObject] = [
-                "title" : "public service 2",
+                "title" : "i dont know title :p",
                 "description" : "this is a service description that will descripte the service with title public service 2",
                 "price" : 12.1,
                 "is_special" : false
@@ -337,15 +347,41 @@ class LoginVC: UIViewController, SubmitButtonDelegate {
             
         }
     }
+    func getBids() {
+        if let myToken = defaults.objectForKey("userToken") as? String{
+            print("token -> '\(myToken)'")
+            let headers = [
+                "Authorization": "\(myToken)"
+            ]
+            let URL = "http://81.4.110.27/bid/1/"
+            let parameters = [
+                "bid": 1000
+            ]
+            
+            Alamofire.request(.GET, URL, parameters: parameters, headers: headers, encoding: .JSON).responseJSON { response in
+                print(response.request)  // original URL request
+                print(response.response) // URL response
+                print(response.data)     // server data
+                print(response.result)   // result of response serialization
+                if let mydata = String(data: response.data!, encoding: NSUTF8StringEncoding) {
+                    print(mydata)
+                }
+                if let JSON = response.result.value {
+                    print("JSON: \(JSON)")
+                }
+            }
+            
+        }
+    }
     func placeABid() {
         if let myToken = defaults.objectForKey("userToken") as? String{
             print("token -> '\(myToken)'")
             let headers = [
                 "Authorization": "\(myToken)"
             ]
-            let URL = "http://81.4.110.27/bid/3/"
+            let URL = "http://81.4.110.27/bid/1/"
             let parameters = [
-                "bid": 12
+                "bid": 1000
             ]
             
             Alamofire.request(.POST, URL, parameters: parameters, headers: headers, encoding: .JSON).responseJSON { response in
@@ -432,7 +468,7 @@ class LoginVC: UIViewController, SubmitButtonDelegate {
         }
         print(imagesDictonaryList)
         let service : [String: AnyObject] = [
-            "title": "service 1 title",
+            "title": "sdkhbcskdhb",
             "description": "service 1 description",
             "price": "11"
         ]
@@ -463,7 +499,48 @@ class LoginVC: UIViewController, SubmitButtonDelegate {
         }
         return imagesData
     }
-    
+    func deleteOfferedService() {
+        if let myToken = defaults.objectForKey("userToken") as? String {
+            print(myToken)
+            let headers = [
+                "Authorization": myToken
+            ]
+            let URL = "http://81.4.110.27/offeredservice/2/"
+            Alamofire.request(.DELETE, URL, parameters: nil, headers: headers).responseJSON { response in
+                print(response.request)  // original URL request
+                print(response.response) // URL response
+                print(response.data)     // server data
+                print(response.result)   // result of response serialization
+                if let mydata = String(data: response.data!, encoding: NSUTF8StringEncoding) {
+                    print(mydata)
+                }
+                
+            }
+        }
+    }
+    func deleteOfferedServiceImage() {
+        if let myToken = defaults.objectForKey("userToken") as? String{
+            print(myToken)
+            let headers = [
+                "Authorization": myToken
+            ]
+            let URL = "http://81.4.110.27/offeredimages/7/"
+            
+            Alamofire.request(.DELETE, URL, parameters: nil, headers: headers).responseJSON { response in
+                print(response.request)  // original URL request
+                print(response.response) // URL response
+                print(response.data)     // server data
+                print(response.result)   // result of response serialization
+                if let mydata = String(data: response.data!, encoding: NSUTF8StringEncoding) {
+                    print(mydata)
+                }
+                if let JSON = response.result.value {
+                    print("JSON: \(JSON)")
+                }
+            }
+            
+        }
+    }
     func updatingOfferedService() {
         if let myToken = defaults.objectForKey("userToken") as? String{
             print(myToken)

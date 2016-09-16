@@ -51,7 +51,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                <color key="backgroundColor" red="0.50588235290000005" green="0.40784313729999999" blue="0.68235294120000001" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstItem="NjX-tv-z54" firstAttribute="top" secondItem="DQR-3B-DXQ" secondAttribute="bottom" constant="8" id="3HT-aQ-2Ve"/>
                                     <constraint firstAttribute="width" constant="54" id="C9U-uj-2Ha"/>
@@ -123,6 +123,7 @@
                         </constraints>
                     </view>
                 </subviews>
+                <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                 <constraints>
                     <constraint firstAttribute="trailing" secondItem="hTE-B7-5dd" secondAttribute="trailing" constant="10" id="BOp-4S-SSm"/>
                     <constraint firstAttribute="bottom" secondItem="hTE-B7-5dd" secondAttribute="bottom" constant="5" id="CE4-rk-p3U"/>
