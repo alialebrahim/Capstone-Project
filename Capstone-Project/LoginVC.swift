@@ -13,8 +13,15 @@ import SwiftyJSON
 
 //TODO: notificaion if email or password are incorrect!
 class LoginVC: UIViewController, SubmitButtonDelegate {
-    
-    
+//    let URL = "http://127.0.0.1:8000"
+    let URL = "http://81.4.110.27"
+	let username = "newname"
+	let password = "newpass"
+	let usertype = "seeker"
+	
+	
+	
+	
     // MARK: IBOutlets
     @IBOutlet weak var logoLabel: UILabel!
     @IBOutlet weak var logoImageView: UIImageView!
@@ -41,11 +48,14 @@ class LoginVC: UIViewController, SubmitButtonDelegate {
     }
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-        //loginTest()
+//		signUpTest()
+//		profileTest()
+		logTest()
+//        loginTest()
         //deleteOfferedService()
         //deleteOfferedServiceImage()
-        offeredServiceCreation()
-        //publicServiceCreation()
+//        offeredServiceCreation()
+//        publicServiceCreation()
         //placeABid()
         //signUpTest()
         //getPublicService()
@@ -147,55 +157,124 @@ class LoginVC: UIViewController, SubmitButtonDelegate {
     }
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
         return .LightContent
-    }
-    func signUpTest() {
-        let URL = "http://81.4.110.27/signup/"
-        let parameters = [
-            "username": "sljfnssdlfjnsldjfn",
-            "password": "AliAlebrahim1003"
-        ]
-        
-        Alamofire.request(.POST, URL, parameters: parameters, encoding: .JSON).responseJSON { response in
-            print(response.request)  // original URL request
-            print(response.response) // URL response
-            print(response.data)     // server data
-            if let requestData = response.data {
-                if let dataString = String(data: requestData, encoding: NSUTF8StringEncoding) {
-                    self.storeToken(dataString)
-                }
-            }
-            print(response.result)   // result of response serialization
-            if response.response?.statusCode == 201 {
-                if let json = response.result.value {
-                    print("my json")
-                    print(json)
-                    let myJson = JSON(json)
-                    if let userID = myJson["userid"].string {
-                        print("user id")
-                        print(userID)
-                    }
-                }
-                if let mydata = String(data: response.data!, encoding: NSUTF8StringEncoding) {
-                    print(mydata)
-                }
-            }else {
-                print("not successful")
-            }
-            
-        }
-    }
+	}
+	func signUpTest() {
+		let URL = "\(self.URL)/signup/"
+		let parameters = [
+			"username": self.username,
+			"password": self.password
+		]
+		
+		Alamofire.request(.POST, URL, parameters: parameters, encoding: .JSON).responseJSON { response in
+			print(response.request)  // original URL request
+			print(response.response) // URL response
+			print(response.data)     // server data
+			if let requestData = response.data {
+				if let dataString = String(data: requestData, encoding: NSUTF8StringEncoding) {
+					self.storeToken(dataString)
+				}
+			}
+			print(response.result)   // result of response serialization
+			if response.response?.statusCode == 201 {
+				if let json = response.result.value {
+					print("my json")
+					print(json)
+					let myJson = JSON(json)
+					if let userID = myJson["userid"].string {
+						print("user id")
+						print(userID)
+					}
+				}
+				if let mydata = String(data: response.data!, encoding: NSUTF8StringEncoding) {
+					print(mydata)
+				}
+			}else {
+				print("not successful")
+			}
+			
+		}
+	}
+	func profileTest() {
+		let URL = "\(self.URL)/profile/"
+		
+		
+		/*
+		user = models.OneToOneField(settings.AUTH_USER_MODEL)
+		# username = models.CharField(max_length=100)
+		usertype = models.CharField(max_length=101, default="seeker") #Make this into choices
+		about = models.TextField(null=True, blank=True)
+		phone_number = models.CharField(max_length=100, null=True, blank=True)
+		email = models.EmailField(null=True, blank=True)
+		image = models.ImageField(upload_to="providers", null=True, blank=True)
+		
+		rating = models.FloatField(default=0.0)
+		country = models.CharField(max_length=100, null=True, blank=True)
+		area = models.CharField(max_length=100, null=True, blank=True)
+		street_address = models.CharField(max_length=100, null=True, blank=True)
+		*/
+		if let myToken = defaults.objectForKey("userToken") as? String{
+			print(myToken)
+			let headers = [
+				"Authorization": myToken
+			]
+			let parameters = [
+				"usertype": self.usertype,
+				"about": "haha I'm funny lol xD #yolo",
+				"email": "cooldude69@yahoo.com",
+				"rating": 6.9,
+				
+				]
+			
+			Alamofire.request(.PUT, URL, parameters: parameters as! [String : AnyObject], headers: headers, encoding: .JSON).responseJSON { response in
+				print(response.request)  // original URL request
+				print(response.response) // URL response
+				print(response.data)     // server data
+				print(response.result)   // result of response serialization
+				
+				
+			}
+		}
+	}
+	
+	func logTest() {
+		let URL = "\(self.URL)/log/"
+		
+		if let myToken = defaults.objectForKey("userToken") as? String{
+			print(myToken)
+			let headers = [
+				"Authorization": myToken
+			]
+			
+			Alamofire.request(.GET, URL, headers: headers, encoding: .JSON).responseJSON { response in
+				print(response.request)  // original URL request
+				print(response.response) // URL response
+				print(response.data)     // server data
+				print(response.result)   // result of response serialization
+				if let dataString = String(data: response.data!, encoding: NSUTF8StringEncoding) {
+					print(dataString)
+				}
+				if let JSON = response.result.value {
+					print("JSON: \(JSON)")
+				}
+			}
+		}
+	}
     func loginTest() {
-        let URL = "http://81.4.110.27/login/"
+		let URL = "\(self.URL)/login/"
         let parameters = [
-            "username": "sljfnssdlfjnsldjfn",
-            "password": "AliAlebrahim1003"
+            "username": self.username,
+            "password": self.password
         ]
-        
+		
+		print("username -> \"\(parameters["username"])\"")
+		print("password -> \"\(parameters["password"])\"")
+		
         Alamofire.request(.POST, URL, parameters: parameters, encoding: .JSON).validate().response {
             (request, response, data, error) in
             if (response?.statusCode)! == 200 {
                 if let requestData = data {
                     if let dataString = String(data: requestData, encoding: NSUTF8StringEncoding) {
+						print("dataString-> \"\(dataString)\"")
                         self.storeToken(dataString)
                     }
                 }
@@ -268,13 +347,13 @@ class LoginVC: UIViewController, SubmitButtonDelegate {
             let headers = [
                 "Authorization": myToken
             ]
-            let URL = "http://81.4.110.27/publicservice/"
+            let URL = "\(self.URL)/publicservice/"
             
             let category = "car Services"
             let service : [String: AnyObject] = [
-                "title" : "i dont know title :p",
-                "description" : "this is a service description that will descripte the service with title public service 2",
-                "price" : 12.1,
+                "title" : "new service!",
+                "description" : "Check out this cool new FREE service!!!!",
+                "price" : 0.0,
                 "is_special" : false
             ]
             
@@ -452,43 +531,49 @@ class LoginVC: UIViewController, SubmitButtonDelegate {
         }
     }
     func offeredServiceCreation() {
-        
-        let URL = "http://81.4.110.27/offeredservice/"
-        var imagesDictonaryList = [[String : AnyObject]]()
-        var images = [UIImage]()
-        for _ in 1...3 {
-            images.append(UIImage(named: "profileImagePlaceholder")!)
-        }
-        let imagesData = imagesToBase64(images)
-        for index in 0..<3 {
-            var myDictionary = [String:AnyObject]()
-            myDictionary["name"] = "\(index)"
-            myDictionary["image"] = imagesData[index]
-            imagesDictonaryList.append(myDictionary)
-        }
-        print(imagesDictonaryList)
-        let service : [String: AnyObject] = [
-            "title": "sdkhbcskdhb",
-            "description": "service 1 description",
-            "price": "11"
-        ]
-        let parameters = [
-            "category" :"Pets Services",
-            "service": service,
-            "serviceimage_set": imagesDictonaryList
-        ]
-        Alamofire.request(.POST, URL, parameters: parameters as? [String : AnyObject], encoding: .JSON).responseJSON { response in
-            print(response.request)  // original URL request
-            print(response.response) // URL response
-            print(response.data)     // server data
-            print(response.result)   // result of response serialization
-            if let dataString = String(data: response.data!, encoding: NSUTF8StringEncoding) {
-                print(dataString)
-            }
-            if let JSON = response.result.value {
-                print("JSON: \(JSON)")
-            }
-        }
+		if let myToken = defaults.objectForKey("userToken") as? String {
+			print("token-> \"\(myToken)\"")
+			let headers = [
+				"Authorization": myToken
+			]
+			let URL = "\(self.URL)/offeredservice/"
+			var imagesDictonaryList = [[String : AnyObject]]()
+			var images = [UIImage]()
+			for _ in 1...3 {
+				images.append(UIImage(named: "profileImagePlaceholder")!)
+			}
+			let imagesData = imagesToBase64(images)
+			for index in 0..<3 {
+				var myDictionary = [String:AnyObject]()
+				myDictionary["name"] = "\(index)"
+				myDictionary["image"] = imagesData[index]
+				imagesDictonaryList.append(myDictionary)
+			}
+	//        print(imagesDictonaryList)
+			let service : [String: AnyObject] = [
+				"title": "random title text",
+				"description": "service 1 description",
+				"price": "11"
+			]
+			let parameters = [
+				"category" :"Pets Services",
+				"service": service,
+				"serviceimage_set": imagesDictonaryList
+			]
+			Alamofire.request(.POST, URL, parameters: parameters as? [String : AnyObject], headers: headers, encoding: .JSON).responseJSON { response in
+	//            print(response.request)  // original URL request
+				print(response.response) // URL response
+				print(response.data)     // server data
+				print(response.result)   // result of response serialization
+				if let dataString = String(data: response.data!, encoding: NSUTF8StringEncoding) {
+					print(dataString)
+				}
+				if let JSON = response.result.value {
+					print("JSON: \(JSON)")
+				}
+			}
+			print("heeh fuck you xD")
+		}
     }
     func imagesToBase64(images: [UIImage]) -> [String]{
         var imagesData = [String]()
