@@ -557,6 +557,7 @@
                         <outlet property="contentViewHeight" destination="xBq-PH-19V" id="ge9-1s-eF5"/>
                         <outlet property="profileImage" destination="CfB-bP-E5c" id="mnB-t1-EEk"/>
                         <outlet property="scrollView" destination="XRu-uu-ban" id="YgP-rn-uuP"/>
+                        <segue destination="cX4-Ch-kaI" kind="show" identifier="categoriesVC" id="Vcl-Of-FLi"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cW3-sA-j9X" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -602,17 +603,19 @@
                                             <rect key="frame" x="0.0" y="0.0" width="567" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Categories" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ZT3-OR-RQj">
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kaG-tM-IDz">
                                                     <rect key="frame" x="8" y="8" width="551" height="27"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits"/>
-                                                </textField>
+                                                    <state key="normal" title="Button"/>
+                                                    <connections>
+                                                        <action selector="categoryButtonPressed:" destination="LSm-pS-kXN" eventType="touchUpInside" id="Rwm-m5-EyO"/>
+                                                    </connections>
+                                                </button>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="ZT3-OR-RQj" firstAttribute="top" secondItem="Bos-EP-M7O" secondAttribute="top" constant="8" id="4bn-bg-mAk"/>
-                                                <constraint firstAttribute="trailing" secondItem="ZT3-OR-RQj" secondAttribute="trailing" constant="8" id="IpK-es-lrl"/>
-                                                <constraint firstItem="ZT3-OR-RQj" firstAttribute="leading" secondItem="Bos-EP-M7O" secondAttribute="leading" constant="8" id="T1W-4e-lxL"/>
-                                                <constraint firstAttribute="bottom" secondItem="ZT3-OR-RQj" secondAttribute="bottom" constant="8" id="yqg-CZ-ytb"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="kaG-tM-IDz" secondAttribute="bottom" id="I3r-FG-gXD"/>
+                                                <constraint firstItem="kaG-tM-IDz" firstAttribute="trailing" secondItem="Bos-EP-M7O" secondAttribute="trailingMargin" id="Znb-c8-cL7"/>
+                                                <constraint firstItem="kaG-tM-IDz" firstAttribute="top" secondItem="Bos-EP-M7O" secondAttribute="topMargin" id="oFl-TU-TKn"/>
+                                                <constraint firstItem="kaG-tM-IDz" firstAttribute="leading" secondItem="Bos-EP-M7O" secondAttribute="leadingMargin" id="umh-Oh-2T1"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -762,13 +765,12 @@
                         <outlet property="areaTextField" destination="FfJ-rY-X31" id="cfk-Ka-T5Y"/>
                         <outlet property="bioTextField" destination="A5n-Go-LSU" id="gzB-Lw-RjE"/>
                         <outlet property="categoriesCell" destination="SqA-U5-f5h" id="cdj-Ra-Wcx"/>
-                        <outlet property="categoriesTextField" destination="ZT3-OR-RQj" id="iXf-fk-5ph"/>
+                        <outlet property="categoryButton" destination="kaG-tM-IDz" id="WW0-gF-aWR"/>
                         <outlet property="countryTextField" destination="5gS-Ju-DMS" id="WMC-Qo-OXe"/>
                         <outlet property="emailTextField" destination="vbJ-b6-tu2" id="S1f-yg-ouq"/>
                         <outlet property="phoneNumberTextField" destination="z9P-hc-erd" id="pUu-Dv-8tE"/>
                         <outlet property="streetAddressTextField" destination="KdF-23-d4B" id="IsG-EN-UPB"/>
                         <outlet property="usernameTextField" destination="1U4-lU-3Jb" id="8Wu-Dk-pbD"/>
-                        <segue destination="cX4-Ch-kaI" kind="show" identifier="categoriesVC" id="O0Q-Ob-abZ"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kRy-ZH-2lU" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1079,15 +1081,15 @@
                         <viewControllerLayoutGuide type="bottom" id="TsV-N3-3bx"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="bBY-YM-Dtf">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="700"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="FJc-eq-azz">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="FJc-eq-azz">
                                 <rect key="frame" x="0.0" y="20" width="600" height="520"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="CategoryCell" textLabel="xMj-ul-ySy" style="IBUITableViewCellStyleDefault" id="hqf-01-8aJ">
-                                        <rect key="frame" x="0.0" y="28" width="600" height="44"/>
+                                        <rect key="frame" x="0.0" y="92" width="600" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="hqf-01-8aJ" id="yxg-9i-2M8">
                                             <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
@@ -1106,7 +1108,7 @@
                                 </prototypes>
                             </tableView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PAg-e9-206">
-                                <rect key="frame" x="0.0" y="540" width="600" height="40"/>
+                                <rect key="frame" x="0.0" y="640" width="600" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="U9K-3E-cYs"/>
                                 </constraints>

@@ -11,18 +11,8 @@ import UIKit
 class RequestLogVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
     @IBOutlet weak var tableView: UITableView!
-    let CellID = ""
-    /*
-     data[0] : public requests
-     data[1] : being working on
-     data[2] : pending requests
-     data[3] : History
-     */
-    var data = [
-                ["Margarita", "BBQ Chicken", "Pepperoni"],
-                ["sausage", "meat lovers", "veggie lovers"],
-                ["sausage", "chicken pesto", "prawns", "mushrooms"]
-    ]
+    let CellID = "SeekerLogCell"
+    var data = [1,2,3,4,5,67]
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
@@ -42,6 +32,9 @@ class RequestLogVC: UIViewController, UITableViewDelegate, UITableViewDataSource
     func setupTableView() {
         tableView.delegate = self
         tableView.dataSource = self
+        let nibFile = UINib(nibName: "seekerLogCell", bundle: nil)
+        tableView.registerNib(nibFile, forCellReuseIdentifier: CellID)
+        tableView.rowHeight = 200
     }
     func setupNavigationBar() {
         navigationItem.title = "Request Log"
@@ -55,8 +48,7 @@ class RequestLogVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         return 1
     }
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 0
-        //return data[section].count
+        return data.count
     }
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier(CellID)

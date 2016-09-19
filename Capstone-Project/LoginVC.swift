@@ -44,7 +44,7 @@ class LoginVC: UIViewController, SubmitButtonDelegate {
         //loginTest()
         //deleteOfferedService()
         //deleteOfferedServiceImage()
-        offeredServiceCreation()
+        //offeredServiceCreation()
         //publicServiceCreation()
         //placeABid()
         //signUpTest()
@@ -60,9 +60,9 @@ class LoginVC: UIViewController, SubmitButtonDelegate {
     @IBAction func loginButtonPressed(sender: AnyObject) {
         loginButton.startLoadingAnimation()
         NSTimer.schedule(delay: 1) { (timer) in
-            //ProfileVC
-            //self.performSegueWithIdentifier("SeekerFeedVC", sender: nil)
-            self.performSegueWithIdentifier("ProfileVC", sender: nil)
+            
+            self.performSegueWithIdentifier("SeekerFeedVC", sender: nil)
+            //self.performSegueWithIdentifier("ProfileVC", sender: nil)
         }
         
     }

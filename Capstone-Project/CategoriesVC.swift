@@ -103,7 +103,7 @@ class CategoriesVC: UIViewController, UITableViewDelegate, UITableViewDataSource
     }
     //MARK: IBActions
     @IBAction func CancelSaveButtonPressed() {
-        print("im here")
+        print("LOL")
         delegate?.shouldDismissCategoriesView(categoriesString)
     }
 }

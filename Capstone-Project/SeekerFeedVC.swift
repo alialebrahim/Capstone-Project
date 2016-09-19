@@ -57,18 +57,9 @@ class SeekerFeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         return myCell
     }
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if segue.identifier == "FeedDetailedPredefinedServiceSegue" {
-            if let destination = segue.destinationViewController as? SeekerDetailedPredefinedServiceVC {
-                destination.ServiceID = serviceID
-                destination.UserType = 1
-                
-            }
-        }
-    }
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        serviceID = indexPath.row
-        performSegueWithIdentifier("FeedDetailedPredefinedServiceSegue", sender: nil)
+        performSegueWithIdentifier("OfferedServicesDetails", sender: nil)
+        
     }
     
 //    func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {

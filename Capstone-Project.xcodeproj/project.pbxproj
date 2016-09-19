@@ -66,6 +66,8 @@
 		41ACDE111D86C87F00CA7438 /* Feed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41ACDE101D86C87F00CA7438 /* Feed.swift */; };
 		41ACDE131D86C8AB00CA7438 /* PublicServiceRequestVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41ACDE121D86C8AB00CA7438 /* PublicServiceRequestVC.swift */; };
 		41ACDE151D86C94A00CA7438 /* RequestLogVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41ACDE141D86C94A00CA7438 /* RequestLogVC.swift */; };
+		41EF4EAE1D8C63AF007F1772 /* seekerLogCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 41EF4EAD1D8C63AE007F1772 /* seekerLogCell.xib */; };
+		41EF4EB01D9021E0007F1772 /* OfferedServiceDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41EF4EAF1D9021E0007F1772 /* OfferedServiceDetails.swift */; };
 		5F93EA9111551AC7F07222B9 /* Pods_Capstone_Project.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A1262E72DABFBDAC57CAA06 /* Pods_Capstone_Project.framework */; };
 /* End PBXBuildFile section */
 
@@ -134,6 +136,8 @@
 		41ACDE101D86C87F00CA7438 /* Feed.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Feed.swift; sourceTree = "<group>"; };
 		41ACDE121D86C8AB00CA7438 /* PublicServiceRequestVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PublicServiceRequestVC.swift; sourceTree = "<group>"; };
 		41ACDE141D86C94A00CA7438 /* RequestLogVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestLogVC.swift; sourceTree = "<group>"; };
+		41EF4EAD1D8C63AE007F1772 /* seekerLogCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = seekerLogCell.xib; sourceTree = "<group>"; };
+		41EF4EAF1D9021E0007F1772 /* OfferedServiceDetails.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OfferedServiceDetails.swift; sourceTree = "<group>"; };
 		9A1262E72DABFBDAC57CAA06 /* Pods_Capstone_Project.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Capstone_Project.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D2697E035B9466973F2B46CC /* Pods-Capstone-Project.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Capstone-Project.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Capstone-Project/Pods-Capstone-Project.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -204,6 +208,7 @@
 				4147777B1D6325220097D34D /* RatingCell.xib */,
 				414777831D63938E0097D34D /* ProviderCell.xib */,
 				41A8A78B1D87F50D00F7E1AC /* PublicServiceCell.xib */,
+				41EF4EAD1D8C63AE007F1772 /* seekerLogCell.xib */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -257,6 +262,7 @@
 			isa = PBXGroup;
 			children = (
 				4136DB561D59CACA0030A685 /* SeekerFeedVC.swift */,
+				41EF4EAF1D9021E0007F1772 /* OfferedServiceDetails.swift */,
 				4136DB571D59CACA0030A685 /* SeekerDetailedPredefinedServiceVC.swift */,
 				414777751D61D8EA0097D34D /* SearchVC.swift */,
 				414777771D62FEA60097D34D /* ChooseCategoriesVC.swift */,
@@ -380,6 +386,7 @@
 				4136DB311D59C9AA0030A685 /* Assets.xcassets in Resources */,
 				414777721D5F0F640097D34D /* RequestedServiceCell.xib in Resources */,
 				4147777C1D6325230097D34D /* RatingCell.xib in Resources */,
+				41EF4EAE1D8C63AF007F1772 /* seekerLogCell.xib in Resources */,
 				4136DB2A1D59C9AA0030A685 /* predefinedServiceCell.xib in Resources */,
 				4136DB2D1D59C9AA0030A685 /* Seeker.storyboard in Resources */,
 				41A8A78C1D87F50D00F7E1AC /* PublicServiceCell.xib in Resources */,
@@ -482,6 +489,7 @@
 				4136DB601D59CAE30030A685 /* LoginVC.swift in Sources */,
 				4136DB541D59CAB50030A685 /* WorkingOnVC.swift in Sources */,
 				4136DB6D1D59CB060030A685 /* CircularImageView.swift in Sources */,
+				41EF4EB01D9021E0007F1772 /* OfferedServiceDetails.swift in Sources */,
 				41ACDE111D86C87F00CA7438 /* Feed.swift in Sources */,
 				4136DB351D59C9FD0030A685 /* iCarousel.m in Sources */,
 				418CA4291D64A0B7007852F6 /* SearchedProviderVC.swift in Sources */,

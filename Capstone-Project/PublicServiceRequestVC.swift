@@ -18,8 +18,6 @@ class PublicServiceRequestVC: UIViewController, UITextViewDelegate, ChooseCatego
 
     @IBOutlet weak var datePicker: UIDatePicker!
     @IBOutlet weak var serviceDescription: UITextView!
-    
-    @IBOutlet weak var descriptionTextView: UITextView!
     var year: Int!
     var month: Int!
     var day: Int!
@@ -37,6 +35,7 @@ class PublicServiceRequestVC: UIViewController, UITextViewDelegate, ChooseCatego
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        serviceDescription.delegate = self
         setup()
         // Do any additional setup after loading the view.
     }
@@ -58,7 +57,7 @@ class PublicServiceRequestVC: UIViewController, UITextViewDelegate, ChooseCatego
         
         let keyboardGesture = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
         self.view.addGestureRecognizer(keyboardGesture)
-        serviceDescription.delegate = self
+        
         
         datePicker.addTarget(self, action: #selector(datePickerValueChanged), forControlEvents: .ValueChanged)
         
@@ -77,6 +76,12 @@ class PublicServiceRequestVC: UIViewController, UITextViewDelegate, ChooseCatego
         submitRequestButton.topAnchor.constraintEqualToAnchor(datePicker.bottomAnchor, constant: 20).active = true
         submitRequestButton.centerXAnchor.constraintEqualToAnchor(self.view.centerXAnchor).active = true
         
+        //textview placeholder setup
+        serviceDescription.delegate = self
+        serviceDescription.text = "Description"
+        serviceDescription.textColor = UIColor(hex: 0xC7C7CD)
+        serviceDescription.selectedTextRange = serviceDescription.textRangeFromPosition(serviceDescription.beginningOfDocument, toPosition: serviceDescription.beginningOfDocument)
+        //////////////////////////////
     }
     func datePickerValueChanged() {
         print("value changed")
@@ -178,6 +183,48 @@ class PublicServiceRequestVC: UIViewController, UITextViewDelegate, ChooseCatego
             print("incorrect")
         }
     }
+    //TextView delegate functions
+    /*
+     textview delegate functions are used to implement textview placehold
+     */
+    func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
+        print("im here for textview")
+        // Combine the textView text and the replacement text to
+        // create the updated text string
+        let currentText:NSString = textView.text
+        let updatedText = currentText.stringByReplacingCharactersInRange(range, withString:text)
+        
+        // If updated text view will be empty, add the placeholder
+        // and set the cursor to the beginning of the text view
+        if updatedText.isEmpty {
+            textView.text = "Description"
+            textView.textColor = UIColor(hex: 0xC7C7CD)
+            
+            textView.selectedTextRange = textView.textRangeFromPosition(textView.beginningOfDocument, toPosition: textView.beginningOfDocument)
+            
+            return false
+        }
+            
+            // Else if the text view's placeholder is showing and the
+            // length of the replacement string is greater than 0, clear
+            // the text view and set its color to black to prepare for
+            // the user's entry
+        else if textView.textColor == UIColor(hex: 0xC7C7CD) && !text.isEmpty {
+            textView.text = nil
+            textView.textColor = UIColor.blackColor()
+        }
+        return true
+    }
+    
+    func textViewDidChangeSelection(textView: UITextView) {
+        
+        if self.view.window != nil {
+            if textView.textColor == UIColor(hex: 0xC7C7CD) {
+                textView.selectedTextRange = textView.textRangeFromPosition(textView.beginningOfDocument, toPosition: textView.beginningOfDocument)
+            }
+        }
+    }
+
     /*
     // MARK: - Navigation
 

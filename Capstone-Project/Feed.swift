@@ -12,6 +12,8 @@ class Feed: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
     @IBOutlet weak var tableView: UITableView!
     var publicServices = [1,2,3,4,5,7,7]
+    var bids = [7,21,322]
+    let sections = ["You Bid On","Public Services"]
     let CellID = "PublicCell"
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,16 +39,43 @@ class Feed: UIViewController, UITableViewDelegate, UITableViewDataSource {
     func setupNavigationBar() {
         navigationItem.title = "Feed"
     }
-    
+    func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return sections[section]
+    }
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return 1
+        return 2
     }
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 10
+        if section == 0 {
+            return bids.count
+        }else {
+            return publicServices.count
+        }
+        
+    }
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        if indexPath.section == 0 {
+            return 100
+        }else {
+            return 250
+        }
     }
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(CellID)
-        return cell!
+        if indexPath.section == 0 {
+            if let cell = tableView.dequeueReusableCellWithIdentifier("test") {
+                cell.textLabel?.text = "\(bids[indexPath.row])"
+                return cell
+            }else {
+                let cell = UITableViewCell(style: .Default, reuseIdentifier: "test")
+                cell.textLabel?.text = "\(bids[indexPath.row])"
+                return cell
+            }
+            
+        }else {
+            let cell = tableView.dequeueReusableCellWithIdentifier(CellID)
+            return cell!
+        }
+        
     }
     /*
     // MARK: - Navigation

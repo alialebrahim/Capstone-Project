@@ -8,8 +8,12 @@
 
 import UIKit
 
+protocol EditProvidersProfileDelegate {
+    func shouldSaveCategories(categories: [String])
+}
+
 //TODO: add description text view placeholder
-class editProvidersProfile: UIViewController, UITextViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIPopoverPresentationControllerDelegate, CategoriesVCDelegate {
+class editProvidersProfile: UIViewController, UITextViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIPopoverPresentationControllerDelegate, CategoriesVCDelegate, ProviderInfoTVCDelegate {
     
     //MARK: IBOutlets
     @IBOutlet weak var profileImage: CircularImageView!
@@ -20,7 +24,8 @@ class editProvidersProfile: UIViewController, UITextViewDelegate, UIImagePickerC
     @IBOutlet weak var containerViewHeightConstraint: NSLayoutConstraint!
     //MARK: Variables
     //var imagePicker = UIImagePickerController()
-    var categories = [String]()
+    var myCategories = [String]()
+    var delegate: EditProvidersProfileDelegate?
     //MARK: ViewControllers lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -115,6 +120,7 @@ class editProvidersProfile: UIViewController, UITextViewDelegate, UIImagePickerC
     func getViewController() -> UIViewController? {
         let storyboard = UIStoryboard(name: "Provider", bundle: nil)
         let vc = storyboard.instantiateViewControllerWithIdentifier("ProviderInfoTable") as! ProviderInfoTVC
+        vc.delegate = self
         return vc
     }
     func displayViewController() {
@@ -211,28 +217,23 @@ class editProvidersProfile: UIViewController, UITextViewDelegate, UIImagePickerC
     }
     //MARK: CategoriesVC delegate function
     func shouldDismissCategoriesView(categories: [String]) {
-        print(categories)
-        presentedViewController?.dismissViewControllerAnimated(true, completion: { 
-            print("dismissed")
-        })
+        print("in edit profile vc")
+        myCategories = categories
+        print(myCategories)
+        delegate?.shouldSaveCategories(categories)
+        navigationController?.popViewControllerAnimated(true)
+        print("did pop view contoller")
+    }
+    //MARK: ProviderInfoTVCDelegate function
+    func shouldPerformSegueToChooseCategoriesVC() {
+        performSegueWithIdentifier("categoriesVC", sender: nil)
     }
     //MARK: Segue functions
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if segue.identifier == "CategoriesVC" {
+        if segue.identifier == "categoriesVC" {
             if let vc = segue.destinationViewController as? CategoriesVC {
                 vc.delegate = self
-                 vc.modalInPopover = true
-                 //to change poped over view:
-                 //vc.preferredContentSize.width = self.view.frame.size.width-20
-                if let controller = vc.popoverPresentationController {
-                    controller.delegate = self
-                    let height = (navigationController?.navigationBar.frame.height)! + UIApplication.sharedApplication().statusBarFrame.height
-                    controller.sourceRect = CGRectMake(CGRectGetMidX(self.view.bounds), height,0,0)
-                    controller.passthroughViews = nil
-                    //set it to zero to remove arrow
-                    controller.permittedArrowDirections = UIPopoverArrowDirection(rawValue: 1)
-                 }
-                
+                print("prepareforsegue")
             }
         }
     }

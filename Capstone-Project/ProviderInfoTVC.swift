@@ -8,7 +8,11 @@
 
 import UIKit
 
-class ProviderInfoTVC: UITableViewController {
+protocol ProviderInfoTVCDelegate: class {
+    func shouldPerformSegueToChooseCategoriesVC()
+}
+
+class ProviderInfoTVC: UITableViewController, EditProvidersProfileDelegate {
 
     @IBOutlet weak var bioTextField: UITextField!
     @IBOutlet weak var usernameTextField: UITextField!
@@ -19,9 +23,13 @@ class ProviderInfoTVC: UITableViewController {
     @IBOutlet weak var areaTextField: UITextField!
     @IBOutlet weak var countryTextField: UITextField!
     @IBOutlet weak var categoriesCell: UITableViewCell!
+    @IBOutlet weak var categoryButton: UIButton!
+    
+    var delegate: ProviderInfoTVCDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setup()
         self.tableView.scrollEnabled = false
         self.tableView.backgroundColor = UIColor.clearColor()
         // Uncomment the following line to preserve selection between presentations
@@ -71,7 +79,29 @@ class ProviderInfoTVC: UITableViewController {
     }
     
     func setup() {
+        categoryButton.setTitleColor(UIColor(hex: 0xC7C7CD), forState: .Normal)
+        categoryButton.setTitle("Choose caegory", forState: .Normal)
+        
+        if let vc = self.parentViewController as? editProvidersProfile {
+            vc.delegate = self
+        }
+    }
+    func shouldSaveCategories(categories: [String]) {
+        print("in providers profile information")
+        //TODO: Do validation from parent view controller
+        if !categories.isEmpty {
+            categoryButton.setTitleColor(UIColor.darkGrayColor(), forState: .Normal)
+            var myCatgories = ""
+            for category in categories {
+                myCatgories += "\(category),"
+            }
+            categoryButton.setTitle(myCatgories, forState: .Normal)
+        }
         
     }
-
+    @IBAction func categoryButtonPressed(sender: AnyObject) {
+        print("did press choose category button")
+        delegate?.shouldPerformSegueToChooseCategoriesVC()
+        //performSegueWithIdentifier("categoriesVC", sender: nil)
+    }
 }
