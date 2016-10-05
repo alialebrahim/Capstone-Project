@@ -26,15 +26,21 @@ class RequestedServicesVC: UIViewController, UICollectionViewDelegate, UICollect
     //MARK: ViewController lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        setup()
+    }
+    //MARK: Functions
+    func setup() {
         if let vc = parentViewController as? ServicesVC {
             vc.delegate = self
         }
+        setupCollectionView()
+    }
+    func setupCollectionView() {
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.backgroundColor = UIColor.whiteColor()
         collectionView.registerNib(UINib(nibName: "RequestedServiceCell", bundle: nil), forCellWithReuseIdentifier: CellID)
     }
-    
     //MARK: UICollectionView delegate funciton
     func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
         return 1
@@ -185,17 +191,6 @@ class RequestedServicesVC: UIViewController, UICollectionViewDelegate, UICollect
         isFirstTimeTransform = true
         collectionView.reloadData()
     }
+    //MARK: BACKEND
+    
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

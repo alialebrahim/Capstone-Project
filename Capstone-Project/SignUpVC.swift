@@ -5,7 +5,7 @@
 //  Created by Ali Alibrahim on 5/29/16.
 //  Copyright © 2016 Ali Alebrahim. All rights reserved.
 //
-
+//TODO: Add code to sign up when user select a picture.
 import UIKit
 import SwiftyJSON
 import Alamofire
@@ -16,7 +16,7 @@ class SignUpVC: UIViewController, UIImagePickerControllerDelegate, UINavigationC
     
     // MARK: IBOutlets
     @IBOutlet weak var profileImage: CircularImageView!
-    @IBOutlet weak var emailTextfield: UITextField!
+    //@IBOutlet weak var emailTextfield: UITextField!
     @IBOutlet weak var passwordTextfield: UITextField!
     @IBOutlet weak var userNameTextField: UITextField!
     @IBOutlet weak var scrollView: UIScrollView!
@@ -30,6 +30,9 @@ class SignUpVC: UIViewController, UIImagePickerControllerDelegate, UINavigationC
     var userCountry = ""
     var errorButtons = [String: ErrorButton]()
     var userType: String!
+    var didChoosePicture = false
+    let defaults = NSUserDefaults.standardUserDefaults()
+    var activity: NVActivityIndicatorView! = nil
     // MARK: ViewController life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,7 +40,7 @@ class SignUpVC: UIViewController, UIImagePickerControllerDelegate, UINavigationC
         detectUserCountry()
         
         //set up textfield delegate 
-        emailTextfield.delegate = self
+        //emailTextfield.delegate = self
         passwordTextfield.delegate = self
         userNameTextField.delegate = self
     }
@@ -93,15 +96,25 @@ class SignUpVC: UIViewController, UIImagePickerControllerDelegate, UINavigationC
     @IBAction func seekerProviderSegmentedControlAction(sender: AnyObject) {
         let segmentedControl = sender as! UISegmentedControl
         if segmentedControl.selectedSegmentIndex == 0 {
-            userType = "S"
+            userType = "seeker"
         }else {
-            userType = "P"
+            userType = "provider"
         }
     }
     
     @IBAction func registerButtonPresser(sender: AnyObject) {
-        registerButton.startLoadingAnimation()
+        if checkRequiredFields() {
+            if validateInput() {
+                registerButton.startLoadingAnimation()
+                //check internet connection
+                signupUser(userNameTextField.text!, password: passwordTextfield.text!)
+                print("did choose image : \(didChoosePicture)")
+                print("user type : \(userType)")
+            }
+        }
     }
+    
+    ///////////////
     // MARK: TextField Delegate functions
     
     /*
@@ -163,6 +176,7 @@ class SignUpVC: UIViewController, UIImagePickerControllerDelegate, UINavigationC
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
         //grabing the selected image
         if let pickedImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
+            didChoosePicture = true
             profileImageButton.hidden = true
             //profileImage.contentMode = .ScaleAspectFill
             profileImage.image = pickedImage
@@ -187,10 +201,10 @@ class SignUpVC: UIViewController, UIImagePickerControllerDelegate, UINavigationC
     func checkRequiredFields() -> Bool {
         //shacking the textfield to indicate its required
         var allRequiredFieldsAreFilled = true
-        if emailTextfield.text == "" {
-            allRequiredFieldsAreFilled = allRequiredFieldsAreFilled && false
-            emailTextfield.shakeView()
-        }
+//        if emailTextfield.text == "" {
+//            allRequiredFieldsAreFilled = allRequiredFieldsAreFilled && false
+//            emailTextfield.shakeView()
+//        }
         if userNameTextField.text == "" {
             allRequiredFieldsAreFilled = allRequiredFieldsAreFilled && false
             userNameTextField.shakeView()
@@ -208,7 +222,7 @@ class SignUpVC: UIViewController, UIImagePickerControllerDelegate, UINavigationC
     func validateInput() -> Bool {
         dismissKeyboard()
         var validated = true
-        guard let email = emailTextfield.text, password = passwordTextfield.text, username = userNameTextField.text else{
+        guard let /*email = emailTextfield.text,*/ password = passwordTextfield.text, username = userNameTextField.text else{
             return false
         }
         /*
@@ -217,12 +231,12 @@ class SignUpVC: UIViewController, UIImagePickerControllerDelegate, UINavigationC
                 2- change the placeholder color to red to grab the user attention
                 3- display the error button
          */
-        if !email.isValidEmail() {
-            validated = validated && false
-            emailTextfield.placeholder = "Invalid email"
-            emailTextfield.textColor = UIColor.redColor()
-            errorButtons["email"]!.hidden = false
-        }
+//        if !email.isValidEmail() {
+//            validated = validated && false
+//            //emailTextfield.placeholder = "Invalid email"
+//            //emailTextfield.textColor = UIColor.redColor()
+//            errorButtons["email"]!.hidden = false
+//        }
         if !username.isValidUsername() {
             validated = validated && false
             userNameTextField.placeholder = "Invalid username"
@@ -242,10 +256,10 @@ class SignUpVC: UIViewController, UIImagePickerControllerDelegate, UINavigationC
      */
     func createErrorButtons() {
         //Email error button
-        let emailErrorMessage = "Please enter a valid email address."
-        let emailErrorButton = ErrorButton(withMessage: emailErrorMessage, isAssociateWith: emailTextfield)
-        setupErrorButton(emailErrorButton)
-        errorButtons["email"] = emailErrorButton
+        //let emailErrorMessage = "Please enter a valid email address."
+        //let emailErrorButton = ErrorButton(withMessage: emailErrorMessage, isAssociateWith: emailTextfield)
+        //setupErrorButton(emailErrorButton)
+        //errorButtons["email"] = emailErrorButton
         
         //Password error button
         let passwordErrorMessage = "Make sure your password is 6 charecters or more and contains uppper and lower case letters."
@@ -292,29 +306,7 @@ class SignUpVC: UIViewController, UIImagePickerControllerDelegate, UINavigationC
         let contentInset:UIEdgeInsets = UIEdgeInsetsZero
         self.scrollView.contentInset = contentInset
     }
-    func signUpAction() {
-        print("sign up pressed")
-        /*
-            before signing up
-                1) check that all required fields are filled
-                2) validate all user input
-                3) check internet connection
-                    1- connected -> perform sign up
-                    2- not connected -> store input data in core data
-         */
-        if checkRequiredFields() {
-            if validateInput() {
-                //TODO: if not valid, once the user start to edit. remove the button.
-                if Reachability.isConnectedToNetwork() {
-                    print("connected")
-                }else {
-                    print("not connected")
-                    //TODO: store inputed data in a locale storage
-                }
-            }
-            
-        }
-    }
+
     
     func adjustContentViewHeight() {
         
@@ -378,8 +370,8 @@ class SignUpVC: UIViewController, UIImagePickerControllerDelegate, UINavigationC
         userNameTextField.textColor = UIColor.whiteColor().colorWithAlphaComponent(0.7)
         passwordTextfield.secureTextEntry = true
         passwordTextfield.textColor = UIColor.whiteColor().colorWithAlphaComponent(0.7)
-        emailTextfield.becomeFirstResponder()
-        emailTextfield.textColor = UIColor.whiteColor().colorWithAlphaComponent(0.7)
+        //emailTextfield.becomeFirstResponder()
+        //emailTextfield.textColor = UIColor.whiteColor().colorWithAlphaComponent(0.7)
         scrollView.userInteractionEnabled = true
         
         /*
@@ -392,7 +384,7 @@ class SignUpVC: UIViewController, UIImagePickerControllerDelegate, UINavigationC
         
         seekerProviderSegmentedControl.setTitleTextAttributes(segAttributes as [NSObject : AnyObject], forState: UIControlState.Selected)
         seekerProviderSegmentedControl.selectedSegmentIndex = 0
-        userType = "S"
+        userType = "seeker"
         seekerProviderSegmentedControl.tintColor = UIColor.whiteColor().colorWithAlphaComponent(0.7)
         
         /*
@@ -400,55 +392,175 @@ class SignUpVC: UIViewController, UIImagePickerControllerDelegate, UINavigationC
          *setup register Button
          */
         registerButton.setTitle("Register", forState: .Normal)
+        registerButton.cachedTitle = "Register"
         registerButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
         registerButton.backgroundColor = UIColor.whiteColor().colorWithAlphaComponent(0.5)
         registerButton.delegate = self
         registerButton.layer.cornerRadius = self.registerButton.frame.height / 2
         
     }
+    //MARK: Submit Button Delegate function
     func didAnimate(frame: CGRect) {
-        let activity = NVActivityIndicatorView(frame: frame, type: .BallClipRotateMultiple, color: UIColor.whiteColor())
+        activity = NVActivityIndicatorView(frame: frame, type: .BallClipRotateMultiple, color: UIColor.whiteColor())
         contentView.addSubview(activity)
         contentView.bringSubviewToFront(activity)
         activity.startAnimation()
     }
+    func removeAnimation() {
+        print("should stop animation")
+    }
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
         return .LightContent
     }
-    
-    ////////////////////
-    //MARK: Face Recognition
-    ////////////////////
-    ////////////////////
-    //TODO: FIX ERRORS!
-    ////////////////////
-//    func centerImageViewOnFace(imageView: UIImageView) {
-//        let context = CIContext(options: nil)
-//        let options = [CIDetectorAccuracy: CIDetectorAccuracyLow]
-//        let detector = CIDetector(ofType: CIDetectorTypeFace, context: context, options: options)
-//        let faceImage = imageView.image
-//        let ciImage = CIImage(CGImage: (faceImage?.CGImage)!)
-//        let features = detector.featuresInImage(ciImage)
-//        
-//        if features.count > 0 {
-//            var face: CIFaceFeature!
-//            for rect in features {
-//                face = rect as! CIFaceFeature
-//            }
-//            var faceRect = face.bounds
-//            faceRect.origin.x -= 20
-//            faceRect.origin.y -= 30
-//            faceRect.size.width += 40
-//            faceRect.size.height += 60
-//            
-//            //converting from faceRect coordinate to UIImageView coordinate
-//            let x = faceRect.origin.x / (faceImage?.size.width)!
-//            let y = ((faceImage?.size.height)!-faceRect.origin.y-faceRect.size.height) / (faceImage?.size.height)!
-//            let width = faceRect.size.width / (faceImage?.size.width)!
-//            let height = faceRect.size.height / (faceImage?.size.height)!
-//            
-//            imageView.layer.contentsRect = CGRectMake(x, y, width, height)
-//        }
-//    }
+    func storeToken(token: String) {
+        print(token)
+        defaults.setObject(token, forKey: "userToken")
+        
+        //this is how to get the token back.
+        /*****************************************************
+         if let mytoken = defaults.objectForKey("userToken") {
+         print("from user defaults token is \(mytoken)")
+         }
+         *****************************************************/
+    }
+    func alertWithMessage(message: String) {
+        let alertController = UIAlertController(title: "Error", message: message, preferredStyle: .Alert)
+        let okAction = UIAlertAction(title: "Ok", style: .Default, handler: nil)
+        alertController.addAction(okAction)
+        
+        presentViewController(alertController, animated: true, completion: nil)
+    }
+    //MARK: BACKEND REQUEST FUNCTIONS
+    func signupUser(username: String, password: String) {
+        print("in sign up user test ---->  user type is : \(userType)")
+        let URL = "\(AppDelegate.URL)/signup/"
+        let parameters = [
+            "username": username,
+            "password": password,
+            "usertype": userType
+        ]
+        print("username: \(username)")
+        print("password: \(password)")
+        Alamofire.request(.POST, URL, parameters: parameters, encoding: .JSON).responseJSON { response in
+            print(response.request)  // original URL request
+            print(response.response) // URL response
+            print(response.data)     // server data
+            if let requestData = response.data {
+                if let dataString = String(data: requestData, encoding: NSUTF8StringEncoding) {
+                    print(dataString)
+                }
+            }
+            print(response.result)   // result of response serialization
+            if response.response?.statusCode == 201 {
+                if let json = response.result.value {
+                    print("my json")
+                    print(json)
+                    let myJson = JSON(json)
+                    if let userID = myJson["userid"].string {
+                        print("user id")
+                        print(userID)
+                    }
+                }
+                if let mydata = String(data: response.data!, encoding: NSUTF8StringEncoding) {
+                    print(mydata)
+                }
+                //perform login test to get token
+                self.loginTest(username, mypassword: password)
+            }else {
+                print("not successful")
+                self.registerButton.returnToOriginalState()
+                self.activity.removeFromSuperview()
+                self.alertWithMessage("error in signing up")
+            }
+            
+        }
+    }
+    func loginTest(myusername: String, mypassword: String) {
+        let URL = "\(AppDelegate.URL)/login/"
+        let parameters = [
+            "username": myusername,
+            "password": mypassword
+        ]
+        
+        print("username -> \"\(parameters["username"])\"")
+        print("password -> \"\(parameters["password"])\"")
+        
+        Alamofire.request(.POST, URL, parameters: parameters, encoding: .JSON).validate().responseJSON {
+            (response) in
+            if (response.response!.statusCode) == 200 {
+                if let json = response.result.value {
+                    print("my json")
+                    print(json)
+                    let myJson = JSON(json)
+                    if let myToken = myJson["token"].string {
+                        print(myToken)
+                        self.storeToken(myToken)
+                        self.setProfile()
+                    }
+                }
+                
+                
+            }else {
+                print("did not login")
+                self.registerButton.returnToOriginalState()
+                self.activity.removeFromSuperview()
+                self.alertWithMessage("error in login in")
+            }
+            
+        }
+    }
+    //will set country to make it part of the sign up
+    func setProfile() {
+        let URL = "\(AppDelegate.URL)/profile/"
+        print(userCountry)
+        if let myToken = defaults.objectForKey("userToken") as? String{
+            print(myToken)
+            let headers = [
+                "Authorization": myToken
+            ]
+            //TODO: Add profile image if available
+            let parameters = [
+                "country": userCountry
+            ]
+            
+            Alamofire.request(.PUT, URL, parameters: parameters, headers: headers, encoding: .JSON).responseJSON { response in
+                print(response.request)  // original URL request
+                print(response.response) // URL response
+                print(response.data)     // server data
+                print(response.result)   // result of response serialization
+                
+                if let requestData = response.data {
+                    if let dataString = String(data: requestData, encoding: NSUTF8StringEncoding) {
+                        print("data String : \(dataString)")
+                    }
+                }
+                
+                if (response.response!.statusCode) == 200 {
+                    if let json = response.result.value {
+                        print("my json")
+                        print(json)
+                        let myJson = JSON(json)
+                        if let myType = myJson["usertype"].string {
+                            print("MY TYPE IS : \(myType)")
+                            if myType == "seeker" {
+                                self.performSegueWithIdentifier("SeekerFeedVC", sender: nil)
+                            }else if myType == "provider" {
+                                self.performSegueWithIdentifier("ProfileVC", sender: nil)
+                            }
+                        }
+                    }
+                }else {
+                    //did not login
+                    print("did not set profile")
+                    self.registerButton.returnToOriginalState()
+                    self.activity.removeFromSuperview()
+                    self.alertWithMessage("could not set up profile")
+                }
+                
+                
+            }
+        }
+    }
+
     
 }

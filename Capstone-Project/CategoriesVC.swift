@@ -46,6 +46,7 @@ class CategoriesVC: UIViewController, UITableViewDelegate, UITableViewDataSource
     var categoriesString = [String]()
     let CellID = "CategoryCell"
     weak var delegate: CategoriesVCDelegate?
+    
     //MARK: ViewController LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -53,6 +54,11 @@ class CategoriesVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         setupTableView()
     }
     
+    //MARK: IBActions
+    @IBAction func CancelSaveButtonPressed() {
+        print("LOL")
+        delegate?.shouldDismissCategoriesView(categoriesString)
+    }
     //MARK: Functions
     func setup() {
         saveCancelButton.setTitleColor(UIColor.redColor(), forState: .Normal)
@@ -101,9 +107,5 @@ class CategoriesVC: UIViewController, UITableViewDelegate, UITableViewDataSource
             saveCancelButton.setTitle("Cancel", forState: .Normal)
         }
     }
-    //MARK: IBActions
-    @IBAction func CancelSaveButtonPressed() {
-        print("LOL")
-        delegate?.shouldDismissCategoriesView(categoriesString)
-    }
+    
 }

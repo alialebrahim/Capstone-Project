@@ -7,7 +7,7 @@
 //
 
 import UIKit
-
+import Alamofire
 protocol OfferedServicesDelegate: class{
     func didSwipeRight()
 }
@@ -15,6 +15,7 @@ class OfferedServicesVC: UIViewController, UITableViewDelegate, UITableViewDataS
     
     //MARK: IBOutlets
     @IBOutlet weak var tableView: UITableView!
+    
     //MARK: Variables
     let cellID = "ServiceCell"
     let cellSpacingHeight: CGFloat = 10
@@ -30,7 +31,6 @@ class OfferedServicesVC: UIViewController, UITableViewDelegate, UITableViewDataS
     }()
     var tableData = ["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15"]
     lazy var refreshControl = UIRefreshControl()
-    var serviceID = -2
     
     // MARK: ViewController lifecycle
     override func viewDidLoad() {
@@ -38,6 +38,7 @@ class OfferedServicesVC: UIViewController, UITableViewDelegate, UITableViewDataS
         setup()
         setupTableView()
         congigureNavigationBar()
+        
     }
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
@@ -53,11 +54,12 @@ class OfferedServicesVC: UIViewController, UITableViewDelegate, UITableViewDataS
         super.viewDidAppear(animated)
         
     }
+    
     // MARK: Functions
     func setup() {
         automaticallyAdjustsScrollViewInsets = false
         
-        //swipe gesture needed to navigate between tabs for the seeker
+        //swipe gesture needed to navigate between tabs for the SEEKER
         let rightSwipeGesture = UISwipeGestureRecognizer(target: self, action:#selector(rightSwipeAction))
         rightSwipeGesture.direction = .Right
         view.addGestureRecognizer(rightSwipeGesture)
@@ -85,7 +87,6 @@ class OfferedServicesVC: UIViewController, UITableViewDelegate, UITableViewDataS
         //register the cell xib file for this tableview
         tableView.registerNib(UINib(nibName: "predefinedServiceCell", bundle: nil), forCellReuseIdentifier: "ServiceCell")
         tableView.rowHeight = 129
-        //TODO: refresh controller
         refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh", attributes: [NSForegroundColorAttributeName: UIColor.whiteColor()])
         refreshControl.tintColor = UIColor.whiteColor()
         refreshControl.addTarget(self, action: #selector(refreshTableView), forControlEvents: .ValueChanged)
@@ -104,8 +105,8 @@ class OfferedServicesVC: UIViewController, UITableViewDelegate, UITableViewDataS
         
         var index = 0
         
-        for a in cells {
-            let cell: UITableViewCell = a as UITableViewCell
+        for myCell in cells {
+            let cell: UITableViewCell = myCell as UITableViewCell
             UIView.animateWithDuration(1.5, delay: 0.05 * Double(index), usingSpringWithDamping: 0.8, initialSpringVelocity: 0, options: [], animations: {
                 cell.transform = CGAffineTransformMakeTranslation(0, 0);
                 }, completion: nil)
@@ -163,6 +164,7 @@ class OfferedServicesVC: UIViewController, UITableViewDelegate, UITableViewDataS
             let alertControl = UIAlertController(title: "Confirmation", message: "Are you sure you want to delete this service?", preferredStyle: .Alert)
             let deleteAction = UIAlertAction(title: "Delete", style: .Destructive, handler: { (UIAlertAction) in
                 tableView.beginUpdates()
+                //TODO: BACKEND FUNCTION CALL
                 self.tableData.removeAtIndex(indexPath.row)
                 tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Right)
                 tableView.endUpdates()
@@ -179,21 +181,9 @@ class OfferedServicesVC: UIViewController, UITableViewDelegate, UITableViewDataS
         
     }
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        serviceID = indexPath.row
-        performSegueWithIdentifier("DetailedPredefinedServiceSegue", sender: nil)
+        //serviceID = indexPath.row
+        performSegueWithIdentifier("OfferedServiceDetails", sender: nil)
     }
-    
-    //MARK: Segue functions
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if segue.identifier == "DetailedPredefinedServiceSegue" {
-            if let destination = segue.destinationViewController as? DetailedPredefinedServiceVC {
-                destination.ServiceID = serviceID
-                destination.UserType = 0
-                
-            }
-        }
-    }
-    
-   
+    //MARK: BACKEND
 }
 

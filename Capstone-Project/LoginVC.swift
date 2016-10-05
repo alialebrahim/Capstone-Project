@@ -13,8 +13,15 @@ import SwiftyJSON
 
 //TODO: notificaion if email or password are incorrect!
 class LoginVC: UIViewController, SubmitButtonDelegate {
-    
-    
+//    let URL = "http://127.0.0.1:8000"
+    let URL = "http://81.4.110.27"
+	let username = "TomatoKetchup"
+	let password = "Heinz"
+	let userType = "provider"
+	
+	
+	
+	
     // MARK: IBOutlets
     @IBOutlet weak var logoLabel: UILabel!
     @IBOutlet weak var logoImageView: UIImageView!
@@ -23,10 +30,13 @@ class LoginVC: UIViewController, SubmitButtonDelegate {
     @IBOutlet weak var createAccountButton: UIButton!
     @IBOutlet weak var loginButton: SubmitButton!
     @IBOutlet weak var forgotYourPasswordButton: UIButton!
+    
     // MARK: Variables
     var loginAttempt = 0
     let defaults = NSUserDefaults.standardUserDefaults()
     var token = ""
+    var activity: NVActivityIndicatorView! = nil
+    
     // MARK: ViewController life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,33 +51,17 @@ class LoginVC: UIViewController, SubmitButtonDelegate {
     }
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-        //loginTest()
-        //deleteOfferedService()
-        //deleteOfferedServiceImage()
-        //offeredServiceCreation()
-        //publicServiceCreation()
-        //placeABid()
-        //signUpTest()
-        //getPublicService()
-        //getBids()
     }
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
-        //hiding navigation controller when view disappears.
-        self.navigationController?.navigationBar.hidden = true
     }
     // MARK: IBActions
     @IBAction func loginButtonPressed(sender: AnyObject) {
         loginButton.startLoadingAnimation()
-        NSTimer.schedule(delay: 1) { (timer) in
-            
-            self.performSegueWithIdentifier("SeekerFeedVC", sender: nil)
-            //self.performSegueWithIdentifier("ProfileVC", sender: nil)
-        }
-        
+        loginTest(emailTextField.text! , mypassword: passwordTextField.text!)
     }
     @IBAction func createAcccountButtonPressed(sender: AnyObject) {
-        print("create account")
+        performSegueWithIdentifier("SignUp", sender: nil)
     }
     @IBAction func forgotYourPasswordButtonPressed(sender: AnyObject) {
         print("forgot password")
@@ -83,13 +77,6 @@ class LoginVC: UIViewController, SubmitButtonDelegate {
         view.addGestureRecognizer(tapGesture)
         let colors = [UIColor(hex: 0xB39DDB), UIColor(hex: 0x7E57C2)]
         self.view.setGradientBackground(colors)
-        self.view.bringSubviewToFront(passwordTextField)
-        self.view.bringSubviewToFront(emailTextField)
-        self.view.bringSubviewToFront(logoLabel)
-        self.view.bringSubviewToFront(logoImageView)
-        self.view.bringSubviewToFront(loginButton)
-        self.view.bringSubviewToFront(forgotYourPasswordButton)
-        self.view.bringSubviewToFront(createAccountButton)
         /*
          *
          *setting up logo image
@@ -115,6 +102,7 @@ class LoginVC: UIViewController, SubmitButtonDelegate {
          *setting up login button
          */
         loginButton.setTitle("Login", forState: .Normal)
+        loginButton.cachedTitle = "Login"
         loginButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
         loginButton.backgroundColor = UIColor.whiteColor().colorWithAlphaComponent(0.5)
         loginButton.delegate = self
@@ -139,86 +127,54 @@ class LoginVC: UIViewController, SubmitButtonDelegate {
 //        bottomView.layoutIfNeeded()
     }
     
+    //MARK: Submit Button Delegate function
     func didAnimate(frame: CGRect) {
-        let activity = NVActivityIndicatorView(frame: frame, type: .BallClipRotateMultiple, color: UIColor.whiteColor())
+        activity = NVActivityIndicatorView(frame: frame, type: .BallClipRotateMultiple, color: UIColor.whiteColor())
         view.addSubview(activity)
         view.bringSubviewToFront(activity)
         activity.startAnimation()
     }
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
         return .LightContent
+	}
+    func alertWithMessage(message: String) {
+        let alertController = UIAlertController(title: "Error", message: message, preferredStyle: .Alert)
+        let okAction = UIAlertAction(title: "Ok", style: .Default, handler: nil)
+        alertController.addAction(okAction)
+        
+        presentViewController(alertController, animated: true, completion: nil)
     }
-    func signUpTest() {
-        let URL = "http://81.4.110.27/signup/"
+    func storeToken(token: String) {
+        print(token)
+        defaults.setObject(token, forKey: "userToken")
+        
+        //this is how to get the token back.
+        /*****************************************************
+         if let mytoken = defaults.objectForKey("userToken") {
+         print("from user defaults token is \(mytoken)")
+         }
+         *****************************************************/
+    }
+    //TODO: implement this function
+    func validateIput(username: UITextField, password: UITextField) -> Bool {
+        //if they are not empty return true
+        //if empty shake
+        //if invalid (for emails only) show error message
+        return true
+    }
+    //MARK: BACKEND
+    func loginTest(myusername: String, mypassword: String) {
+        let URL = "\(AppDelegate.URL)/login/"
         let parameters = [
-            "username": "sljfnssdlfjnsldjfn",
-            "password": "AliAlebrahim1003"
+            "username": myusername,
+            "password": mypassword
         ]
         
-        Alamofire.request(.POST, URL, parameters: parameters, encoding: .JSON).responseJSON { response in
-            print(response.request)  // original URL request
-            print(response.response) // URL response
-            print(response.data)     // server data
-            if let requestData = response.data {
-                if let dataString = String(data: requestData, encoding: NSUTF8StringEncoding) {
-                    self.storeToken(dataString)
-                }
-            }
-            print(response.result)   // result of response serialization
-            if response.response?.statusCode == 201 {
-                if let json = response.result.value {
-                    print("my json")
-                    print(json)
-                    let myJson = JSON(json)
-                    if let userID = myJson["userid"].string {
-                        print("user id")
-                        print(userID)
-                    }
-                }
-                if let mydata = String(data: response.data!, encoding: NSUTF8StringEncoding) {
-                    print(mydata)
-                }
-            }else {
-                print("not successful")
-            }
-            
-        }
-    }
-    func loginTest() {
-        let URL = "http://81.4.110.27/login/"
-        let parameters = [
-            "username": "sljfnssdlfjnsldjfn",
-            "password": "AliAlebrahim1003"
-        ]
+        print("username -> \"\(parameters["username"])\"")
+        print("password -> \"\(parameters["password"])\"")
         
-        Alamofire.request(.POST, URL, parameters: parameters, encoding: .JSON).validate().response {
-            (request, response, data, error) in
-            if (response?.statusCode)! == 200 {
-                if let requestData = data {
-                    if let dataString = String(data: requestData, encoding: NSUTF8StringEncoding) {
-                        self.storeToken(dataString)
-                    }
-                }
-            }else {
-                //did not login
-                print("did not login")
-            }
-            print("request")
-            print(request)
-            print("response")
-            print(response)
-            print("data")
-            print(data)
-            print("error")
-            print(error)
-        }
-        
-    }
-    func feedTest() {
-    
-        let URL = "http://81.4.110.27/predefinedservice/"
-        
-        Alamofire.request(.GET, URL, parameters: nil).responseJSON { response in
+        Alamofire.request(.POST, URL, parameters: parameters, encoding: .JSON).validate().responseJSON {
+            (response) in
             print(response.request)  // original URL request
             print(response.response) // URL response
             print(response.data)     // server data
@@ -226,353 +182,30 @@ class LoginVC: UIViewController, SubmitButtonDelegate {
             if let mydata = String(data: response.data!, encoding: NSUTF8StringEncoding) {
                 print(mydata)
             }
-            if let JSON = response.result.value {
-                print("JSON: \(JSON)")
-            }
-        }
-    }
-    
-    func storeToken(token: String) {
-        print(token)
-        defaults.setObject(token, forKey: "userToken")
-        
-        //this is how to get the token back.
-        /*****************************************************
-        if let mytoken = defaults.objectForKey("userToken") {
-            print("from user defaults token is \(mytoken)")
-        }
-        *****************************************************/
-    }
-    func storeUserID(userID: String) {
-        print(userID)
-        defaults.setObject(userID, forKey: "UserID")
-    }
-    func publicServiceCreation() {
-        /*
-         
-         “category”: string (defaulted to “other”)
-         “service”: {
-         “title” : string
-         “description” : big string
-         “price” : float
-         “status” : string (defaulted to “pending”)
-         “due_date” : models.DateTimeField(null=True, blank=True)
-         “created” : automatically set to the current server time
-         “is_special” : boolean (defaulted to “false)
-         }
-         
-         */
-        
-        if let myToken = defaults.objectForKey("userToken") as? String{
-            print(myToken)
-            let headers = [
-                "Authorization": myToken
-            ]
-            let URL = "http://81.4.110.27/publicservice/"
-            
-            let category = "car Services"
-            let service : [String: AnyObject] = [
-                "title" : "i dont know title :p",
-                "description" : "this is a service description that will descripte the service with title public service 2",
-                "price" : 12.1,
-                "is_special" : false
-            ]
-            
-            let parameters = [
-                "category": category,
-                "service": service
-            ]
-            
-            Alamofire.request(.POST, URL, parameters: parameters as? [String : AnyObject], headers: headers, encoding: .JSON).responseJSON { response in
-                print(response.request)  // original URL request
-                print(response.response) // URL response
-                print(response.data)     // server data
-                print(response.result)   // result of response serialization
-                if let mydata = String(data: response.data!, encoding: NSUTF8StringEncoding) {
-                    print(mydata)
-                }
-                if let JSON = response.result.value {
-                    print("JSON: \(JSON)")
-                }
-            }
-
-        }
-    }
-    func getPublicService() {
-   
-        if let myToken = defaults.objectForKey("userToken") as? String{
-            print(myToken)
-            let headers = [
-                "Authorization": myToken
-            ]
-            let URL = "http://81.4.110.27/publicservice/"
-            
-            Alamofire.request(.GET, URL, parameters: nil, headers: headers).responseJSON { response in
-                print(response.request)  // original URL request
-                print(response.response) // URL response
-                print(response.data)     // server data
-                print(response.result)   // result of response serialization
-                if let mydata = String(data: response.data!, encoding: NSUTF8StringEncoding) {
-                    print(mydata)
-                }
-                if let JSON = response.result.value {
-                    print("JSON: \(JSON)")
-                }
-            }
-            
-        }
-    }
-    
-    func deletionPublicService() {
-        
-        if let myToken = defaults.objectForKey("userToken") as? String{
-            print(myToken)
-            let headers = [
-                "Authorization": myToken
-            ]
-            let URL = "http://81.4.110.27/puiblicservice/3/"
-            
-            Alamofire.request(.DELETE, URL, parameters: nil, headers: headers).responseJSON { response in
-                print(response.request)  // original URL request
-                print(response.response) // URL response
-                print(response.data)     // server data
-                print(response.result)   // result of response serialization
-                if let mydata = String(data: response.data!, encoding: NSUTF8StringEncoding) {
-                    print(mydata)
-                }
-                if let JSON = response.result.value {
-                    print("JSON: \(JSON)")
-                }
-            }
-            
-        }
-    }
-    func getBids() {
-        if let myToken = defaults.objectForKey("userToken") as? String{
-            print("token -> '\(myToken)'")
-            let headers = [
-                "Authorization": "\(myToken)"
-            ]
-            let URL = "http://81.4.110.27/bid/1/"
-            let parameters = [
-                "bid": 1000
-            ]
-            
-            Alamofire.request(.GET, URL, parameters: parameters, headers: headers, encoding: .JSON).responseJSON { response in
-                print(response.request)  // original URL request
-                print(response.response) // URL response
-                print(response.data)     // server data
-                print(response.result)   // result of response serialization
-                if let mydata = String(data: response.data!, encoding: NSUTF8StringEncoding) {
-                    print(mydata)
-                }
-                if let JSON = response.result.value {
-                    print("JSON: \(JSON)")
-                }
-            }
-            
-        }
-    }
-    func placeABid() {
-        if let myToken = defaults.objectForKey("userToken") as? String{
-            print("token -> '\(myToken)'")
-            let headers = [
-                "Authorization": "\(myToken)"
-            ]
-            let URL = "http://81.4.110.27/bid/1/"
-            let parameters = [
-                "bid": 1000
-            ]
-            
-            Alamofire.request(.POST, URL, parameters: parameters, headers: headers, encoding: .JSON).responseJSON { response in
-                print(response.request)  // original URL request
-                print(response.response) // URL response
-                print(response.data)     // server data
-                print(response.result)   // result of response serialization
-                if let mydata = String(data: response.data!, encoding: NSUTF8StringEncoding) {
-                    print(mydata)
-                }
-                if let JSON = response.result.value {
-                    print("JSON: \(JSON)")
-                }
-            }
-            
-        }
-    }
-    func publicServiceUpdate() {
-        
-        if let myToken = defaults.objectForKey("userToken") as? String{
-            print(myToken)
-            let headers = [
-                "Authorization": myToken
-            ]
-            let URL = "http://81.4.110.27/publicservice/2/"
-            
-            let category = "Pet Services"
-            let service : [String: AnyObject] = [
-                "title" : "sjfbs.khdb",
-                "description" : "this is a service description ksdhfks",
-                "price" : 33.2,
-                "is_special" : false
-            ]
-            
-            let parameters = [
-                "category": category,
-                "service": service
-            ]
-            
-            Alamofire.request(.PUT, URL, parameters: parameters as? [String : AnyObject], headers: headers, encoding: .JSON).responseJSON { response in
-                print(response.request)  // original URL request
-                print(response.response) // URL response
-                print(response.data)     // server data
-                print(response.result)   // result of response serialization
-                if let mydata = String(data: response.data!, encoding: NSUTF8StringEncoding) {
-                    print(mydata)
-                }
-                if let JSON = response.result.value {
-                    print("JSON: \(JSON)")
-                }
-            }
-            
-        }
-    }
-    func gettingOfferedService() {
-        let URL = "http://81.4.110.27/offeredservice/"
-        Alamofire.request(.GET, URL, parameters: nil, encoding: .JSON).responseJSON { response in
-            print(response.request)  // original URL request
-            print(response.response) // URL response
-            print(response.data)     // server data
-            print(response.result)   // result of response serialization
-            if let dataString = String(data: response.data!, encoding: NSUTF8StringEncoding) {
-                print(dataString)
-            }
-            if let JSON = response.result.value {
-                print("JSON: \(JSON)")
-            }
-        }
-    }
-    func offeredServiceCreation() {
-        
-        let URL = "http://81.4.110.27/offeredservice/"
-        var imagesDictonaryList = [[String : AnyObject]]()
-        var images = [UIImage]()
-        for _ in 1...3 {
-            images.append(UIImage(named: "profileImagePlaceholder")!)
-        }
-        let imagesData = imagesToBase64(images)
-        for index in 0..<3 {
-            var myDictionary = [String:AnyObject]()
-            myDictionary["name"] = "\(index)"
-            myDictionary["image"] = imagesData[index]
-            imagesDictonaryList.append(myDictionary)
-        }
-        print(imagesDictonaryList)
-        let service : [String: AnyObject] = [
-            "title": "sdkhbcskdhb",
-            "description": "service 1 description",
-            "price": "11"
-        ]
-        let parameters = [
-            "category" :"Pets Services",
-            "service": service,
-            "serviceimage_set": imagesDictonaryList
-        ]
-        Alamofire.request(.POST, URL, parameters: parameters as? [String : AnyObject], encoding: .JSON).responseJSON { response in
-            print(response.request)  // original URL request
-            print(response.response) // URL response
-            print(response.data)     // server data
-            print(response.result)   // result of response serialization
-            if let dataString = String(data: response.data!, encoding: NSUTF8StringEncoding) {
-                print(dataString)
-            }
-            if let JSON = response.result.value {
-                print("JSON: \(JSON)")
-            }
-        }
-    }
-    func imagesToBase64(images: [UIImage]) -> [String]{
-        var imagesData = [String]()
-        for image in images {
-            let imageData = UIImagePNGRepresentation(image)
-            let base64String = imageData!.base64EncodedStringWithOptions(.Encoding64CharacterLineLength)
-            imagesData.append(base64String)
-        }
-        return imagesData
-    }
-    func deleteOfferedService() {
-        if let myToken = defaults.objectForKey("userToken") as? String {
-            print(myToken)
-            let headers = [
-                "Authorization": myToken
-            ]
-            let URL = "http://81.4.110.27/offeredservice/2/"
-            Alamofire.request(.DELETE, URL, parameters: nil, headers: headers).responseJSON { response in
-                print(response.request)  // original URL request
-                print(response.response) // URL response
-                print(response.data)     // server data
-                print(response.result)   // result of response serialization
-                if let mydata = String(data: response.data!, encoding: NSUTF8StringEncoding) {
-                    print(mydata)
+            if (response.response!.statusCode) == 200 {
+                if let json = response.result.value {
+                    print("my json")
+                    print(json)
+                    let myJson = JSON(json)
+                    if let myToken = myJson["token"].string {
+                        print(myToken)
+                        self.storeToken(myToken)
+                        if let myType = myJson["usertype"].string {
+                            print(myType)
+                            if myType == "seeker" {
+                                self.performSegueWithIdentifier("SeekerFeedVC", sender: nil)
+                            }else if myType == "provider" {
+                                self.performSegueWithIdentifier("ProfileVC", sender: nil)
+                            }
+                        }
+                    }
                 }
                 
-            }
-        }
-    }
-    func deleteOfferedServiceImage() {
-        if let myToken = defaults.objectForKey("userToken") as? String{
-            print(myToken)
-            let headers = [
-                "Authorization": myToken
-            ]
-            let URL = "http://81.4.110.27/offeredimages/7/"
-            
-            Alamofire.request(.DELETE, URL, parameters: nil, headers: headers).responseJSON { response in
-                print(response.request)  // original URL request
-                print(response.response) // URL response
-                print(response.data)     // server data
-                print(response.result)   // result of response serialization
-                if let mydata = String(data: response.data!, encoding: NSUTF8StringEncoding) {
-                    print(mydata)
-                }
-                if let JSON = response.result.value {
-                    print("JSON: \(JSON)")
-                }
-            }
-            
-        }
-    }
-    func updatingOfferedService() {
-        if let myToken = defaults.objectForKey("userToken") as? String{
-            print(myToken)
-            let headers = [
-                "Authorization": myToken
-            ]
-            let URL = "http://81.4.110.27/offeredservice/2/"
-            
-            let category = "IDK Services"
-            let service : [String: AnyObject] = [
-                "title" : "kkkkkkkkk",
-                "description" : "this is a service description ksdhfks",
-                "price" : 33.2
-            ]
-            
-            let parameters = [
-                "category": category,
-                "service": service,
-                "serviceimage_set": []
-            ]
-            
-            Alamofire.request(.PUT, URL, parameters: parameters as? [String : AnyObject], headers: headers, encoding: .JSON).responseJSON { response in
-                print(response.request)  // original URL request
-                print(response.response) // URL response
-                print(response.data)     // server data
-                print(response.result)   // result of response serialization
-                if let mydata = String(data: response.data!, encoding: NSUTF8StringEncoding) {
-                    print(mydata)
-                }
-                if let JSON = response.result.value {
-                    print("JSON: \(JSON)")
-                }
+            }else {
+                print("did not login")
+                self.loginButton.returnToOriginalState()
+                self.activity.removeFromSuperview()
+                self.alertWithMessage("error in login in")
             }
             
         }

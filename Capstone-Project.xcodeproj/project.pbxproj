@@ -25,7 +25,6 @@
 		4136DB4B1D59CAB50030A685 /* ServicesVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4136DB411D59CAB50030A685 /* ServicesVC.swift */; };
 		4136DB4C1D59CAB50030A685 /* ProfileVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4136DB421D59CAB50030A685 /* ProfileVC.swift */; };
 		4136DB4D1D59CAB50030A685 /* OfferedServicesVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4136DB431D59CAB50030A685 /* OfferedServicesVC.swift */; };
-		4136DB4E1D59CAB50030A685 /* DetailedPredefinedServiceVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4136DB441D59CAB50030A685 /* DetailedPredefinedServiceVC.swift */; };
 		4136DB4F1D59CAB50030A685 /* addPredefinedService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4136DB451D59CAB50030A685 /* addPredefinedService.swift */; };
 		4136DB501D59CAB50030A685 /* EditProfileVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4136DB461D59CAB50030A685 /* EditProfileVC.swift */; };
 		4136DB511D59CAB50030A685 /* AvailableServiceHoursVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4136DB471D59CAB50030A685 /* AvailableServiceHoursVC.swift */; };
@@ -66,8 +65,13 @@
 		41ACDE111D86C87F00CA7438 /* Feed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41ACDE101D86C87F00CA7438 /* Feed.swift */; };
 		41ACDE131D86C8AB00CA7438 /* PublicServiceRequestVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41ACDE121D86C8AB00CA7438 /* PublicServiceRequestVC.swift */; };
 		41ACDE151D86C94A00CA7438 /* RequestLogVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41ACDE141D86C94A00CA7438 /* RequestLogVC.swift */; };
+		41CCA2361D9CF366009E9FBE /* backendTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41CCA2351D9CF366009E9FBE /* backendTests.swift */; };
 		41EF4EAE1D8C63AF007F1772 /* seekerLogCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 41EF4EAD1D8C63AE007F1772 /* seekerLogCell.xib */; };
 		41EF4EB01D9021E0007F1772 /* OfferedServiceDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41EF4EAF1D9021E0007F1772 /* OfferedServiceDetails.swift */; };
+		41EF4EB21D910AA0007F1772 /* SelectOfferedServiceTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41EF4EB11D910AA0007F1772 /* SelectOfferedServiceTime.swift */; };
+		41EF4EB41D910ACD007F1772 /* SelectOfferedServiceDay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41EF4EB31D910ACD007F1772 /* SelectOfferedServiceDay.swift */; };
+		41EF4EB61D91123E007F1772 /* OfferedServiceDetailsP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41EF4EB51D91123E007F1772 /* OfferedServiceDetailsP.swift */; };
+		41EF4EBC1D913455007F1772 /* PublicServiceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41EF4EBB1D913455007F1772 /* PublicServiceViewController.swift */; };
 		5F93EA9111551AC7F07222B9 /* Pods_Capstone_Project.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A1262E72DABFBDAC57CAA06 /* Pods_Capstone_Project.framework */; };
 /* End PBXBuildFile section */
 
@@ -95,7 +99,6 @@
 		4136DB411D59CAB50030A685 /* ServicesVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ServicesVC.swift; sourceTree = "<group>"; };
 		4136DB421D59CAB50030A685 /* ProfileVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileVC.swift; sourceTree = "<group>"; };
 		4136DB431D59CAB50030A685 /* OfferedServicesVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OfferedServicesVC.swift; sourceTree = "<group>"; };
-		4136DB441D59CAB50030A685 /* DetailedPredefinedServiceVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailedPredefinedServiceVC.swift; sourceTree = "<group>"; };
 		4136DB451D59CAB50030A685 /* addPredefinedService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = addPredefinedService.swift; sourceTree = "<group>"; };
 		4136DB461D59CAB50030A685 /* EditProfileVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditProfileVC.swift; sourceTree = "<group>"; };
 		4136DB471D59CAB50030A685 /* AvailableServiceHoursVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AvailableServiceHoursVC.swift; sourceTree = "<group>"; };
@@ -136,8 +139,13 @@
 		41ACDE101D86C87F00CA7438 /* Feed.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Feed.swift; sourceTree = "<group>"; };
 		41ACDE121D86C8AB00CA7438 /* PublicServiceRequestVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PublicServiceRequestVC.swift; sourceTree = "<group>"; };
 		41ACDE141D86C94A00CA7438 /* RequestLogVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestLogVC.swift; sourceTree = "<group>"; };
+		41CCA2351D9CF366009E9FBE /* backendTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = backendTests.swift; sourceTree = "<group>"; };
 		41EF4EAD1D8C63AE007F1772 /* seekerLogCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = seekerLogCell.xib; sourceTree = "<group>"; };
 		41EF4EAF1D9021E0007F1772 /* OfferedServiceDetails.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OfferedServiceDetails.swift; sourceTree = "<group>"; };
+		41EF4EB11D910AA0007F1772 /* SelectOfferedServiceTime.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectOfferedServiceTime.swift; sourceTree = "<group>"; };
+		41EF4EB31D910ACD007F1772 /* SelectOfferedServiceDay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectOfferedServiceDay.swift; sourceTree = "<group>"; };
+		41EF4EB51D91123E007F1772 /* OfferedServiceDetailsP.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OfferedServiceDetailsP.swift; sourceTree = "<group>"; };
+		41EF4EBB1D913455007F1772 /* PublicServiceViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PublicServiceViewController.swift; sourceTree = "<group>"; };
 		9A1262E72DABFBDAC57CAA06 /* Pods_Capstone_Project.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Capstone_Project.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D2697E035B9466973F2B46CC /* Pods-Capstone-Project.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Capstone-Project.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Capstone-Project/Pods-Capstone-Project.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -223,6 +231,7 @@
 				4136DB341D59C9FD0030A685 /* iCarousel.m */,
 				4136DB3A1D59CA280030A685 /* AppDelegate.swift */,
 				4136DB211D59C9A80030A685 /* Capstone-Project-Bridging-Header.h */,
+				41CCA2351D9CF366009E9FBE /* backendTests.swift */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -230,6 +239,7 @@
 		4136DB3F1D59CA6D0030A685 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				41EF4EBB1D913455007F1772 /* PublicServiceViewController.swift */,
 				4136DB5A1D59CAD50030A685 /* Main */,
 				4136DB401D59CA780030A685 /* Provider */,
 				4136DB551D59CABB0030A685 /* Seeker */,
@@ -243,17 +253,17 @@
 				4136DB421D59CAB50030A685 /* ProfileVC.swift */,
 				4136DB431D59CAB50030A685 /* OfferedServicesVC.swift */,
 				4136DB461D59CAB50030A685 /* EditProfileVC.swift */,
+				411879F71D6C3FB500A23DD6 /* ProviderInfoTVC.swift */,
 				4136DB7A1D5B19F80030A685 /* CategoriesVC.swift */,
 				4136DB411D59CAB50030A685 /* ServicesVC.swift */,
 				4136DB781D5A510F0030A685 /* RequestedServicesVC.swift */,
 				4136DB4A1D59CAB50030A685 /* WorkingOnVC.swift */,
-				4136DB441D59CAB50030A685 /* DetailedPredefinedServiceVC.swift */,
 				4136DB451D59CAB50030A685 /* addPredefinedService.swift */,
 				4136DB471D59CAB50030A685 /* AvailableServiceHoursVC.swift */,
 				4136DB481D59CAB50030A685 /* AvailableServiceDaysVC.swift */,
 				4136DB491D59CAB50030A685 /* ImagePreview.swift */,
-				411879F71D6C3FB500A23DD6 /* ProviderInfoTVC.swift */,
 				41ACDE101D86C87F00CA7438 /* Feed.swift */,
+				41EF4EB51D91123E007F1772 /* OfferedServiceDetailsP.swift */,
 			);
 			name = Provider;
 			sourceTree = "<group>";
@@ -271,6 +281,8 @@
 				418CA4281D64A0B7007852F6 /* SearchedProviderVC.swift */,
 				41ACDE121D86C8AB00CA7438 /* PublicServiceRequestVC.swift */,
 				41ACDE141D86C94A00CA7438 /* RequestLogVC.swift */,
+				41EF4EB11D910AA0007F1772 /* SelectOfferedServiceTime.swift */,
+				41EF4EB31D910ACD007F1772 /* SelectOfferedServiceDay.swift */,
 			);
 			name = Seeker;
 			sourceTree = "<group>";
@@ -453,6 +465,8 @@
 				414777741D5F13470097D34D /* RequestedServiceCell.swift in Sources */,
 				41ACDE131D86C8AB00CA7438 /* PublicServiceRequestVC.swift in Sources */,
 				4136DB771D59CB060030A685 /* ErrorButton.swift in Sources */,
+				41EF4EB61D91123E007F1772 /* OfferedServiceDetailsP.swift in Sources */,
+				41EF4EB21D910AA0007F1772 /* SelectOfferedServiceTime.swift in Sources */,
 				4136DB6F1D59CB060030A685 /* Extensions.swift in Sources */,
 				4136DB4D1D59CAB50030A685 /* OfferedServicesVC.swift in Sources */,
 				4136DB791D5A510F0030A685 /* RequestedServicesVC.swift in Sources */,
@@ -465,6 +479,7 @@
 				414777781D62FEA60097D34D /* ChooseCategoriesVC.swift in Sources */,
 				4136DB2F1D59C9AA0030A685 /* WorkingHoursCell.swift in Sources */,
 				4147777A1D6320C80097D34D /* ChooseRatingVC.swift in Sources */,
+				41CCA2361D9CF366009E9FBE /* backendTests.swift in Sources */,
 				4136DB381D59CA070030A685 /* SCLAlertView.swift in Sources */,
 				4136DB711D59CB060030A685 /* TimeIntervalManager.swift in Sources */,
 				4136DB761D59CB060030A685 /* WorkingOnServiceCell.swift in Sources */,
@@ -472,10 +487,10 @@
 				4136DB5F1D59CAE30030A685 /* SignUpVC.swift in Sources */,
 				4136DB501D59CAB50030A685 /* EditProfileVC.swift in Sources */,
 				4147777E1D63304B0097D34D /* RatingCell.swift in Sources */,
-				4136DB4E1D59CAB50030A685 /* DetailedPredefinedServiceVC.swift in Sources */,
 				414777821D63936D0097D34D /* ProvidersSearchVC.swift in Sources */,
 				4136DB7B1D5B19F80030A685 /* CategoriesVC.swift in Sources */,
 				411879D41D6876BA00A23DD6 /* SubmitButton.swift in Sources */,
+				41EF4EBC1D913455007F1772 /* PublicServiceViewController.swift in Sources */,
 				411879F81D6C3FBB00A23DD6 /* ProviderInfoTVC.swift in Sources */,
 				4136DB591D59CACA0030A685 /* SeekerDetailedPredefinedServiceVC.swift in Sources */,
 				4136DB741D59CB060030A685 /* CustomSearchBar.swift in Sources */,
@@ -488,6 +503,7 @@
 				4136DB3B1D59CA280030A685 /* AppDelegate.swift in Sources */,
 				4136DB601D59CAE30030A685 /* LoginVC.swift in Sources */,
 				4136DB541D59CAB50030A685 /* WorkingOnVC.swift in Sources */,
+				41EF4EB41D910ACD007F1772 /* SelectOfferedServiceDay.swift in Sources */,
 				4136DB6D1D59CB060030A685 /* CircularImageView.swift in Sources */,
 				41EF4EB01D9021E0007F1772 /* OfferedServiceDetails.swift in Sources */,
 				41ACDE111D86C87F00CA7438 /* Feed.swift in Sources */,

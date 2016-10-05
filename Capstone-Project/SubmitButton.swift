@@ -10,6 +10,7 @@ import UIKit
 import NVActivityIndicatorView
 protocol SubmitButtonDelegate: class {
     func didAnimate(frame: CGRect)
+    //func removeAnimation()
 }
 class SubmitButton: UIButton {
     
@@ -80,6 +81,7 @@ class SubmitButton: UIButton {
         
         self.layer.removeAllAnimations()
         self.setTitle(self.cachedTitle, forState: .Normal)
+        //self.delegate.removeAnimation()
     }
     
     func shrink() {

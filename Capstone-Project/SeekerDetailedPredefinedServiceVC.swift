@@ -266,7 +266,7 @@ class SeekerDetailedPredefinedServiceVC: UIViewController , UITableViewDelegate 
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "editPredefinedServiceSegue" {
             if let destination = segue.destinationViewController as? addService {
-                destination.serviceID = ServiceID
+                //destination.serviceID = ServiceID
                 destination.buttonName = "Save"
             }
             

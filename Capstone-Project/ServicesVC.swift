@@ -12,7 +12,6 @@ protocol ServicesVCDelegate: class {
     func didRefresh()
 }
 
-
 class ServicesVC: UIViewController {
     
     // MARK: IBOutlets

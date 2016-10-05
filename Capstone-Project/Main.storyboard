@@ -106,7 +106,7 @@
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <action selector="createAcccountButtonPressed:" destination="RA5-pe-pUn" eventType="touchUpInside" id="a0M-d3-ran"/>
+                                    <action selector="createAcccountButtonPressed:" destination="RA5-pe-pUn" eventType="touchUpInside" id="GQs-by-ZQA"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -140,6 +140,7 @@
                         <outlet property="passwordTextField" destination="Fda-N6-FUs" id="Pac-wx-CBa"/>
                         <segue destination="kOC-7f-d3q" kind="show" identifier="ProfileVC" id="wto-Rf-HOq"/>
                         <segue destination="CXy-uN-3hj" kind="show" identifier="SeekerFeedVC" id="xcn-wm-eRh"/>
+                        <segue destination="HVA-co-UTb" kind="show" identifier="SignUp" id="B7Z-IT-We8"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mh9-XP-5KB" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -313,7 +314,7 @@
                                                     </userDefinedRuntimeAttribute>
                                                 </userDefinedRuntimeAttributes>
                                             </textField>
-                                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Email" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="aj5-oa-fhN" customClass="HoshiTextField" customModule="TextFieldEffects">
+                                            <textField hidden="YES" opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Email" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="aj5-oa-fhN" customClass="HoshiTextField" customModule="TextFieldEffects">
                                                 <rect key="frame" x="8" y="222" width="584" height="40"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="40" id="PIt-jw-DK3"/>
@@ -456,7 +457,6 @@
                     <connections>
                         <outlet property="contentView" destination="iEG-ej-VM6" id="FCx-Le-DYc"/>
                         <outlet property="contentViewHeightConstraint" destination="9mI-nB-SaL" id="Utv-bv-TfJ"/>
-                        <outlet property="emailTextfield" destination="aj5-oa-fhN" id="2a7-gr-WDs"/>
                         <outlet property="passwordTextfield" destination="Ppl-T2-0M6" id="Vin-0R-Geu"/>
                         <outlet property="profileImage" destination="dJO-vA-S45" id="fGs-YU-FJ8"/>
                         <outlet property="profileImageButton" destination="NlB-Y4-b7P" id="ep8-pb-IKp"/>
@@ -464,6 +464,8 @@
                         <outlet property="scrollView" destination="fUW-Kv-CUs" id="2mt-jO-WSy"/>
                         <outlet property="seekerProviderSegmentedControl" destination="GCb-IG-Eem" id="3Dz-bA-pH0"/>
                         <outlet property="userNameTextField" destination="taI-Eq-7zl" id="0Fv-eb-AKc"/>
+                        <segue destination="CXy-uN-3hj" kind="show" identifier="SeekerFeedVC" id="Vf5-BU-bQ3"/>
+                        <segue destination="kOC-7f-d3q" kind="show" identifier="ProfileVC" id="0uS-QR-iTR"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2O4-lg-SUK" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -475,4 +477,9 @@
         <image name="camera" width="512" height="512"/>
         <image name="logo" width="200" height="217"/>
     </resources>
+    <inferredMetricsTieBreakers>
+        <segue reference="B7Z-IT-We8"/>
+        <segue reference="wto-Rf-HOq"/>
+        <segue reference="Vf5-BU-bQ3"/>
+    </inferredMetricsTieBreakers>
 </document>

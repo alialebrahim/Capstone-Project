@@ -7,7 +7,8 @@
 //
 
 import UIKit
-
+import Alamofire
+import SwiftyJSON
 class SeekerFeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource, CustomSearchControllerDelegate {
     //MARK: Variables
     var dataArray = [String]() //TODO: change to type predefined service
@@ -16,7 +17,10 @@ class SeekerFeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource
     var shouldShowSearchResult = false
     var customSearchController: CustomSearchController!
     var serviceID = -1
+    var offeredServices: JSON?
     lazy var refreshControl = UIRefreshControl()
+    var choosenService: JSON?
+    let defaults = NSUserDefaults.standardUserDefaults()
     //MARK: IBOutlets
     @IBOutlet weak var tableView: UITableView!
     
@@ -29,8 +33,12 @@ class SeekerFeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         loadCountries()
         ///////////////////////////////////////////////////
         configureSearchController()
+        
     }
-    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        gettingOfferedService()
+    }
     //MARK: tableview delegate functions
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
@@ -39,25 +47,33 @@ class SeekerFeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         if shouldShowSearchResult {
             return filteredArray.count
         }else {
-            return dataArray.count
+            if let service = offeredServices {
+                return service.count
+            }else {
+                return 0
+            }
         }
     }
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let myCell = tableView.dequeueReusableCellWithIdentifier(cellID, forIndexPath: indexPath) as! PredefinedServicesCell
-        
+        let service = offeredServices![indexPath.row]
         //Cell configuration.
         if shouldShowSearchResult {
-            myCell.serviceTitle.text = "\(filteredArray[indexPath.row])"
+            myCell.serviceTitle.text = service["service"]["title"].string
         }else {
-            myCell.serviceTitle.text = "\(dataArray[indexPath.row])"
+            myCell.serviceTitle.text = service["service"]["title"].string
         }
-        myCell.servicePrice.text = "10"
+        
+        
+        myCell.servicePrice.text = "\(service["service"]["price"].float!)"
         myCell.serviceCurrency.text = "KWD"
-        myCell.serviceDescription.text = "This is a service description This is a service description This is a service description This is a service description This is a service description This is a service description This is a service description This is a service description This is a service description"
+        
+        myCell.serviceDescription.text = service["service"]["description"].string
         return myCell
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        choosenService = offeredServices![indexPath.row]
         performSegueWithIdentifier("OfferedServicesDetails", sender: nil)
         
     }
@@ -155,6 +171,32 @@ class SeekerFeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource
                 print("error converting file content into a string")
             }
             
+        }
+    }
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "OfferedServicesDetails" {
+            if let vc = segue.destinationViewController as? OfferedServiceDetails {
+                vc.myService = choosenService
+            }
+        }
+    }
+    //BACKEND
+    func gettingOfferedService() {
+        let URL = "\(AppDelegate.URL)/offeredservice/"
+        Alamofire.request(.GET, URL, parameters: nil, encoding: .JSON).responseJSON { response in
+            print(response.request)  // original URL request
+            print(response.response) // URL response
+            print(response.data)     // server data
+            print(response.result)   // result of response serialization
+            if let dataString = String(data: response.data!, encoding: NSUTF8StringEncoding) {
+                print(dataString)
+            }
+            if let json = response.result.value {
+                self.offeredServices = JSON(json)
+                print(self.offeredServices!)
+                print(self.offeredServices?.count)
+                self.tableView.reloadData()
+            }
         }
     }
 

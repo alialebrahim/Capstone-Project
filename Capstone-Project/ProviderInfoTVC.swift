@@ -7,13 +7,15 @@
 //
 
 import UIKit
-
+import Alamofire
 protocol ProviderInfoTVCDelegate: class {
     func shouldPerformSegueToChooseCategoriesVC()
+    func dismiss()
 }
 
 class ProviderInfoTVC: UITableViewController, EditProvidersProfileDelegate {
 
+    //MARK: IBOutlets
     @IBOutlet weak var bioTextField: UITextField!
     @IBOutlet weak var usernameTextField: UITextField!
     @IBOutlet weak var categoriesTextField: UITextField!
@@ -25,8 +27,11 @@ class ProviderInfoTVC: UITableViewController, EditProvidersProfileDelegate {
     @IBOutlet weak var categoriesCell: UITableViewCell!
     @IBOutlet weak var categoryButton: UIButton!
     
+    //MARK: Variables
     var delegate: ProviderInfoTVCDelegate?
+    let defaults = NSUserDefaults.standardUserDefaults()
     
+    //MARK: ViewController lifecycle.
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
@@ -48,6 +53,8 @@ class ProviderInfoTVC: UITableViewController, EditProvidersProfileDelegate {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+    //MARK: TableView Delegate Functions
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         return 44
     }
@@ -78,6 +85,14 @@ class ProviderInfoTVC: UITableViewController, EditProvidersProfileDelegate {
         return headerView
     }
     
+    //MARK: IBActions
+    @IBAction func categoryButtonPressed(sender: AnyObject) {
+        print("did press choose category button")
+        delegate?.shouldPerformSegueToChooseCategoriesVC()
+        //performSegueWithIdentifier("categoriesVC", sender: nil)
+    }
+    
+    //MARK: Functions
     func setup() {
         categoryButton.setTitleColor(UIColor(hex: 0xC7C7CD), forState: .Normal)
         categoryButton.setTitle("Choose caegory", forState: .Normal)
@@ -99,9 +114,57 @@ class ProviderInfoTVC: UITableViewController, EditProvidersProfileDelegate {
         }
         
     }
-    @IBAction func categoryButtonPressed(sender: AnyObject) {
-        print("did press choose category button")
-        delegate?.shouldPerformSegueToChooseCategoriesVC()
-        //performSegueWithIdentifier("categoriesVC", sender: nil)
+    func editProfileRequest(profileImage: UIImage?) {
+        editProfile()
+    }
+    func alertWithMessage(message: String) {
+        let alertController = UIAlertController(title: "Error", message: message, preferredStyle: .Alert)
+        let okAction = UIAlertAction(title: "Ok", style: .Default, handler: nil)
+        alertController.addAction(okAction)
+        
+        presentViewController(alertController, animated: true, completion: nil)
+    }
+    //MARK: BACKEND
+    func editProfile() {
+        let URL = "\(AppDelegate.URL)/profile/"
+        
+        if let myToken = defaults.objectForKey("userToken") as? String{
+            print(myToken)
+            let headers = [
+                "Authorization": myToken
+            ]
+            //TODO: DO INPUT VALIDATION
+            let parameters = [
+                "about" : bioTextField.text!,
+                "phone_number" : phoneNumberTextField.text!,
+                "email" : emailTextField.text!,
+                "area" : areaTextField.text!,
+                "street_address" : streetAddressTextField.text!
+            ]
+            
+            Alamofire.request(.PUT, URL, parameters: parameters, headers: headers, encoding: .JSON).responseJSON { response in
+                print(response.request)  // original URL request
+                print(response.response) // URL response
+                print(response.data)     // server data
+                print(response.result)   // result of response serialization
+                
+                if let requestData = response.data {
+                    if let dataString = String(data: requestData, encoding: NSUTF8StringEncoding) {
+                        print("data String : \(dataString)")
+                    }
+                }
+                
+                if (response.response!.statusCode) == 200 {
+                    //delegate to dimiss EditProfileVC
+                    self.delegate?.dismiss()
+                }else {
+                    //TODO: delegate function to show alert on editProfileVC
+                    print("did not set profile")
+                    self.alertWithMessage("could not update profile")
+                }
+                
+                
+            }
+        }
     }
 }

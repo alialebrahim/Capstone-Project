@@ -9,22 +9,24 @@
 import UIKit
 
 class Feed: UIViewController, UITableViewDelegate, UITableViewDataSource {
-
+    
+    //MARK: IBOutlets
     @IBOutlet weak var tableView: UITableView!
+    
+    //MARK: Variables
     var publicServices = [1,2,3,4,5,7,7]
     var bids = [7,21,322]
     let sections = ["You Bid On","Public Services"]
     let CellID = "PublicCell"
+    
+    //MARK: ViewController lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
         // Do any additional setup after loading the view.
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
+    
+    //MARK: Functions
     func setup() {
         automaticallyAdjustsScrollViewInsets = false
         setupTableView()
@@ -34,11 +36,11 @@ class Feed: UIViewController, UITableViewDelegate, UITableViewDataSource {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.registerNib(UINib(nibName: "PublicServiceCell", bundle: nil), forCellReuseIdentifier: CellID)
-        tableView.rowHeight = 250
     }
     func setupNavigationBar() {
         navigationItem.title = "Feed"
     }
+    //MARK: TableView delegate functions
     func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return sections[section]
     }
@@ -60,6 +62,9 @@ class Feed: UIViewController, UITableViewDelegate, UITableViewDataSource {
             return 250
         }
     }
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        performSegueWithIdentifier("PublicServiceDetails", sender: nil)
+    }
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         if indexPath.section == 0 {
             if let cell = tableView.dequeueReusableCellWithIdentifier("test") {
@@ -77,14 +82,4 @@ class Feed: UIViewController, UITableViewDelegate, UITableViewDataSource {
         }
         
     }
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }

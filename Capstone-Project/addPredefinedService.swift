@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Alamofire
 //TODO: dynamic content size
 //TODO: delegate to remove picture
 class addService: UIViewController, UITextViewDelegate, iCarouselDelegate, iCarouselDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIPopoverPresentationControllerDelegate, AvailableServiceHoursDelegate, AvailableServiceDaysDelegate {
@@ -41,8 +42,9 @@ class addService: UIViewController, UITextViewDelegate, iCarouselDelegate, iCaro
     var pictures = [UIImage]()
     let imagePicker = UIImagePickerController()
     var buttonName = "Add"
-    var serviceID = -1
     var dimView: UIView!
+    let defaults = NSUserDefaults.standardUserDefaults()
+    
     //MARK: ViewController lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -55,10 +57,6 @@ class addService: UIViewController, UITextViewDelegate, iCarouselDelegate, iCaro
          */
         setup()
         configureNavigationBar()
-        
-        if serviceID != -1 {
-            fillingTheInfo()
-        }
     }
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
@@ -68,10 +66,8 @@ class addService: UIViewController, UITextViewDelegate, iCarouselDelegate, iCaro
     }
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-        
         //rotate left arrow picture
         arowImage.transform = CGAffineTransformMakeRotation(CGFloat(M_PI))
-        
         adjustContentViewHeight()
     }
     
@@ -165,17 +161,14 @@ class addService: UIViewController, UITextViewDelegate, iCarouselDelegate, iCaro
         
         descriptionTextView.delegate = self
         
-        currency = "KWD"
-        if let myCurrency = currency {
-            priceTextField.placeholder = "Price in \(myCurrency)"
+        currency = ""
+        if currency != nil {
+            priceTextField.placeholder = "Price in local currency"
         }
         priceTextField.keyboardType = .NumberPad
         
         //textview placeholder setup
         descriptionTextView.text = "Description"
-        if serviceID == -1 {
-            descriptionTextView.textColor = UIColor(hex: 0xC7C7CD)
-        }
         descriptionTextView.selectedTextRange = descriptionTextView.textRangeFromPosition(descriptionTextView.beginningOfDocument, toPosition: descriptionTextView.beginningOfDocument)
         
         //setup textfields and textview textColor
@@ -191,8 +184,8 @@ class addService: UIViewController, UITextViewDelegate, iCarouselDelegate, iCaro
         navigationItem.title = "Add Service"
     }
     func addService() {
-        //update the changes to the server
-        self.navigationController?.popViewControllerAnimated(true)
+        //BACKEND REQUEST FUNCTION
+        offeredServiceCreation("test category", title: titleLabel.text!, description: descriptionTextView.text!, price: priceTextField.text!)
     }
     func adjustContentViewHeight() {
         var contentRect = CGRectZero
@@ -201,23 +194,6 @@ class addService: UIViewController, UITextViewDelegate, iCarouselDelegate, iCaro
         }
         contentViewHeight.constant = contentRect.size.height+20
     }
-    func fillingTheInfo () {
-        titleTextField.text = "title of service"
-        descriptionTextView.text = "text view description bla bla bla text view description bla bla bla text view description bla bla bla text view description bla bla bla text view description bla bla bla."
-        priceTextField.text = "55"
-    }
-//    func addLine(color: UIColor, width: CGFloat) {
-//        if border != nil {
-//            border.removeFromSuperview()
-//            border = nil
-//        }
-//        
-//        border = UIView()
-//        border.frame = CGRectMake(descriptionTextView.frame.origin.x, descriptionTextView.frame.origin.y+descriptionTextView.frame.height-width, descriptionTextView.frame.width, width)
-//        border.backgroundColor = color
-//        descriptionTextView.superview!.insertSubview(border, aboveSubview: descriptionTextView)
-//        descriptionTextView.layoutIfNeeded()
-//    }
     func keyboardWillShow(notification: NSNotification) {
         var userInfo = notification.userInfo!
         let keyboardFrame = (userInfo[UIKeyboardFrameBeginUserInfoKey] as! NSValue).CGRectValue()
@@ -228,6 +204,13 @@ class addService: UIViewController, UITextViewDelegate, iCarouselDelegate, iCaro
     }
     func adaptivePresentationStyleForPresentationController(controller: UIPresentationController) -> UIModalPresentationStyle {
         return .None
+    }
+    func alertWithMessage(message: String) {
+        let alertController = UIAlertController(title: "Error", message: message, preferredStyle: .Alert)
+        let okAction = UIAlertAction(title: "Ok", style: .Default, handler: nil)
+        alertController.addAction(okAction)
+        
+        presentViewController(alertController, animated: true, completion: nil)
     }
     //TextView delegate functions
     /*
@@ -343,5 +326,61 @@ class addService: UIViewController, UITextViewDelegate, iCarouselDelegate, iCaro
                 }
             }
         }
+    }
+    
+    //MARK: BACKEND
+    func offeredServiceCreation(category: String, title: String, description: String, price: String) {
+        if let myToken = defaults.objectForKey("userToken") as? String {
+            print("token-> \"\(myToken)\"")
+            let headers = [
+                "Authorization": myToken
+            ]
+            let URL = "\(AppDelegate.URL)/offeredservice/"
+            var imagesDictonaryList = [[String : AnyObject]]()
+            let imagesData = imagesToBase64(pictures)
+            for index in 0..<imagesData.count {
+                var myDictionary = [String:AnyObject]()
+                myDictionary["name"] = "\(index)"
+                myDictionary["image"] = imagesData[index]
+                imagesDictonaryList.append(myDictionary)
+            }
+            let service : [String: AnyObject] = [
+                "title": title,
+                "description": description,
+                "price": price
+            ]
+            let parameters = [
+                "category" : category,
+                "service": service,
+                "serviceimage_set": imagesDictonaryList
+            ]
+            print("im here")
+            Alamofire.request(.POST, URL, parameters: parameters as? [String : AnyObject], headers: headers, encoding: .JSON).responseJSON { response in
+                //            print(response.request)  // original URL request
+                print(response.response) // URL response
+                print(response.data)     // server data
+                print(response.result)   // result of response serialization
+                if let dataString = String(data: response.data!, encoding: NSUTF8StringEncoding) {
+                    print(dataString)
+                }
+                if let JSON = response.result.value {
+                    print("JSON: \(JSON)")
+                }
+                if response.response?.statusCode == 201 {
+                    self.navigationController?.popViewControllerAnimated(true)
+                }else {
+                    self.alertWithMessage("could not create offered service, please try again")
+                }
+            }
+        }
+    }
+    func imagesToBase64(images: [UIImage]) -> [String]{
+        var imagesData = [String]()
+        for image in images {
+            let imageData = UIImagePNGRepresentation(image)
+            let base64String = imageData!.base64EncodedStringWithOptions(.Encoding64CharacterLineLength)
+            imagesData.append(base64String)
+        }
+        return imagesData
     }
 }

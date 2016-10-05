@@ -7,9 +7,11 @@
 //
 
 import UIKit
+import Alamofire
 
 protocol EditProvidersProfileDelegate {
     func shouldSaveCategories(categories: [String])
+    func editProfileRequest(profileImage: UIImage?)
 }
 
 //TODO: add description text view placeholder
@@ -26,6 +28,7 @@ class editProvidersProfile: UIViewController, UITextViewDelegate, UIImagePickerC
     //var imagePicker = UIImagePickerController()
     var myCategories = [String]()
     var delegate: EditProvidersProfileDelegate?
+    let defaults = NSUserDefaults.standardUserDefaults()
     //MARK: ViewControllers lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -181,8 +184,8 @@ class editProvidersProfile: UIViewController, UITextViewDelegate, UIImagePickerC
         print("done editing")
         //dimissing keyboard
         view.endEditing(true)
-        //update the changes in the server
-        self.navigationController?.popViewControllerAnimated(true)
+        //editProfile()
+        delegate?.editProfileRequest(nil)
     }
     func cancelEditing() {
         print("cancel editing")
@@ -228,6 +231,9 @@ class editProvidersProfile: UIViewController, UITextViewDelegate, UIImagePickerC
     func shouldPerformSegueToChooseCategoriesVC() {
         performSegueWithIdentifier("categoriesVC", sender: nil)
     }
+    func dismiss(){
+        self.navigationController?.popViewControllerAnimated(true)
+    }
     //MARK: Segue functions
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "categoriesVC" {
@@ -236,5 +242,12 @@ class editProvidersProfile: UIViewController, UITextViewDelegate, UIImagePickerC
                 print("prepareforsegue")
             }
         }
+    }
+    func alertWithMessage(message: String) {
+        let alertController = UIAlertController(title: "Error", message: message, preferredStyle: .Alert)
+        let okAction = UIAlertAction(title: "Ok", style: .Default, handler: nil)
+        alertController.addAction(okAction)
+        
+        presentViewController(alertController, animated: true, completion: nil)
     }
 }

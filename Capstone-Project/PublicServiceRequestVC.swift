@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Alamofire
 
 class PublicServiceRequestVC: UIViewController, UITextViewDelegate, ChooseCategoriesVCDelegate {
 
@@ -22,7 +23,7 @@ class PublicServiceRequestVC: UIViewController, UITextViewDelegate, ChooseCatego
     var month: Int!
     var day: Int!
     var choosenCategory: String = Categories.Others.rawValue
-    
+    let defaults = NSUserDefaults.standardUserDefaults()
     var submitRequestButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -179,6 +180,7 @@ class PublicServiceRequestVC: UIViewController, UITextViewDelegate, ChooseCatego
         print("will submit a public request")
         if validateDate() {
             print("corrent")
+            publicServiceCreation(choosenCategory, title: titleTextField.text!, description: serviceDescription.text!)
         }else {
             print("incorrect")
         }
@@ -234,5 +236,63 @@ class PublicServiceRequestVC: UIViewController, UITextViewDelegate, ChooseCatego
         // Pass the selected object to the new view controller.
     }
     */
+    
+    //MARK: BACKEND
+    func publicServiceCreation(category: String, title: String, description: String) {
+        /*
+         
+         “category”: string (defaulted to “other”)
+         “service”: {
+         “title” : string
+         “description” : big string
+         “price” : float
+         “status” : string (defaulted to “pending”)
+         “due_date” : models.DateTimeField(null=True, blank=True)
+         “created” : automatically set to the current server time
+         “is_special” : boolean (defaulted to “false)
+         }
+         
+         */
+        
+        if let myToken = defaults.objectForKey("userToken") as? String{
+            print(myToken)
+            let headers = [
+                "Authorization": myToken
+            ]
+            let URL = "\(AppDelegate.URL)/publicservice/"
+            
+            let category = category
+            let service : [String: AnyObject] = [
+                "title" : title,
+                "description" : description,
+                "is_special" : false
+            ]
+            
+            let parameters = [
+                "category": category,
+                "service": service
+            ]
+            
+            Alamofire.request(.POST, URL, parameters: parameters as? [String : AnyObject], headers: headers, encoding: .JSON).responseJSON { response in
+                print(response.request)  // original URL request
+                print(response.response) // URL response
+                print(response.data)     // server data
+                print(response.result)   // result of response serialization
+                if let mydata = String(data: response.data!, encoding: NSUTF8StringEncoding) {
+                    print(mydata)
+                }
+                if let JSON = response.result.value {
+                    print("JSON: \(JSON)")
+                }
+                if response.response?.statusCode == 201 {
+                    // TODO: go to the detailed page of the offered service.
+                }else {
+                    print("could not create public service")
+                }
+            }
+            
+        }
+    }
+
 
 }

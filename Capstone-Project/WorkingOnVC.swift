@@ -15,14 +15,15 @@ class WorkingOnVC: UIViewController, UITableViewDelegate, UITableViewDataSource 
     var CellID = "WorkingOnServiceCell"
     lazy var refreshControl = UIRefreshControl()
     var data = [0,1,2,3,4,5,6,7,8,9,10]
+    
     //MARK: IBOutlets
     @IBOutlet weak var tableView: UITableView!
+    
+    //MARK: ViewController lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTableView()
-        configureNavigationBar()
     }
-    
     
     //MARK: Tableview delegate functions
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -33,6 +34,7 @@ class WorkingOnVC: UIViewController, UITableViewDelegate, UITableViewDataSource 
     }
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier(CellID) as? WorkingOnServiceCell
+        //CONFIGURE CELL
         cell?.titleLabel.text = "\(data[indexPath.row])"
         return cell!
     }
@@ -42,7 +44,7 @@ class WorkingOnVC: UIViewController, UITableViewDelegate, UITableViewDataSource 
 
             let alertController = UIAlertController(title: "Confirmation", message: "Are you sure you want to mark this service as \"Done\"?  \nMarking this service \"Done\" the seeker will get the confirmation", preferredStyle: .Alert)
             let doneAction = UIAlertAction(title: "Done", style: .Destructive, handler: { (UIAlertAction) in
-                //TODO: mark this service as done and delete this
+                //TODO: BACKEND STUFF
                 self.tableView.beginUpdates()
                 self.data.removeAtIndex(indexPath.row)
                 self.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
@@ -84,11 +86,4 @@ class WorkingOnVC: UIViewController, UITableViewDelegate, UITableViewDataSource 
         //tableView.reloadData()
         //refreshControl.endRefreshing()
     }
-    func configureNavigationBar() {
-        
-        self.navigationItem.title = "Requested Services"
-        self.navigationController?.view.backgroundColor = UIColor.whiteColor() //because it had a darker color
-    }
-    
-    
 }

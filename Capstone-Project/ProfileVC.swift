@@ -8,6 +8,8 @@
 
 import UIKit
 import Cosmos
+import Alamofire
+import SwiftyJSON
 
 protocol ProfileDelegate: class{
     func didSwipeLeft()
@@ -28,14 +30,13 @@ class ProfileVC: UIViewController, UIScrollViewDelegate {
     @IBOutlet weak var providersMobileNumber: UIButton!
     @IBOutlet weak var providersEmailAddress: UIButton!
     @IBOutlet weak var address: UILabel!
-
     @IBOutlet weak var contentViewHeight: NSLayoutConstraint!
-    
     @IBOutlet weak var remainingTasksView: UIView!
-    
     @IBOutlet weak var completedTasksView: UIView!
+    
     //MARK: Variables
     weak var delegate: ProfileDelegate?
+    let defaults = NSUserDefaults.standardUserDefaults()
     
     //MARK: ViewController lifecycle
     override func viewDidLoad() {
@@ -49,6 +50,9 @@ class ProfileVC: UIViewController, UIScrollViewDelegate {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         createRatingView()
+        //TODO: start loading anumation
+        getProfileInfo()
+        //TODO: web request to get profile information.
     }
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
@@ -82,14 +86,12 @@ class ProfileVC: UIViewController, UIScrollViewDelegate {
         scrollView.contentInset = UIEdgeInsetsZero
         scrollView.userInteractionEnabled = true
         //TODO: obtain these information from the backend
-        bioTextView.text = "A well-organized paragraph supports or develops a single controlling idea, which is expressed in a sentence called the topic sentence. A topic sentence has several important functions: it substantiates or supports an essay’s thesis statement; it unifies the content of a paragraph and directs the order of the sentence"
         bioTextView.textAlignment = .Justified
         bioTextView.editable = false
         bioTextView.selectable = false
         bioTextView.dataDetectorTypes = .Link
         bioTextView.contentInset = UIEdgeInsetsMake(0,-5,0,0)
         address.numberOfLines = 5
-        address.text = "Sabah Al-Salem\nKuwait"
         let colors = [UIColor(hex: 0xB39DDB), UIColor(hex: 0x7E57C2)]
         self.view.setGradientBackground(colors)
         profileImage.addBorderWith(color: UIColor.whiteColor().colorWithAlphaComponent(0.7), borderWidth: 4)
@@ -98,10 +100,8 @@ class ProfileVC: UIViewController, UIScrollViewDelegate {
 //        workingFields.layer.shadowOffset = CGSize(width: 0, height: 0)
 //        workingFields.layer.shadowOpacity = 1
 //        workingFields.layer.shadowRadius = 6
-        providersMobileNumber.setTitle("1801801", forState: .Normal)
         providersMobileNumber.setTitleColor(UIColor(hex: 0xEAAE13), forState: .Normal)
         providersEmailAddress.setTitleColor(UIColor(hex: 0xEAAE13), forState: .Normal)
-        providersEmailAddress.setTitle("testmail@gmail.com", forState: .Normal)
         contentView.backgroundColor = UIColor.clearColor()
         bioTextView.backgroundColor = UIColor.clearColor()
         workingFields.text = "Development Services, Design Services, Teaching Services"
@@ -136,9 +136,7 @@ class ProfileVC: UIViewController, UIScrollViewDelegate {
         
         //title color
 //        navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.whiteColor()]
-
-        
-        
+  
     }
     func OfferedServices() {
         performSegueWithIdentifier("OfferedServicesVC", sender: nil)
@@ -178,6 +176,61 @@ class ProfileVC: UIViewController, UIScrollViewDelegate {
     }
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
         return .LightContent
+    }
+    func alertWithMessage(message: String) {
+        let alertController = UIAlertController(title: "Error", message: message, preferredStyle: .Alert)
+        let okAction = UIAlertAction(title: "Ok", style: .Default, handler: nil)
+        alertController.addAction(okAction)
+        
+        presentViewController(alertController, animated: true, completion: nil)
+    }
+    //MARK: BACKEND 
+    func getProfileInfo() {
+        let URL = "\(AppDelegate.URL)/profile/"
+        if let myToken = defaults.objectForKey("userToken") as? String{
+            print(myToken)
+            let headers = [
+                "Authorization": myToken
+            ]
+            
+            Alamofire.request(.GET, URL, parameters: nil, headers: headers, encoding: .JSON).responseJSON { response in
+                
+                if response.response?.statusCode == 200 {
+                    if let json = response.result.value {
+                        print("my json")
+                        print(json)
+                        let myJson = JSON(json)
+                        if let myUsername = myJson["username"].string {
+                            self.username.text = myUsername
+                        }
+                        if let myAbout = myJson["about"].string {
+                            self.bioTextView.text = myAbout
+                        }else{
+                            self.bioTextView.text = "no description"
+                        }
+                        if let phoneNo = myJson["phone_number"].string {
+                            self.providersMobileNumber.setTitle(phoneNo, forState: .Normal)
+                        }else {
+                            self.providersMobileNumber.setTitle("no phone number", forState: .Normal)
+                        }
+                        if let email = myJson["email"].string {
+                            self.providersEmailAddress.setTitle(email, forState: .Normal)
+                        }else {
+                            self.providersEmailAddress.setTitle("no email", forState: .Normal)
+                        }
+                        if let area = myJson["area"].string, let street = myJson["street_address"].string, let country = myJson["country"].string {
+                            self.address.text = "\(area)\n\(street)\n\(country)"
+                        }
+                    }
+                    //TODO: finish loading anumation
+                    if let mydata = String(data: response.data!, encoding: NSUTF8StringEncoding) {
+                        print("my data from getting profile request is \(mydata)")
+                    }
+                }else {
+                    self.alertWithMessage("Could not load profile information, please try again")
+                }
+            }
+        }
     }
 }
 
