@@ -11,7 +11,7 @@ import Foundation
 class TimeIntervalManager {
     
     //correct time interval when from-time is less than to-time
-    class func correctTimeInterval(FromTime FromTime: NSDate, ToTime: NSDate) -> Bool {
+    class func correctTimeInterval(FromTime: Date, ToTime: Date) -> Bool {
         if FromTime.isLessThanDate(ToTime) && !FromTime.equalToDate(ToTime) {
             return true
         }
@@ -47,7 +47,7 @@ class TimeIntervalManager {
     */
     //determine if two given time conflicts using the above algorithem
     //this function has a bug, if fromTime is greater than toTim. Ex: 23:00 -> 02:00
-    class func conflicts(TimeIntervalArray TimeIntervalArray: [(from: NSDate,to: NSDate)], TimeInterval: (fromB: NSDate, toB: NSDate)) -> Bool {
+    class func conflicts(TimeIntervalArray: [(from: Date,to: Date)], TimeInterval: (fromB: Date, toB: Date)) -> Bool {
         for (fromA, toA) in TimeIntervalArray {
             if ((fromA.isLessThanDate(TimeInterval.toB) || fromA.equalToDate(TimeInterval.toB)) &&
                 (TimeInterval.fromB.isLessThanDate(toA) || toA.equalToDate(TimeInterval.fromB)))

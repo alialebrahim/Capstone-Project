@@ -13,7 +13,7 @@ extension String {
     func isValidEmail() -> Bool {
         let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}"
         let emailTest = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
-        return emailTest.evaluateWithObject(self)
+        return emailTest.evaluate(with: self)
     }
     /*
      username:
@@ -23,7 +23,7 @@ extension String {
     func isValidUsername() -> Bool {
         let usernameRegEx = "[A-Z0-9a-z._-]{6,15}"
         let usernameTest = NSPredicate(format:"SELF MATCHES %@", usernameRegEx)
-        return usernameTest.evaluateWithObject(self)
+        return usernameTest.evaluate(with: self)
     }
     /*
      password:
@@ -34,7 +34,7 @@ extension String {
     func isValidPassword() -> Bool {
         let passwordRegEx = "(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{6,15}"
         let passwordTest = NSPredicate(format:"SELF MATCHES %@", passwordRegEx)
-        return passwordTest.evaluateWithObject(self)
+        return passwordTest.evaluate(with: self)
     }
 }
 // MARK: UIView
@@ -47,46 +47,46 @@ extension UIView {
         shake.repeatCount = 2
         shake.autoreverses = true
         
-        let from_point = CGPointMake(self.center.x - xDelta, self.center.y)
-        let from_value = NSValue(CGPoint: from_point)
+        let from_point = CGPoint(x: self.center.x - xDelta, y: self.center.y)
+        let from_value = NSValue(cgPoint: from_point)
         
-        let to_point = CGPointMake(self.center.x + xDelta, self.center.y)
-        let to_value = NSValue(CGPoint: to_point)
+        let to_point = CGPoint(x: self.center.x + xDelta, y: self.center.y)
+        let to_value = NSValue(cgPoint: to_point)
         
         shake.fromValue = from_value
         shake.toValue = to_value
         shake.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
-        self.layer.addAnimation(shake, forKey: "position")
+        self.layer.add(shake, forKey: "position")
     }
-    func addBorderWithColor(color: UIColor, width: CGFloat){
-        self.layer.borderColor = color.CGColor
+    func addBorderWithColor(_ color: UIColor, width: CGFloat){
+        self.layer.borderColor = color.cgColor
         self.layer.borderWidth = width
     }
-    func addLeadingBorderWithColor(color: UIColor, width: CGFloat) {
+    func addLeadingBorderWithColor(_ color: UIColor, width: CGFloat) {
         let border = CALayer()
-        border.backgroundColor = color.CGColor
-        border.frame = CGRectMake(0, 0, width, self.frame.size.height)
+        border.backgroundColor = color.cgColor
+        border.frame = CGRect(x: 0, y: 0, width: width, height: self.frame.size.height)
         self.layer.addSublayer(border)
         self.layer.masksToBounds = false
     }
-    func addTopBorderWithColor(color: UIColor, width: CGFloat) {
+    func addTopBorderWithColor(_ color: UIColor, width: CGFloat) {
         let border = CALayer()
-        border.backgroundColor = color.CGColor
-        border.frame = CGRectMake(0, 0, self.frame.width, width)
+        border.backgroundColor = color.cgColor
+        border.frame = CGRect(x: 0, y: 0, width: self.frame.width, height: width)
         self.layer.addSublayer(border)
         self.layer.masksToBounds = false
     }
-    func addBottomBorderWithColor(color: UIColor, width: CGFloat) {
+    func addBottomBorderWithColor(_ color: UIColor, width: CGFloat) {
         let border = CALayer()
-        border.backgroundColor = color.CGColor
-        border.frame = CGRectMake(0, self.frame.size.height - width, self.frame.size.width, width)
+        border.backgroundColor = color.cgColor
+        border.frame = CGRect(x: 0, y: self.frame.size.height - width, width: self.frame.size.width, height: width)
         self.layer.addSublayer(border)
         self.layer.masksToBounds = false
     }
-    func setGradientBackground(colors: [UIColor]) {
+    func setGradientBackground(_ colors: [UIColor]) {
         var gradientColors = [CGColor]()
         for color in colors {
-            gradientColors.append(color.CGColor)
+            gradientColors.append(color.cgColor)
         }
         let gradientLayer = CAGradientLayer()
         gradientLayer.colors = gradientColors
@@ -94,7 +94,7 @@ extension UIView {
 //        gradientLayer.startPoint = CGPointMake(1,0)
 //        gradientLayer.endPoint = CGPointMake(0,1)
         gradientLayer.frame = self.bounds
-        self.layer.insertSublayer(gradientLayer, atIndex: 0)
+        self.layer.insertSublayer(gradientLayer, at: 0)
         //self.layer.addSublayer(gradientLayer)
     }
 
@@ -117,24 +117,24 @@ extension UIColor {
 }
 
 //MARK: NSDate
-extension NSDate {
-    func isGreaterThanDate(Date: NSDate) -> Bool {
+extension Date {
+    func isGreaterThanDate(_ Date: Foundation.Date) -> Bool {
         var isGreater = false
-        if self.compare(Date) == NSComparisonResult.OrderedDescending {
+        if self.compare(Date) == ComparisonResult.orderedDescending {
             isGreater = true
         }
         return isGreater
     }
-    func isLessThanDate(Date: NSDate) -> Bool {
+    func isLessThanDate(_ Date: Foundation.Date) -> Bool {
         var isLess = false
-        if self.compare(Date) == NSComparisonResult.OrderedAscending {
+        if self.compare(Date) == ComparisonResult.orderedAscending {
             isLess = true
         }
         return isLess
     }
-    func equalToDate(Date: NSDate) -> Bool {
-        if (NSCalendar.currentCalendar().compareDate(self, toDate: Date, toUnitGranularity: .Hour)) == .OrderedSame
-            && (NSCalendar.currentCalendar().compareDate(self, toDate: Date, toUnitGranularity: .Minute)) == .OrderedSame {
+    func equalToDate(_ Date: Foundation.Date) -> Bool {
+        if ((Calendar.current as NSCalendar).compare(self, to: Date, toUnitGranularity: .hour)) == .orderedSame
+            && ((Calendar.current as NSCalendar).compare(self, to: Date, toUnitGranularity: .minute)) == .orderedSame {
             return true
         }
         return false
@@ -144,11 +144,11 @@ extension NSDate {
 //MARK: Array
 extension Array {
     //This method works with any object that implements the Equatable protocol
-    mutating func removeObject<U: Equatable>(object: U) -> Bool {
-        for (idx, objectToCompare) in self.enumerate() {
+    mutating func removeObject<U: Equatable>(_ object: U) -> Bool {
+        for (idx, objectToCompare) in self.enumerated() {
             if let to = objectToCompare as? U {
                 if object == to {
-                    self.removeAtIndex(idx)
+                    self.remove(at: idx)
                     return true
                 }
             }
@@ -157,18 +157,18 @@ extension Array {
     }
 }
 //MARK: NSTimer
-extension NSTimer {
-    class func schedule(delay delay: NSTimeInterval, handler: NSTimer! -> Void) -> NSTimer {
+extension Timer {
+    class func schedule(delay: TimeInterval, handler: @escaping (Timer!) -> Void) -> Timer {
         let fireDate = delay + CFAbsoluteTimeGetCurrent()
         let timer = CFRunLoopTimerCreateWithHandler(kCFAllocatorDefault, fireDate, 0, 0, 0, handler)
-        CFRunLoopAddTimer(CFRunLoopGetCurrent(), timer, kCFRunLoopCommonModes)
+        CFRunLoopAddTimer(CFRunLoopGetCurrent(), timer, CFRunLoopMode.commonModes)
         return timer
     }
     
-    class func schedule(repeatInterval interval: NSTimeInterval, handler: NSTimer! -> Void) -> NSTimer {
+    class func schedule(repeatInterval interval: TimeInterval, handler: @escaping (Timer!) -> Void) -> Timer {
         let fireDate = interval + CFAbsoluteTimeGetCurrent()
         let timer = CFRunLoopTimerCreateWithHandler(kCFAllocatorDefault, fireDate, interval, 0, 0, handler)
-        CFRunLoopAddTimer(CFRunLoopGetCurrent(), timer, kCFRunLoopCommonModes)
+        CFRunLoopAddTimer(CFRunLoopGetCurrent(), timer, CFRunLoopMode.commonModes)
         return timer
     }
 }

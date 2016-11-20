@@ -14,16 +14,16 @@ class ErrorButton: UIButton {
     var errorMessage: String!
     
     init(withMessage message: String, isAssociateWith textField: UITextField) {
-        super.init(frame: CGRectZero)
+        super.init(frame: CGRect.zero)
         errorMessage = message
         let frame: CGRect = textField.frame
         let buttonYPoint = frame.origin.y + 10
         let buttonXPoint = frame.origin.x + frame.width - 40
         self.frame = CGRect(x: buttonXPoint, y: buttonYPoint, width: 20 , height: 20)
         let explanationMarkImage = UIImage(named: "explanation_mark")
-        self.setImage(explanationMarkImage, forState: .Normal)
-        self.imageView?.contentMode = .ScaleAspectFit
-        self.hidden = true
+        self.setImage(explanationMarkImage, for: UIControlState())
+        self.imageView?.contentMode = .scaleAspectFit
+        self.isHidden = true
     }
     
     required init?(coder aDecoder: NSCoder) {

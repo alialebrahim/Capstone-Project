@@ -10,6 +10,7 @@ import UIKit
 
 class WorkingOnServiceCell: UITableViewCell {
     
+    @IBOutlet weak var containerView: UIView!
     @IBOutlet weak var statusLabel: UILabel!
     @IBOutlet weak var dueToLabel: UILabel!
     @IBOutlet weak var requestedOnLabel: UILabel!
@@ -18,9 +19,13 @@ class WorkingOnServiceCell: UITableViewCell {
     @IBOutlet weak var titleLabel: UILabel!
     override func awakeFromNib() {
         super.awakeFromNib()
+        containerView.layer.cornerRadius = 5
+        containerView.layer.borderColor = UIColor(hex: 0x404040).cgColor
+        containerView.layer.borderWidth = 1
+        containerView.clipsToBounds = true
         // Initialization code
     }
-    override func setSelected(selected: Bool, animated: Bool) {
+    override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
         // Configure the view for the selected state
     }

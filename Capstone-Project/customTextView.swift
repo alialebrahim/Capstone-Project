@@ -18,7 +18,7 @@ class customTextView: UITextView {
         super.init(coder: aDecoder)
         addSubview(border)
         originalInsetBottom = textContainerInset.bottom
-        addObserver(self, forKeyPath: "contentOffset", options: .New, context: nil)
+        addObserver(self, forKeyPath: "contentOffset", options: .new, context: nil)
     }
     
     deinit {
@@ -27,21 +27,21 @@ class customTextView: UITextView {
     
     override var frame: CGRect {
         didSet {
-            border.frame = CGRectMake(0, frame.height+contentOffset.y-border.frame.height, frame.width, border.frame.height+10)
-            originalBorderFrame  = CGRectMake(0, frame.height-border.frame.height, frame.width, border.frame.height);
+            border.frame = CGRect(x: 0, y: frame.height+contentOffset.y-border.frame.height, width: frame.width, height: border.frame.height+10)
+            originalBorderFrame  = CGRect(x: 0, y: frame.height-border.frame.height, width: frame.width, height: border.frame.height);
         }
     }
     
-    override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if keyPath == "contentOffset" {
-            border.frame = CGRectOffset(originalBorderFrame, 0, contentOffset.y)
+            border.frame = originalBorderFrame.offsetBy(dx: 0, dy: contentOffset.y)
         }
     }
     
     func addBottomBorderWith(Color color: UIColor, width: CGFloat) {
         border.backgroundColor = color
-        border.frame = CGRectMake(0, frame.height+contentOffset.y-width, self.frame.width, width)
-        originalBorderFrame = CGRectMake(0, frame.height-width, self.frame.width, width)
+        border.frame = CGRect(x: 0, y: frame.height+contentOffset.y-width, width: self.frame.width, height: width)
+        originalBorderFrame = CGRect(x: 0, y: frame.height-width, width: self.frame.width, height: width)
         textContainerInset.bottom = originalInsetBottom+width
     }
 }

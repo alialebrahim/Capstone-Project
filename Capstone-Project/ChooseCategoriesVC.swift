@@ -9,7 +9,7 @@
 import UIKit
 
 protocol ChooseCategoriesVCDelegate: class {
-    func didSelectCategory(category: String)
+    func didSelectCategory(_ category: String)
 }
 
 class ChooseCategoriesVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
@@ -43,23 +43,23 @@ class ChooseCategoriesVC: UIViewController, UITableViewDelegate, UITableViewData
     }
 
     //MARK: TableView delegate functions
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return categories.count
     }
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         print("cell testing")
-        let cell = tableView.dequeueReusableCellWithIdentifier(cellID)
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellID)
         cell?.textLabel?.text = "\(categories[indexPath.row].rawValue)"
         return cell!
     }
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let cell = tableView.cellForRowAtIndexPath(indexPath)
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let cell = tableView.cellForRow(at: indexPath)
         let category = (cell?.textLabel?.text)!
         delegate?.didSelectCategory(category)
-        navigationController?.popViewControllerAnimated(true)
+        navigationController?.popViewController(animated: true)
     }
     //MARK: Functions
     func setup() {

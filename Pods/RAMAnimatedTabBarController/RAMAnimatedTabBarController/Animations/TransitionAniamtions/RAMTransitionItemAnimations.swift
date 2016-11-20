@@ -22,88 +22,110 @@
 
 import UIKit
 
-public class RAMTransitionItemAnimations : RAMItemAnimation {
-
-    public var transitionOptions : UIViewAnimationOptions!
-
-    override init() {
-        super.init()
-
-        transitionOptions = UIViewAnimationOptions.TransitionNone
+/// Transition animtion
+open class RAMTransitionItemAnimations : RAMItemAnimation {
+  
+  ///  Options for animating. Default TransitionNone
+  open var transitionOptions : UIViewAnimationOptions!
+  
+  override init() {
+    super.init()
+    
+    transitionOptions = UIViewAnimationOptions()
+  }
+  
+  /**
+   Start animation, method call when UITabBarItem is selected
+   
+   - parameter icon:      animating UITabBarItem icon
+   - parameter textLabel: animating UITabBarItem textLabel
+   */
+  override open func playAnimation(_ icon : UIImageView, textLabel : UILabel) {
+    
+    selectedColor(icon, textLabel: textLabel)
+    
+    UIView.transition(with: icon, duration: TimeInterval(duration), options: transitionOptions, animations: {
+      }, completion: { _ in
+    })
+  }
+  
+  /**
+   Start animation, method call when UITabBarItem is unselected
+   
+   - parameter icon:      animating UITabBarItem icon
+   - parameter textLabel: animating UITabBarItem textLabel
+   - parameter defaultTextColor: default UITabBarItem text color
+   - parameter defaultIconColor: default UITabBarItem icon color
+   */
+  override open func deselectAnimation(_ icon : UIImageView, textLabel : UILabel, defaultTextColor : UIColor, defaultIconColor : UIColor) {
+    
+    if let iconImage = icon.image {
+      let renderMode = defaultIconColor.cgColor.alpha == 0 ? UIImageRenderingMode.alwaysOriginal :
+        UIImageRenderingMode.alwaysTemplate
+      let renderImage = iconImage.withRenderingMode(renderMode)
+      icon.image = renderImage
+      icon.tintColor = defaultIconColor
     }
-
-    override public func playAnimation(icon : UIImageView, textLabel : UILabel) {
-
-        selectedColor(icon, textLabel: textLabel)
-
-        UIView.transitionWithView(icon, duration: NSTimeInterval(duration), options: transitionOptions, animations: {
-            }, completion: { _ in
-        })
+    textLabel.textColor = defaultTextColor
+  }
+  
+  /**
+   Method call when TabBarController did load
+   
+   - parameter icon:      animating UITabBarItem icon
+   - parameter textLabel: animating UITabBarItem textLabel
+   */
+  override open func selectedState(_ icon : UIImageView, textLabel : UILabel) {
+    
+    selectedColor(icon, textLabel: textLabel)
+  }
+  
+  
+  func selectedColor(_ icon : UIImageView, textLabel : UILabel) {
+    
+    if let iconImage = icon.image , iconSelectedColor != nil {
+      let renderImage = iconImage.withRenderingMode(.alwaysTemplate)
+      icon.image = renderImage
+      icon.tintColor = iconSelectedColor
     }
-
-    override public func deselectAnimation(icon : UIImageView, textLabel : UILabel, defaultTextColor : UIColor, defaultIconColor : UIColor) {
-
-        if let iconImage = icon.image {
-            let renderMode = CGColorGetAlpha(defaultIconColor.CGColor) == 0 ? UIImageRenderingMode.AlwaysOriginal :
-                                                                              UIImageRenderingMode.AlwaysTemplate
-            let renderImage = iconImage.imageWithRenderingMode(renderMode)
-            icon.image = renderImage
-            icon.tintColor = defaultIconColor
-        }
-        textLabel.textColor = defaultTextColor
-    }
-
-    override public func selectedState(icon : UIImageView, textLabel : UILabel) {
-
-        selectedColor(icon, textLabel: textLabel)
-    }
-
-
-    func selectedColor(icon : UIImageView, textLabel : UILabel) {
-
-        if let iconImage = icon.image where iconSelectedColor != nil {
-            let renderImage = iconImage.imageWithRenderingMode(.AlwaysTemplate)
-            icon.image = renderImage
-            icon.tintColor = iconSelectedColor
-        }
-
-        textLabel.textColor = textSelectedColor
-    }
+    
+    textLabel.textColor = textSelectedColor
+  }
 }
 
 class RAMFlipLeftTransitionItemAnimations : RAMTransitionItemAnimations {
-
-    override init() {
-        super.init()
-
-        transitionOptions = UIViewAnimationOptions.TransitionFlipFromLeft
-    }
+  
+  override init() {
+    super.init()
+    
+    transitionOptions = UIViewAnimationOptions.transitionFlipFromLeft
+  }
 }
 
 
 class RAMFlipRightTransitionItemAnimations : RAMTransitionItemAnimations {
-
-    override init() {
-        super.init()
-
-        transitionOptions = UIViewAnimationOptions.TransitionFlipFromRight
-    }
+  
+  override init() {
+    super.init()
+    
+    transitionOptions = UIViewAnimationOptions.transitionFlipFromRight
+  }
 }
 
 class RAMFlipTopTransitionItemAnimations : RAMTransitionItemAnimations {
-
-    override init() {
-        super.init()
-
-        transitionOptions = UIViewAnimationOptions.TransitionFlipFromTop
-    }
+  
+  override init() {
+    super.init()
+    
+    transitionOptions = UIViewAnimationOptions.transitionFlipFromTop
+  }
 }
 
 class RAMFlipBottomTransitionItemAnimations : RAMTransitionItemAnimations {
-
-    override init() {
-        super.init()
-
-        transitionOptions = UIViewAnimationOptions.TransitionFlipFromBottom
-    }
+  
+  override init() {
+    super.init()
+    
+    transitionOptions = UIViewAnimationOptions.transitionFlipFromBottom
+  }
 }

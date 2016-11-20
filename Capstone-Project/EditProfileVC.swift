@@ -10,8 +10,8 @@ import UIKit
 import Alamofire
 
 protocol EditProvidersProfileDelegate {
-    func shouldSaveCategories(categories: [String])
-    func editProfileRequest(profileImage: UIImage?)
+    func shouldSaveCategories(_ categories: [String])
+    func editProfileRequest(_ profileImage: UIImage?)
 }
 
 //TODO: add description text view placeholder
@@ -25,10 +25,9 @@ class editProvidersProfile: UIViewController, UITextViewDelegate, UIImagePickerC
     @IBOutlet weak var containerView: UIView!
     @IBOutlet weak var containerViewHeightConstraint: NSLayoutConstraint!
     //MARK: Variables
-    //var imagePicker = UIImagePickerController()
     var myCategories = [String]()
     var delegate: EditProvidersProfileDelegate?
-    let defaults = NSUserDefaults.standardUserDefaults()
+    let defaults = UserDefaults.standard
     //MARK: ViewControllers lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,17 +38,17 @@ class editProvidersProfile: UIViewController, UITextViewDelegate, UIImagePickerC
         displayViewController()
         //imagePicker.navigationController?.navigationBar.tintColor = UIColor.whiteColor()
     }
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIKeyboardWillChangeFrameNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIKeyboardWillHideNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: NSNotification.Name.UIKeyboardWillChangeFrame, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         navigationItem.title = "Edit Profile"
         
-        containerViewHeightConstraint.constant = (44*8) + 80
+        containerViewHeightConstraint.constant = CGFloat((44*8) + 80)
     }
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        scrollView.userInteractionEnabled = true
+        scrollView.isUserInteractionEnabled = true
         adjustContentViewHeight()
         //TODO: Delete (testing only)
         //performSegueWithIdentifier("CategoriesVC", sender: nil)
@@ -60,7 +59,7 @@ class editProvidersProfile: UIViewController, UITextViewDelegate, UIImagePickerC
     }
     //MARK: TextView delegates functions
     //adjusting the scrollview each time the textfield changes
-    func textViewDidChange(textView: UITextView) {
+    func textViewDidChange(_ textView: UITextView) {
         //TODO: when textfield frame changes scroll to a specific position.
         //TODO: bug when deleting all text in a textview nothing happens
         adjustContentViewHeight()
@@ -68,35 +67,33 @@ class editProvidersProfile: UIViewController, UITextViewDelegate, UIImagePickerC
     }
     //MARK: IBActions
     @IBAction func chanegProfileImageButtonPressed() {
-        let alert = UIAlertController(title: nil, message: "Choose option", preferredStyle: .ActionSheet)
-        let cameraAction = UIAlertAction(title: "Camera", style: .Default) { (UIAlertAction) in
+        let alert = UIAlertController(title: nil, message: "Choose option", preferredStyle: .actionSheet)
+        let cameraAction = UIAlertAction(title: "Camera", style: .default) { (UIAlertAction) in
             
-            if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera) {
+            if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.camera) {
                 let imagePicker = UIImagePickerController()
                 imagePicker.delegate = self
-                imagePicker.sourceType = UIImagePickerControllerSourceType.Camera;
+                imagePicker.sourceType = UIImagePickerControllerSourceType.camera;
                 imagePicker.allowsEditing = false
-                imagePicker.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.whiteColor()]
-                self.presentViewController(imagePicker, animated: true, completion: nil)
+                imagePicker.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white]
+                self.present(imagePicker, animated: true, completion: nil)
             }else {
                 print("camera not available")
             }
         }
-        let photoAction = UIAlertAction(title: "Choose Photo", style: .Default) { (UIAlertAction) in
+        let photoAction = UIAlertAction(title: "Choose Photo", style: .default) { (UIAlertAction) in
             let imagePicker = UIImagePickerController()
             imagePicker.delegate = self
-            imagePicker.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.whiteColor()]
-            self.presentViewController(imagePicker, animated: true, completion: nil)
-            
-            
+            imagePicker.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white]
+            self.present(imagePicker, animated: true, completion: nil)
         }
-        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         
         alert.addAction(cameraAction)
         alert.addAction(photoAction)
         alert.addAction(cancelAction)
         
-        presentViewController(alert, animated: true, completion: nil)
+        present(alert, animated: true, completion: nil)
 
     }
     //MARK: functions
@@ -108,77 +105,77 @@ class editProvidersProfile: UIViewController, UITextViewDelegate, UIImagePickerC
         //imagePicker.delegate = self
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(selectImage))
         profileImage.addGestureRecognizer(tapGesture)
-        profileImage.userInteractionEnabled = true
-        profileImage.contentMode = .ScaleAspectFill
-       containerView.backgroundColor = UIColor.clearColor()
+        profileImage.isUserInteractionEnabled = true
+        profileImage.contentMode = .scaleAspectFill
+        profileImage.addBorderWith(color: UIColor(hex: 0x404040), borderWidth: 2)
+       containerView.backgroundColor = UIColor.clear
     }
     func setupNavigationBar() {
         navigationItem.title = "Edit Profile"
-        let doneItem = UIBarButtonItem(barButtonSystemItem: .Done, target: self, action: #selector(editProvidersProfile.doneEditing))
-        let cancelItem = UIBarButtonItem(barButtonSystemItem: .Cancel, target: self, action: #selector(editProvidersProfile.cancelEditing))
+        let doneItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(editProvidersProfile.doneEditing))
+        let cancelItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(editProvidersProfile.cancelEditing))
         navigationItem.rightBarButtonItem = doneItem
         navigationItem.leftBarButtonItem = cancelItem
-        navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.whiteColor()]
+        navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white]
     }
     func getViewController() -> UIViewController? {
         let storyboard = UIStoryboard(name: "Provider", bundle: nil)
-        let vc = storyboard.instantiateViewControllerWithIdentifier("ProviderInfoTable") as! ProviderInfoTVC
+        let vc = storyboard.instantiateViewController(withIdentifier: "ProviderInfoTable") as! ProviderInfoTVC
         vc.delegate = self
         return vc
     }
     func displayViewController() {
         if let vc = getViewController() {
             addChildViewController(vc)
-            didMoveToParentViewController(self)
+            didMove(toParentViewController: self)
             vc.view.frame = contentView.bounds
             containerView.clipsToBounds = true
             containerView.addSubview(vc.view)
         }
     }
-    func keyboardWillShow(notification: NSNotification) {
+    func keyboardWillShow(_ notification: Notification) {
         //TODO: content offset is not correct when emoj keyboard appear.
         var userInfo = notification.userInfo!
-        let keyboardFrame = (userInfo[UIKeyboardFrameBeginUserInfoKey] as! NSValue).CGRectValue()
+        let keyboardFrame = (userInfo[UIKeyboardFrameBeginUserInfoKey] as! NSValue).cgRectValue
         var contentInset = scrollView.contentInset
         contentInset.bottom = keyboardFrame.size.height
         scrollView.contentInset = contentInset
         scrollView.contentInset.top = 0
         
     }
-    func keyboardWillHide(notification: NSNotification) {
+    func keyboardWillHide(_ notification: Notification) {
         
     }
     func selectImage() {
-//        presentViewController(imagePicker, animated: true, completion: nil)
-        let alert = UIAlertController(title: nil, message: "Choose option", preferredStyle: .ActionSheet)
-        let cameraAction = UIAlertAction(title: "Camera", style: .Default) { (UIAlertAction) in
+        let alert = UIAlertController(title: nil, message: "Choose option", preferredStyle: .actionSheet)
+        let cameraAction = UIAlertAction(title: "Camera", style: .default) { (UIAlertAction) in
             
-            if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera) {
+            if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.camera) {
                 let imagePicker = UIImagePickerController()
                 imagePicker.delegate = self
-                imagePicker.sourceType = UIImagePickerControllerSourceType.Camera;
+                imagePicker.sourceType = UIImagePickerControllerSourceType.camera;
                 imagePicker.allowsEditing = false
-                imagePicker.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.whiteColor()]
-                self.presentViewController(imagePicker, animated: true, completion: nil)
+                imagePicker.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white]
+                self.present(imagePicker, animated: true, completion: nil)
             }else {
                 print("camera not available")
             }
         }
-        let photoAction = UIAlertAction(title: "Choose Photo", style: .Default) { (UIAlertAction) in
+        let photoAction = UIAlertAction(title: "Choose Photo", style: .default) { (UIAlertAction) in
             let imagePicker = UIImagePickerController()
             imagePicker.delegate = self
-            imagePicker.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.whiteColor()]
-            self.presentViewController(imagePicker, animated: true, completion: nil)
+            imagePicker.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white]
+            self.present(imagePicker, animated: true, completion: nil)
             
             
         }
-        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         
         alert.addAction(cameraAction)
         alert.addAction(photoAction)
         alert.addAction(cancelAction)
         
-        presentViewController(alert, animated: true, completion: nil)
+        present(alert, animated: true, completion: nil)
     }
     func doneEditing() {
         print("done editing")
@@ -189,65 +186,76 @@ class editProvidersProfile: UIViewController, UITextViewDelegate, UIImagePickerC
     }
     func cancelEditing() {
         print("cancel editing")
-        navigationController?.popViewControllerAnimated(true)
+        navigationController?.popViewController(animated: true)
     }
     //MARK: ImagePicker Delegate functions
-    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         if let pickedImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
-            profileImage.contentMode = .ScaleAspectFit
+            profileImage.contentMode = .scaleAspectFit
             profileImage.image = pickedImage
         }
-        
-        dismissViewControllerAnimated(true, completion: nil)
+        self.dismiss(animated: true, completion: nil)
     }
-    func imagePickerControllerDidCancel(picker: UIImagePickerController) {
-        dismissViewControllerAnimated(true, completion: nil)
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        self.dismiss(animated: true, completion: nil)
     }
     func adjustContentViewHeight() {
-        var contentRect = CGRectZero
+        var contentRect = CGRect.zero
         for view in self.contentView.subviews {
-            contentRect = CGRectUnion(contentRect, view.frame)
+            contentRect = contentRect.union(view.frame)
         }
         contentViewHeight.constant = contentRect.size.height + 30
         
         
     }
-    func adaptivePresentationStyleForPresentationController(controller: UIPresentationController) -> UIModalPresentationStyle {
-        return .None
+    func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
+        return .none
     }
     func hideKeyboardAction() {
         view.endEditing(true)
     }
     //MARK: CategoriesVC delegate function
-    func shouldDismissCategoriesView(categories: [String]) {
+    func shouldDismissCategoriesView(_ categories: [String]) {
         print("in edit profile vc")
         myCategories = categories
         print(myCategories)
         delegate?.shouldSaveCategories(categories)
-        navigationController?.popViewControllerAnimated(true)
+        navigationController?.popViewController(animated: true)
         print("did pop view contoller")
     }
     //MARK: ProviderInfoTVCDelegate function
     func shouldPerformSegueToChooseCategoriesVC() {
-        performSegueWithIdentifier("categoriesVC", sender: nil)
+        performSegue(withIdentifier: "categoriesVC", sender: nil)
     }
     func dismiss(){
-        self.navigationController?.popViewControllerAnimated(true)
+        self.navigationController?.popViewController(animated: true)
+    }
+    func showAlertWithMessage(_ message: String) {
+        self.alertWithMessage(message)
+    }
+    func shouldAnimateWithMessage(_ message: String) {
+        LoadingView.addLoadingViewTo(self.view)
+        navigationController?.setNavigationBarHidden(true, animated: false)
+        LoadingView.startAnimatingWithMessage(message)
+    }
+    func shouldStopAnimating(){
+        navigationController?.setNavigationBarHidden(false, animated: false)
+        LoadingView.stopAnimating()
     }
     //MARK: Segue functions
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "categoriesVC" {
-            if let vc = segue.destinationViewController as? CategoriesVC {
+            if let vc = segue.destination as? CategoriesVC {
                 vc.delegate = self
+                vc.savedCategory = myCategories
                 print("prepareforsegue")
             }
         }
     }
-    func alertWithMessage(message: String) {
-        let alertController = UIAlertController(title: "Error", message: message, preferredStyle: .Alert)
-        let okAction = UIAlertAction(title: "Ok", style: .Default, handler: nil)
+    func alertWithMessage(_ message: String) {
+        let alertController = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "Ok", style: .default, handler: nil)
         alertController.addAction(okAction)
-        
-        presentViewController(alertController, animated: true, completion: nil)
+        present(alertController, animated: true, completion: nil)
     }
 }

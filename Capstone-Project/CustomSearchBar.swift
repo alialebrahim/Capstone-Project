@@ -25,19 +25,19 @@ class CustomSearchBar: UISearchBar {
     }
     
     //MARK: Functions
-    override func drawRect(rect: CGRect) {
+    override func draw(_ rect: CGRect) {
         configureSearchTextField()
-        super.drawRect(rect)
+        super.draw(rect)
     }
     func configureSearchBar() {
-        searchBarStyle = .Prominent
-        translucent = false //For both searchbar and search field to be opaque
+        searchBarStyle = .prominent
+        isTranslucent = false //For both searchbar and search field to be opaque
         addBottomBorderWithColor(prefferedTextColor, width: 1.5)
     }
     func configureSearchTextField() {
         if let index = indexOfTextFieldInSubViews() {
             let searchField = subviews[0].subviews[index] as! UITextField
-            searchField.frame = CGRectMake(5.0, 5.0, frame.size.width - 10.0, frame.size.height - 10)
+            searchField.frame = CGRect(x: 5.0, y: 5.0, width: frame.size.width - 10.0, height: frame.size.height - 10)
             searchField.textColor = prefferedTextColor
             searchField.backgroundColor = barTintColor
         }
@@ -52,7 +52,7 @@ class CustomSearchBar: UISearchBar {
         var index: Int!
         let searchBarView = subviews[0]
         for i in 0 ..< searchBarView.subviews.count {
-            if searchBarView.subviews[i].isKindOfClass(UITextField) {
+            if searchBarView.subviews[i].isKind(of: UITextField.self) {
                 index = i
                 break
             }

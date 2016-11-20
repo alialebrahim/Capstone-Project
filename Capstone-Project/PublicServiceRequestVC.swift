@@ -23,14 +23,14 @@ class PublicServiceRequestVC: UIViewController, UITextViewDelegate, ChooseCatego
     var month: Int!
     var day: Int!
     var choosenCategory: String = Categories.Others.rawValue
-    let defaults = NSUserDefaults.standardUserDefaults()
+    let defaults = UserDefaults.standard
     var submitRequestButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("submit", forState: .Normal)
+        button.setTitle("submit", for: UIControlState())
         button.layer.borderWidth = 1
-        button.layer.borderColor = UIColor.blackColor().CGColor
-        button.setTitleColor(UIColor.blackColor(), forState: .Normal)
+        button.layer.borderColor = UIColor.black.cgColor
+        button.setTitleColor(UIColor.black, for: UIControlState())
         return button
     }()
     
@@ -45,7 +45,7 @@ class PublicServiceRequestVC: UIViewController, UITextViewDelegate, ChooseCatego
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         automaticallyAdjustsScrollViewInsets = false
         adjustContentViewHeight()
@@ -53,17 +53,17 @@ class PublicServiceRequestVC: UIViewController, UITextViewDelegate, ChooseCatego
     }
     func setup() {
         setupNavigationBar()
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIKeyboardWillChangeFrameNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIKeyboardWillHideNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: NSNotification.Name.UIKeyboardWillChangeFrame, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         
         let keyboardGesture = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
         self.view.addGestureRecognizer(keyboardGesture)
         
         
-        datePicker.addTarget(self, action: #selector(datePickerValueChanged), forControlEvents: .ValueChanged)
+        datePicker.addTarget(self, action: #selector(datePickerValueChanged), for: .valueChanged)
         
-        let components = datePicker.calendar.components([.Year, .Month, .Day],
-                                                        fromDate: datePicker.date)
+        let components = datePicker.calendar.dateComponents([.year, .month, .day],
+                                                        from: datePicker.date)
         year = components.year
         month = components.month
         day = components.day
@@ -73,21 +73,21 @@ class PublicServiceRequestVC: UIViewController, UITextViewDelegate, ChooseCatego
         print(day)
         
         self.view.addSubview(submitRequestButton)
-        submitRequestButton.addTarget(self, action: #selector(submitButtonAction), forControlEvents: .TouchUpInside)
-        submitRequestButton.topAnchor.constraintEqualToAnchor(datePicker.bottomAnchor, constant: 20).active = true
-        submitRequestButton.centerXAnchor.constraintEqualToAnchor(self.view.centerXAnchor).active = true
+        submitRequestButton.addTarget(self, action: #selector(submitButtonAction), for: .touchUpInside)
+        submitRequestButton.topAnchor.constraint(equalTo: datePicker.bottomAnchor, constant: 20).isActive = true
+        submitRequestButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
         
         //textview placeholder setup
         serviceDescription.delegate = self
         serviceDescription.text = "Description"
         serviceDescription.textColor = UIColor(hex: 0xC7C7CD)
-        serviceDescription.selectedTextRange = serviceDescription.textRangeFromPosition(serviceDescription.beginningOfDocument, toPosition: serviceDescription.beginningOfDocument)
+        serviceDescription.selectedTextRange = serviceDescription.textRange(from: serviceDescription.beginningOfDocument, to: serviceDescription.beginningOfDocument)
         //////////////////////////////
     }
     func datePickerValueChanged() {
         print("value changed")
-        let components = datePicker.calendar.components([.Year, .Month, .Day],
-                                                     fromDate: datePicker.date)
+        let components = datePicker.calendar.dateComponents([.year, .month, .day],
+                                                     from: datePicker.date)
         year = components.year
         month = components.month
         day = components.day
@@ -103,16 +103,16 @@ class PublicServiceRequestVC: UIViewController, UITextViewDelegate, ChooseCatego
     func setupNavigationBar() {
         navigationItem.title = "Submit a request"
         
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Log", style: .Plain, target: self, action: #selector(requestLog))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Log", style: .plain, target: self, action: #selector(requestLog))
     }
     func requestLog() {
-        performSegueWithIdentifier("RequestLog", sender: nil)
+        performSegue(withIdentifier: "RequestLog", sender: nil)
     }
     func validateDate() -> Bool {
         print("will validate date")
-        let date = NSDate()
-        let calendar = NSCalendar.currentCalendar()
-        let components = calendar.components([.Day , .Month , .Year], fromDate: date)
+        let date = Date()
+        let calendar = Calendar.current
+        let components = (calendar as NSCalendar).components([.day , .month , .year], from: date)
         
         let currentYear =  components.year
         let currentMonth = components.month
@@ -123,9 +123,9 @@ class PublicServiceRequestVC: UIViewController, UITextViewDelegate, ChooseCatego
         
         ///////////////////////
         
-        if year > currentYear {
+        if year > currentYear! {
             return true
-        }else if year == currentYear && (month == currentMonth || month > currentMonth) && (day == currentDay || day > currentDay) {
+        }else if year == currentYear! && (month == currentMonth! || month > currentMonth!) && (day == currentDay! || day > currentDay!) {
             return true
         }else {
             return false
@@ -133,45 +133,45 @@ class PublicServiceRequestVC: UIViewController, UITextViewDelegate, ChooseCatego
         
     }
     func adjustContentViewHeight() {
-        var contentRect = CGRectZero
+        var contentRect = CGRect.zero
         for view in contentView.subviews {
-            contentRect = CGRectUnion(contentRect, view.frame)
+            contentRect = contentRect.union(view.frame)
         }
         contentViewHeightContraint.constant = contentRect.size.height+20
     }
-    func keyboardWillShow(notification: NSNotification) {
+    func keyboardWillShow(_ notification: Notification) {
         //TODO: content offset is not correct when emoj keyboard appear.
         var userInfo = notification.userInfo!
-        let keyboardFrame = (userInfo[UIKeyboardFrameBeginUserInfoKey] as! NSValue).CGRectValue()
+        let keyboardFrame = (userInfo[UIKeyboardFrameBeginUserInfoKey] as! NSValue).cgRectValue
         var contentInset = scrollView.contentInset
         contentInset.bottom = keyboardFrame.size.height
         scrollView.contentInset = contentInset
         scrollView.contentInset.top = 0
         
     }
-    func keyboardWillHide(notification: NSNotification) {
-        scrollView.contentInset = UIEdgeInsetsZero
+    func keyboardWillHide(_ notification: Notification) {
+        scrollView.contentInset = UIEdgeInsets.zero
     }
-    func textViewDidChange(textView: UITextView) {
+    func textViewDidChange(_ textView: UITextView) {
         //TODO: when textfield frame changes scroll to a specific position.
         //TODO: bug when deleting all text in a textview nothing happens
         adjustContentViewHeight()
         
     }
     
-    @IBAction func categoryButtonPressed(sender: UIButton) {
+    @IBAction func categoryButtonPressed(_ sender: UIButton) {
         print("category button pressed")
-        performSegueWithIdentifier("chooseCategory", sender: nil)
+        performSegue(withIdentifier: "chooseCategory", sender: nil)
         
     }
     
-    func didSelectCategory(category: String) {
+    func didSelectCategory(_ category: String) {
         choosenCategory = category
-        categoryButton.setTitle("\(choosenCategory)  >", forState: .Normal)
+        categoryButton.setTitle("\(choosenCategory)  >", for: UIControlState())
     }
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "chooseCategory" {
-            if let vc = segue.destinationViewController as? ChooseCategoriesVC {
+            if let vc = segue.destination as? ChooseCategoriesVC {
                 vc.delegate = self
             }
         }
@@ -189,12 +189,12 @@ class PublicServiceRequestVC: UIViewController, UITextViewDelegate, ChooseCatego
     /*
      textview delegate functions are used to implement textview placehold
      */
-    func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         print("im here for textview")
         // Combine the textView text and the replacement text to
         // create the updated text string
-        let currentText:NSString = textView.text
-        let updatedText = currentText.stringByReplacingCharactersInRange(range, withString:text)
+        let currentText:NSString = textView.text as NSString
+        let updatedText = currentText.replacingCharacters(in: range, with:text)
         
         // If updated text view will be empty, add the placeholder
         // and set the cursor to the beginning of the text view
@@ -202,7 +202,7 @@ class PublicServiceRequestVC: UIViewController, UITextViewDelegate, ChooseCatego
             textView.text = "Description"
             textView.textColor = UIColor(hex: 0xC7C7CD)
             
-            textView.selectedTextRange = textView.textRangeFromPosition(textView.beginningOfDocument, toPosition: textView.beginningOfDocument)
+            textView.selectedTextRange = textView.textRange(from: textView.beginningOfDocument, to: textView.beginningOfDocument)
             
             return false
         }
@@ -213,16 +213,16 @@ class PublicServiceRequestVC: UIViewController, UITextViewDelegate, ChooseCatego
             // the user's entry
         else if textView.textColor == UIColor(hex: 0xC7C7CD) && !text.isEmpty {
             textView.text = nil
-            textView.textColor = UIColor.blackColor()
+            textView.textColor = UIColor.black
         }
         return true
     }
     
-    func textViewDidChangeSelection(textView: UITextView) {
+    func textViewDidChangeSelection(_ textView: UITextView) {
         
         if self.view.window != nil {
             if textView.textColor == UIColor(hex: 0xC7C7CD) {
-                textView.selectedTextRange = textView.textRangeFromPosition(textView.beginningOfDocument, toPosition: textView.beginningOfDocument)
+                textView.selectedTextRange = textView.textRange(from: textView.beginningOfDocument, to: textView.beginningOfDocument)
             }
         }
     }
@@ -238,7 +238,7 @@ class PublicServiceRequestVC: UIViewController, UITextViewDelegate, ChooseCatego
     */
     
     //MARK: BACKEND
-    func publicServiceCreation(category: String, title: String, description: String) {
+    func publicServiceCreation(_ category: String, title: String, description: String) {
         /*
          
          “category”: string (defaulted to “other”)
@@ -254,7 +254,7 @@ class PublicServiceRequestVC: UIViewController, UITextViewDelegate, ChooseCatego
          
          */
         
-        if let myToken = defaults.objectForKey("userToken") as? String{
+        if let myToken = defaults.object(forKey: "userToken") as? String{
             print(myToken)
             let headers = [
                 "Authorization": myToken
@@ -263,22 +263,22 @@ class PublicServiceRequestVC: UIViewController, UITextViewDelegate, ChooseCatego
             
             let category = category
             let service : [String: AnyObject] = [
-                "title" : title,
-                "description" : description,
-                "is_special" : false
+                "title" : title as AnyObject,
+                "description" : description as AnyObject,
+                "is_special" : false as AnyObject
             ]
             
             let parameters = [
                 "category": category,
                 "service": service
-            ]
+            ] as [String : Any]
             
-            Alamofire.request(.POST, URL, parameters: parameters as? [String : AnyObject], headers: headers, encoding: .JSON).responseJSON { response in
+            Alamofire.request(.POST, URL, parameters: parameters as? [String : AnyObject], headers: headers, encoding: .json).responseJSON { response in
                 print(response.request)  // original URL request
                 print(response.response) // URL response
                 print(response.data)     // server data
                 print(response.result)   // result of response serialization
-                if let mydata = String(data: response.data!, encoding: NSUTF8StringEncoding) {
+                if let mydata = String(data: response.data!, encoding: String.Encoding.utf8) {
                     print(mydata)
                 }
                 if let JSON = response.result.value {

@@ -18,17 +18,17 @@ class WelcomeVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
     }
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         //hiding navigation controller on this view
-        self.navigationController?.navigationBarHidden = true
+        self.navigationController?.isNavigationBarHidden = true
     }
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         //make the navigation controller appears on next views.
-        self.navigationController?.navigationBarHidden = false
+        self.navigationController?.isNavigationBarHidden = false
     }
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         //TODO: delete
         //loginTest()
@@ -52,7 +52,7 @@ class WelcomeVC: UIViewController {
         //performSegueWithIdentifier("SignUpVC", sender: nil)
     }
     @IBAction func loginButtonPressed() {
-        performSegueWithIdentifier("LoginVC", sender: nil)
+        performSegue(withIdentifier: "LoginVC", sender: nil)
     }
     
     //MARK: Backend testing.
@@ -62,7 +62,7 @@ class WelcomeVC: UIViewController {
             "username": "testUser",
             "password": "testPass"
         ]
-        Alamofire.request(.POST, URL, parameters: parameters, encoding: .JSON).validate().response {
+        Alamofire.request(.POST, URL, parameters: parameters, encoding: .json).validate().response {
             (request, response, data, error) in
             print("request")
             print(request)
@@ -71,7 +71,7 @@ class WelcomeVC: UIViewController {
             print("data")
             print(data)
             print("string data")
-            if let dataString = String(data: data!, encoding: NSUTF8StringEncoding) {
+            if let dataString = String(data: data!, encoding: String.Encoding.utf8) {
                 self.token = dataString
                 print(self.token)
             }
@@ -87,7 +87,7 @@ class WelcomeVC: UIViewController {
             "email": "alebrahimcs@gmail.com"
         ]
         
-        Alamofire.request(.POST, URL, parameters: parameters, encoding: .JSON).validate().response { (request, response, data, error) in
+        Alamofire.request(.POST, URL, parameters: parameters, encoding: .json).validate().response { (request, response, data, error) in
             print("request")
             print(request)
             print("response")
@@ -95,7 +95,7 @@ class WelcomeVC: UIViewController {
             print("data")
             print(data)
             print("string data")
-            if let dataString = String(data: data!, encoding: NSUTF8StringEncoding) {
+            if let dataString = String(data: data!, encoding: String.Encoding.utf8) {
                 print(dataString)
             }
             print("error")
@@ -113,8 +113,8 @@ class WelcomeVC: UIViewController {
         let imagesData = imagesToBase64(images)
         for index in 0..<3 {
             var myDictionary = [String:AnyObject]()
-            myDictionary["name"] = "\(index)"
-            myDictionary["image"] = imagesData[index]
+            myDictionary["name"] = "\(index)" as AnyObject?
+            myDictionary["image"] = imagesData[index] as AnyObject?
             imagesDictonaryList.append(myDictionary)
         }
         print(imagesDictonaryList)
@@ -123,13 +123,13 @@ class WelcomeVC: UIViewController {
             "description": "service 1 description",
             "price": "11",
             "images": imagesDictonaryList
-        ]
-        Alamofire.request(.POST, URL, parameters: parameters as? [String : AnyObject], encoding: .JSON).responseJSON { response in
+        ] as [String : Any]
+        Alamofire.request(.POST, URL, parameters: parameters as? [String : AnyObject], encoding: .json).responseJSON { response in
             print(response.request)  // original URL request
             print(response.response) // URL response
             print(response.data)     // server data
             print(response.result)   // result of response serialization
-            if let dataString = String(data: response.data!, encoding: NSUTF8StringEncoding) {
+            if let dataString = String(data: response.data!, encoding: String.Encoding.utf8) {
                 print(dataString)
             }
             if let JSON = response.result.value {
@@ -157,11 +157,11 @@ class WelcomeVC: UIViewController {
         
         
     }
-    func imagesToBase64(images: [UIImage]) -> [String]{
+    func imagesToBase64(_ images: [UIImage]) -> [String]{
         var imagesData = [String]()
         for image in images {
             let imageData = UIImagePNGRepresentation(image)
-            let base64String = imageData!.base64EncodedStringWithOptions(.Encoding64CharacterLineLength)
+            let base64String = imageData!.base64EncodedString(options: .lineLength64Characters)
             imagesData.append(base64String)
         }
         return imagesData

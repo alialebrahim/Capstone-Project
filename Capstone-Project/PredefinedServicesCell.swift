@@ -20,30 +20,32 @@ class PredefinedServicesCell: UITableViewCell {
     @IBOutlet weak var arrowImageView: UIImageView!
     
     //this function is responsible for showing and hiding selection view
-    override func setSelected(selected: Bool, animated: Bool) {
+    override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-        selectionView.hidden = !selected
+        selectionView.isHidden = !selected
     }
     override func awakeFromNib() {
         configureCellAppearance()
     }
     func configureCellAppearance() {
-        selectionStyle = .None
+        selectionStyle = .none
         let image = arrowImageView.image!
-        let tintedImage = image.imageWithRenderingMode(.AlwaysTemplate)
+        let tintedImage = image.withRenderingMode(.alwaysTemplate)
         arrowImageView.image = tintedImage
-        arrowImageView.tintColor = UIColor.whiteColor()
-        priceView.addLeadingBorderWithColor(UIColor.whiteColor(), width: 1)
-        priceView.addBottomBorderWithColor(UIColor.whiteColor(), width: 1)
-        priceView.addTopBorderWithColor(UIColor.whiteColor(), width: 1)
-        priceView.backgroundColor = UIColor(hex: 0x8168AE)
-        servicePrice.textColor = UIColor.whiteColor().colorWithAlphaComponent(0.8)
-        serviceCurrency.textColor = UIColor.whiteColor().colorWithAlphaComponent(0.8)
-        serviceDescription.textAlignment = .Justified
-        serviceDescription.textColor = UIColor(hex: 0x8168AE, alpha: 0.9)
-        self.backgroundColor = UIColor.clearColor()
-        containerView.backgroundColor = UIColor(hex: 0xD1C4E9)
-        serviceTitle.textColor = UIColor(hex: 0x8168AE)
+        arrowImageView.tintColor = UIColor(hex: 0x404040)
+        priceView.addLeadingBorderWithColor(UIColor.white, width: 1)
+        priceView.addBottomBorderWithColor(UIColor.white, width: 1)
+        priceView.addTopBorderWithColor(UIColor.white, width: 1)
+        priceView.backgroundColor = UIColor(hex: 0xa85783)
+        servicePrice.textColor = UIColor.white
+        serviceCurrency.textColor = UIColor.white
+        serviceDescription.textAlignment = .justified
+        serviceDescription.textColor = UIColor(hex: 0x404040)
+        self.backgroundColor = UIColor.clear
+        containerView.backgroundColor = UIColor.clear
+        containerView.addBorderWithColor(UIColor(hex: 0x404040), width: 1)
+        containerView.layer.cornerRadius = 5
+        serviceTitle.textColor = UIColor(hex: 0x404040)
         containerView.clipsToBounds = true
     }
 }

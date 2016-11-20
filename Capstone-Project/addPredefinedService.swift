@@ -8,146 +8,212 @@
 
 import UIKit
 import Alamofire
+import SwiftyJSON
 //TODO: dynamic content size
 //TODO: delegate to remove picture
-class addService: UIViewController, UITextViewDelegate, iCarouselDelegate, iCarouselDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIPopoverPresentationControllerDelegate, AvailableServiceHoursDelegate, AvailableServiceDaysDelegate {
-    
+class addService: UIViewController, UITextViewDelegate, iCarouselDelegate, iCarouselDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIPopoverPresentationControllerDelegate, AvailableServiceHoursDelegate, AvailableServiceDaysDelegate, CategoriesVCDelegate {
+ 
     //MARK: Outlets
-    @IBOutlet weak var daysTakenTextField: UITextField!
-    @IBOutlet weak var hoursTakenTextField: UITextField!
     @IBOutlet weak var contentViewHeight: NSLayoutConstraint!
     @IBOutlet weak var contentView: UIView!
-    @IBOutlet weak var picturesLabel: UILabel!
-    @IBOutlet weak var descriptionLabel: UILabel!
+    @IBOutlet weak var imageContainerView: UIView!
     @IBOutlet weak var scrollView: UIScrollView!
-    @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var containerView: UIView!
-    @IBOutlet weak var priceLabel: UILabel!
     @IBOutlet weak var titleTextField: UITextField!
     @IBOutlet weak var descriptionTextView: UITextView!
     @IBOutlet weak var priceTextField: UITextField!
     @IBOutlet weak var availableServiceDaysButton: UIButton!
     @IBOutlet weak var availableServiceHoursButton: UIButton!
     @IBOutlet weak var picturesView: iCarousel!
-    @IBOutlet weak var arowImage: UIImageView! //TODO: change spelling
-    @IBOutlet weak var rightArowImage: UIImageView! //TODO: change spelling
+    @IBOutlet weak var carouselView: iCarousel!
+    @IBOutlet weak var categoryButton: UIButton!
     
-    
-    
+    @IBOutlet weak var categoryLabel: UILabel!
+    @IBOutlet weak var chooseCategoryView: UIView!
+    @IBOutlet weak var addPictureView: UIView!
+    @IBOutlet weak var cameraImageView: UIImageView!
+    @IBOutlet weak var categoryImageView: UIImageView!
     //MARK: Variables
     var currency: String?
     var availableServiceHours = [(String, String)]()
     var availableServiceDays = [Int]()
     var border: UIView!
     var pictures = [UIImage]()
+    var picturesImageView = [UIImageView]()
     let imagePicker = UIImagePickerController()
     var buttonName = "Add"
     var dimView: UIView!
-    let defaults = NSUserDefaults.standardUserDefaults()
-    
+    let defaults = UserDefaults.standard
+    var willEdit = false
+    var pictureThatWillBeDeleted: UIImageView!
+    var right = true
+    var serviceID: Int?
+    var myCategories = [String]()
     //MARK: ViewController lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         dimView = UIView(frame: self.view.bounds)
-        dimView.backgroundColor = UIColor.whiteColor().colorWithAlphaComponent(0.7)
+        dimView.backgroundColor = UIColor.white.withAlphaComponent(0.7)
         /*
             1-this is done in the storyboard and it is needed!:
                 descriptionTextView.scrollEnabled = false
             2-arow images are both hidden from the storyboard.
          */
         setup()
+        carouselView.clipsToBounds = false
         configureNavigationBar()
     }
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         //addLine(UIColor(hex: 0xC7C7CD), width: 1)
-        titleTextField.addBottomBorderWithColor(UIColor(hex: 0xC7C7CD), width: 1)
-        priceTextField.addBottomBorderWithColor(UIColor(hex: 0xC7C7CD), width: 1)
+        titleTextField.addBottomBorderWithColor(UIColor(hex: 0xa85783), width: 1)
+        priceTextField.addBottomBorderWithColor(UIColor(hex: 0xa85783), width: 1)
     }
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         //rotate left arrow picture
-        arowImage.transform = CGAffineTransformMakeRotation(CGFloat(M_PI))
         adjustContentViewHeight()
+        if willEdit {
+            if let myID = serviceID {
+                offeredServiceDetails(myID)
+            }
+            
+        }
     }
     
     //MARK: IBActions
     @IBAction func addPicturePressed() {
-        presentViewController(imagePicker, animated: true, completion: nil)
+        present(imagePicker, animated: true, completion: nil)
     }
-    @IBAction func availableServiceDaysButtonPressed(sender: AnyObject) {
-        performSegueWithIdentifier("availableServiceDays", sender: self)
+    @IBAction func availableServiceDaysButtonPressed(_ sender: AnyObject) {
+        performSegue(withIdentifier: "availableServiceDays", sender: self)
     }
     
-    @IBAction func availableServiceHoursButtonPressed(sender: AnyObject) {
-        performSegueWithIdentifier("availableServiceHours", sender: self)
+    @IBAction func availableServiceHoursButtonPressed(_ sender: AnyObject) {
+        performSegue(withIdentifier: "availableServiceHours", sender: self)
+    }
+    @IBAction func categoryButtonPressed(_ sender: AnyObject) {
+        performSegue(withIdentifier: "CategoriesVC", sender: nil)
     }
     
     //MARK: available service hours delegate function
-    func shouldDismissHoursView(times: [(from: NSDate, to: NSDate)]) {
+    func shouldDismissHoursView(_ times: [(from: Date, to: Date)]) {
         dimView.removeFromSuperview()
         if !times.isEmpty {
             var from: String
             var to: String
-            let formatTime = NSDateFormatter()
+            let formatTime = DateFormatter()
             
-            formatTime.timeStyle = .ShortStyle
+            formatTime.timeStyle = .short
             
             //Converting Hours to 24:00 form
             formatTime.dateFormat = "HH:mm"
             
-            availableServiceHoursButton.setTitle("Available Service Times", forState: .Normal)
+            availableServiceHoursButton.setTitle("Available Service Times", for: UIControlState())
             for time in times {
-                from = formatTime.stringFromDate(time.from)
-                to = formatTime.stringFromDate(time.to)
+                from = formatTime.string(from: time.from)
+                to = formatTime.string(from: time.to)
                 availableServiceHours.append((from, to))
             }
             print(availableServiceHours)
             
         }else {
-            availableServiceHoursButton.setTitle("+Available Service Times", forState: .Normal)
+            availableServiceHoursButton.setTitle("+Available Service Times", for: UIControlState())
         }
-        presentedViewController?.dismissViewControllerAnimated(true, completion: nil)
+        presentedViewController?.dismiss(animated: true, completion: nil)
     }
     
     //MARK: available service days delegate function
-    func shouldDismissDaysView(days: [Int]) {
+    func shouldDismissDaysView(_ days: [Int]) {
         dimView.removeFromSuperview()
         if !days.isEmpty {
             availableServiceDays = days
             print(availableServiceDays)
-            availableServiceDaysButton.setTitle("Available Service Days", forState: .Normal)
+            availableServiceDaysButton.setTitle("Available Service Days", for: UIControlState())
         }else {
-            availableServiceDaysButton.setTitle("+Available Service Days", forState: .Normal)
+            availableServiceDaysButton.setTitle("+Available Service Days", for: UIControlState())
         }
-        presentedViewController?.dismissViewControllerAnimated(true, completion: nil)
+        presentedViewController?.dismiss(animated: true, completion: nil)
     }
     
     //MARK: iCarousel Delegate Function (for services images)
-    func numberOfItemsInCarousel(carousel: iCarousel) -> Int {
+    func numberOfItems(in carousel: iCarousel) -> Int {
         return pictures.count
     }
-    func carousel(carousel: iCarousel, viewForItemAtIndex index: Int, reusingView view: UIView?) -> UIView {
-        let tempView = UIImageView(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
-        tempView.contentMode = .ScaleAspectFill
+    func carousel(_ carousel: iCarousel, viewForItemAt index: Int, reusing view: UIView?) -> UIView {
+        let tempView = UIImageView(frame: CGRect(x: 0, y: 0, width: 80, height: 80))
+        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(didLongPressOnImage(_:)))
+        tempView.isUserInteractionEnabled = true
+        tempView.addGestureRecognizer(longPress)
+        tempView.contentMode = .scaleAspectFill
         tempView.clipsToBounds = true
         tempView.image = pictures[index]
+        picturesImageView.append(tempView)
         return tempView
     }
-    func carousel(carousel: iCarousel, valueForOption option: iCarouselOption, withDefault value: CGFloat) -> CGFloat {
-        if option == iCarouselOption.Spacing {
+    func carousel(_ carousel: iCarousel, valueFor option: iCarouselOption, withDefault value: CGFloat) -> CGFloat {
+        if option == iCarouselOption.spacing {
             return value*1.1
         }
         return value
     }
-    func carousel(carousel: iCarousel, didSelectItemAtIndex index: Int) {
-        performSegueWithIdentifier("ImagePreviewVC", sender: index)
+    func carousel(_ carousel: iCarousel, didSelectItemAt index: Int) {
+        performSegue(withIdentifier: "ImagePreviewVC", sender: index)
     }
     
     //MARK: Functions
+    func didLongPressOnImage(_ gestureReconizer: UILongPressGestureRecognizer) {
+        print("testing")
+        let deleteButton = UIButton()
+        deleteButton.isUserInteractionEnabled = true
+        deleteButton.setTitle("test", for: UIControlState())
+        deleteButton.backgroundColor = UIColor.black.withAlphaComponent(0.4)
+        deleteButton.addTarget(self, action: #selector(deletePicture), for: .touchUpInside)
+        if let myView = gestureReconizer.view {
+            if let imageView = myView as? UIImageView {
+                print("im here")
+                //TODO: Animate the view
+                //TODO: figure out a way to stop gesture and remove added button!
+                deleteButton.frame = myView.bounds
+                pictureThatWillBeDeleted = imageView
+                imageView.addSubview(deleteButton)
+                animateSelectedToDeleteImage(imageView)
+            }
+        }
+    }
+    func animateSelectedToDeleteImage(_ imageView: UIImageView) {
+        UIView.animate(withDuration: 0.25, animations: {
+            imageView.transform = CGAffineTransform(rotationAngle: CGFloat((M_PI * (-5) / 180.0)))
+        }) 
+        rotateRightAnimation(imageView)
+    }
+    func rotateRightAnimation(_ imageView: UIImageView) {
+        UIView.animate(withDuration: 0.25, delay: 0, options:  [.autoreverse, .repeat, .allowUserInteraction], animations: {
+            imageView.transform = CGAffineTransform(rotationAngle: CGFloat((M_PI * (5) / 180.0)))
+        }) { (completed) in
+            if completed {
+                print("im here")
+            }
+        }
+    }
+    func deletePicture() {
+        print("testing delete picture button")
+        for imageView in picturesImageView {
+            if imageView == pictureThatWillBeDeleted {
+                let myImage = imageView.image!
+                for image in pictures {
+                    if myImage == image {
+                        pictures.removeObject(myImage)
+                        picturesImageView.removeObject(imageView)
+                        picturesView .reloadData()
+                    }
+                }
+            }
+        }
+    }
     func setup() {
 
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIKeyboardDidChangeFrameNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: NSNotification.Name.UIKeyboardDidChangeFrame, object: nil)
         
         automaticallyAdjustsScrollViewInsets = false
         
@@ -155,7 +221,7 @@ class addService: UIViewController, UITextViewDelegate, iCarouselDelegate, iCaro
         
         picturesView.delegate = self
         picturesView.dataSource = self
-        picturesView.type = .Linear
+        picturesView.type = .linear
         picturesView .reloadData()
         picturesView.clipsToBounds = true
         
@@ -165,63 +231,91 @@ class addService: UIViewController, UITextViewDelegate, iCarouselDelegate, iCaro
         if currency != nil {
             priceTextField.placeholder = "Price in local currency"
         }
-        priceTextField.keyboardType = .NumberPad
+        priceTextField.keyboardType = .numberPad
         
         //textview placeholder setup
         descriptionTextView.text = "Description"
-        descriptionTextView.selectedTextRange = descriptionTextView.textRangeFromPosition(descriptionTextView.beginningOfDocument, toPosition: descriptionTextView.beginningOfDocument)
+        descriptionTextView.selectedTextRange = descriptionTextView.textRange(from: descriptionTextView.beginningOfDocument, to: descriptionTextView.beginningOfDocument)
         
         //setup textfields and textview textColor
-        titleTextField.textColor = UIColor.darkTextColor()
+        titleTextField.textColor = UIColor.darkText
         
-        daysTakenTextField.keyboardType = .NumberPad
+        chooseCategoryView.addBottomBorderWithColor(UIColor(hex: 0x404040), width: 1)
+        addPictureView.addBottomBorderWithColor(UIColor(hex: 0x404040), width: 1)
+        chooseCategoryView.addLeadingBorderWithColor(UIColor(hex: 0x404040), width: 1)
+        imageContainerView.addTopBorderWithColor(UIColor(hex: 0xa85783), width: 1)
+        imageContainerView.addBottomBorderWithColor(UIColor(hex: 0xa85783), width: 1)
         
-        hoursTakenTextField.keyboardType = .NumberPad
+        //MARK: change image tint color
+         let origImage = cameraImageView.image!
+         let tintedImage = origImage.withRenderingMode(.alwaysTemplate)
+         cameraImageView.image = tintedImage
+         cameraImageView.tintColor = UIColor(hex: 0x404040)
+         cameraImageView.contentMode = .scaleAspectFit
+        
+        let origImage1 = categoryImageView.image!
+        let tintedImage1 = origImage1.withRenderingMode(.alwaysTemplate)
+        categoryImageView.image = tintedImage1
+        categoryImageView.tintColor = UIColor(hex: 0x404040)
+        categoryImageView.contentMode = .scaleAspectFit
+        
+        
     }
     func configureNavigationBar() {
-        let addBarButtonItem = UIBarButtonItem(title: buttonName, style: .Plain , target: self, action: #selector(addService))
-        navigationItem.rightBarButtonItem = addBarButtonItem
+        if willEdit {
+            let editBarButtonItem = UIBarButtonItem(title: "update", style: .plain , target: self, action: #selector(editService))
+            navigationItem.rightBarButtonItem = editBarButtonItem
+        }else {
+            let addBarButtonItem = UIBarButtonItem(title: "Add", style: .plain , target: self, action: #selector(addService))
+            navigationItem.rightBarButtonItem = addBarButtonItem
+        }
         navigationItem.title = "Add Service"
+    }
+    func editService() {
+        let title = titleTextField.text
+        let description = descriptionTextView.text
+        let price = priceTextField.text
+        updatingOfferedService(title!, description: description!, price: price!)
     }
     func addService() {
         //BACKEND REQUEST FUNCTION
-        offeredServiceCreation("test category", title: titleLabel.text!, description: descriptionTextView.text!, price: priceTextField.text!)
+        offeredServiceCreation("food", title: titleTextField.text!, description: descriptionTextView.text!, price: priceTextField.text!)
     }
     func adjustContentViewHeight() {
-        var contentRect = CGRectZero
+        var contentRect = CGRect.zero
         for view in contentView.subviews {
-            contentRect = CGRectUnion(contentRect, view.frame)
+            contentRect = contentRect.union(view.frame)
         }
         contentViewHeight.constant = contentRect.size.height+20
     }
-    func keyboardWillShow(notification: NSNotification) {
+    func keyboardWillShow(_ notification: Notification) {
         var userInfo = notification.userInfo!
-        let keyboardFrame = (userInfo[UIKeyboardFrameBeginUserInfoKey] as! NSValue).CGRectValue()
+        let keyboardFrame = (userInfo[UIKeyboardFrameBeginUserInfoKey] as! NSValue).cgRectValue
         var contentInset = scrollView.contentInset
         contentInset.bottom = keyboardFrame.size.height
         scrollView.contentInset = contentInset
         scrollView.contentInset.top = 0
     }
-    func adaptivePresentationStyleForPresentationController(controller: UIPresentationController) -> UIModalPresentationStyle {
-        return .None
+    func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
+        return .none
     }
-    func alertWithMessage(message: String) {
-        let alertController = UIAlertController(title: "Error", message: message, preferredStyle: .Alert)
-        let okAction = UIAlertAction(title: "Ok", style: .Default, handler: nil)
+    func alertWithMessage(_ message: String) {
+        let alertController = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "Ok", style: .default, handler: nil)
         alertController.addAction(okAction)
         
-        presentViewController(alertController, animated: true, completion: nil)
+        present(alertController, animated: true, completion: nil)
     }
     //TextView delegate functions
     /*
         textview delegate functions are used to implement textview placehold
      */
-    func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         
         // Combine the textView text and the replacement text to
         // create the updated text string
-        let currentText:NSString = textView.text
-        let updatedText = currentText.stringByReplacingCharactersInRange(range, withString:text)
+        let currentText:NSString = textView.text as NSString
+        let updatedText = currentText.replacingCharacters(in: range, with:text)
         
         // If updated text view will be empty, add the placeholder
         // and set the cursor to the beginning of the text view
@@ -229,7 +323,7 @@ class addService: UIViewController, UITextViewDelegate, iCarouselDelegate, iCaro
             textView.text = "Description"
             textView.textColor = UIColor(hex: 0xC7C7CD)
             
-            textView.selectedTextRange = textView.textRangeFromPosition(textView.beginningOfDocument, toPosition: textView.beginningOfDocument)
+            textView.selectedTextRange = textView.textRange(from: textView.beginningOfDocument, to: textView.beginningOfDocument)
             
             return false
         }
@@ -240,57 +334,51 @@ class addService: UIViewController, UITextViewDelegate, iCarouselDelegate, iCaro
             // the user's entry
         else if textView.textColor == UIColor(hex: 0xC7C7CD) && !text.isEmpty {
             textView.text = nil
-            textView.textColor = UIColor.blackColor()
+            textView.textColor = UIColor.black
         }
         return true
     }
     
-    func textViewDidChangeSelection(textView: UITextView) {
+    func textViewDidChangeSelection(_ textView: UITextView) {
         
         if self.view.window != nil {
             if textView.textColor == UIColor(hex: 0xC7C7CD) {
-                textView.selectedTextRange = textView.textRangeFromPosition(textView.beginningOfDocument, toPosition: textView.beginningOfDocument)
+                textView.selectedTextRange = textView.textRange(from: textView.beginningOfDocument, to: textView.beginningOfDocument)
             }
         }
     }
-    func textViewDidChange(textView: UITextView) {
+    func textViewDidChange(_ textView: UITextView) {
         adjustContentViewHeight()
     }
-    
+ 
+
     //MARK: ImagePicker delegates
-    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         if let pickedImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
             pictures.append(pickedImage)
             picturesView.reloadData()
-            if picturesView.numberOfVisibleItems < pictures.count {
-                arowImage.hidden = false
-                rightArowImage.hidden = false
-            }else {
-                arowImage.hidden = true
-                rightArowImage.hidden = true
-            }
             
             //TODO: remove if statement
             if pictures.count == 2 {
-                picturesView.scrollToItemAtIndex(0, animated: true)
+                picturesView.scrollToItem(at: 0, animated: true)
             }else {
-                picturesView.scrollToItemAtIndex(pictures.count-2, animated: true)
+                picturesView.scrollToItem(at: pictures.count-2, animated: true)
             }
             
             print(pictures.count)
         }
-        dismissViewControllerAnimated(true, completion: nil)
+        dismiss(animated: true, completion: nil)
     }
-    func imagePickerControllerDidCancel(picker: UIImagePickerController) {
-        dismissViewControllerAnimated(true, completion: nil)
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        dismiss(animated: true, completion: nil)
     }
     
     //MARK: Segue functions
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         self.view.addSubview(dimView)
         let myIndex = sender as? Int
         if segue.identifier == "ImagePreviewVC" {
-            if let vc = segue.destinationViewController as? ImagePreview {
+            if let vc = segue.destination as? ImagePreview {
                 if let index = myIndex {
                     vc.imageIndex = index
                     vc.image = pictures[index]
@@ -298,39 +386,50 @@ class addService: UIViewController, UITextViewDelegate, iCarouselDelegate, iCaro
                 
             }
         }else if segue.identifier == "availableServiceHours" { //popover
-            if let vc = segue.destinationViewController as? AvailableServiceHoursVC {
+            if let vc = segue.destination as? AvailableServiceHoursVC {
                 vc.delegate = self
-                vc.modalInPopover = true
+                vc.isModalInPopover = true
                 //to change poped over view:
                 //vc.preferredContentSize.width = self.view.frame.size.width-20
                 if let controller = vc.popoverPresentationController {
                     controller.delegate = self
-                    let height = (navigationController?.navigationBar.frame.height)! + UIApplication.sharedApplication().statusBarFrame.height
-                    controller.sourceRect = CGRectMake(CGRectGetMidX(self.view.bounds), height,0,0)
+                    let height = (navigationController?.navigationBar.frame.height)! + UIApplication.shared.statusBarFrame.height
+                    controller.sourceRect = CGRect(x: self.view.bounds.midX, y: height,width: 0,height: 0)
                     controller.passthroughViews = nil
                     //set it to zero to remove arrow
                     controller.permittedArrowDirections = UIPopoverArrowDirection(rawValue: 1)
                 }
             }
         }else if segue.identifier == "availableServiceDays" { //popover
-            if let vc = segue.destinationViewController as? AvailableServiceDaysVC {
+            if let vc = segue.destination as? AvailableServiceDaysVC {
                 vc.delegate = self
-                vc.modalInPopover = true
+                vc.isModalInPopover = true
                 if let controller = vc.popoverPresentationController {
                     controller.delegate = self
-                    let height = (navigationController?.navigationBar.frame.height)! + UIApplication.sharedApplication().statusBarFrame.height
-                    controller.sourceRect = CGRectMake(CGRectGetMidX(self.view.bounds), height,0,0)
+                    let height = (navigationController?.navigationBar.frame.height)! + UIApplication.shared.statusBarFrame.height
+                    controller.sourceRect = CGRect(x: self.view.bounds.midX, y: height,width: 0,height: 0)
                     controller.passthroughViews = nil
                     //set it to zero or remove arrow
                     controller.permittedArrowDirections = UIPopoverArrowDirection(rawValue: 1)
                 }
             }
+        }else if segue.identifier == "CategoriesVC" {
+            if let vc = segue.destination as? CategoriesVC {
+                vc.delegate = self
+            }
         }
     }
-    
+    //MARK: Categories vc delegate functions 
+    func shouldDismissCategoriesView(_ categories: [String]) {
+        myCategories = categories
+        //categoryButton.setTitle(myCategories[0], forState: .Normal)
+        categoryLabel.text = myCategories[0]
+        dimView.removeFromSuperview()
+        navigationController?.popViewController(animated: true)
+    }
     //MARK: BACKEND
-    func offeredServiceCreation(category: String, title: String, description: String, price: String) {
-        if let myToken = defaults.objectForKey("userToken") as? String {
+    func offeredServiceCreation(_ category: String, title: String, description: String, price: String) {
+        if let myToken = defaults.object(forKey: "userToken") as? String {
             print("token-> \"\(myToken)\"")
             let headers = [
                 "Authorization": myToken
@@ -340,45 +439,141 @@ class addService: UIViewController, UITextViewDelegate, iCarouselDelegate, iCaro
             let imagesData = imagesToBase64(pictures)
             for index in 0..<imagesData.count {
                 var myDictionary = [String:AnyObject]()
-                myDictionary["name"] = "\(index)"
-                myDictionary["image"] = imagesData[index]
+                myDictionary["name"] = "\(index)" as AnyObject?
+                myDictionary["image"] = imagesData[index] as AnyObject?
                 imagesDictonaryList.append(myDictionary)
             }
             let service : [String: AnyObject] = [
-                "title": title,
-                "description": description,
-                "price": price
+                "title": title as AnyObject,
+                "description": description as AnyObject,
+                "price": price as AnyObject
             ]
             let parameters = [
                 "category" : category,
                 "service": service,
                 "serviceimage_set": imagesDictonaryList
-            ]
+            ] as [String : Any]
             print("im here")
-            Alamofire.request(.POST, URL, parameters: parameters as? [String : AnyObject], headers: headers, encoding: .JSON).responseJSON { response in
+            Alamofire.request(.POST, URL, parameters: parameters as? [String : AnyObject], headers: headers, encoding: .json).responseJSON { response in
                 //            print(response.request)  // original URL request
                 print(response.response) // URL response
                 print(response.data)     // server data
                 print(response.result)   // result of response serialization
-                if let dataString = String(data: response.data!, encoding: NSUTF8StringEncoding) {
+                if let dataString = String(data: response.data!, encoding: String.Encoding.utf8) {
                     print(dataString)
                 }
                 if let JSON = response.result.value {
                     print("JSON: \(JSON)")
                 }
                 if response.response?.statusCode == 201 {
-                    self.navigationController?.popViewControllerAnimated(true)
+                    self.navigationController?.popViewController(animated: true)
                 }else {
                     self.alertWithMessage("could not create offered service, please try again")
                 }
             }
         }
     }
-    func imagesToBase64(images: [UIImage]) -> [String]{
+    func offeredServiceDetails(_ id: Int?) {
+        //TODO: add loading animation only for the first time.
+        let URL = "\(AppDelegate.URL)/offeredservice/"
+        
+        let parameter:[String:Int]
+        if let myId = id {
+            parameter = [
+                "servicepk": myId
+            ]
+        }else {
+            parameter = [
+                "servicepk": 0
+            ]
+        }
+        Alamofire.request(.GET, URL, parameters: parameter).responseJSON { response in
+            if let myResponse = response.response {
+                if myResponse.statusCode == 200 {
+                    if let json = response.result.value {
+                        let myJson = JSON(json)
+                        /*
+                         
+                         let title = myOfferedServices[index]["service"]["title"].string
+                         let description = myOfferedServices[index]["service"]["description"].string
+                         let category = myOfferedServices[index]["category"].string
+                         let price = myOfferedServices[index]["service"]["price"].float
+                         let id = myOfferedServices[index]["id"].int
+                         
+                         */
+                        if let myTitle = myJson["service"]["title"].string {
+                            self.titleTextField.text = myTitle
+                        }else {
+                            self.titleTextField.text = "no title"
+                        }
+                        if let myDescription = myJson["service"]["description"].string {
+                            self.descriptionTextView.text = myDescription
+                        }else {
+                            self.descriptionTextView.text = "no description"
+                        }
+                        if let myPrice = myJson["service"]["price"].float {
+                            self.priceTextField.text = "\(myPrice)"
+                        }else {
+                            self.descriptionTextView.text = "no price"
+                        }
+                    }
+                }else {
+                    self.alertWithMessage("There was a problem getting offered services\n please try again")
+                }
+            }else {
+                self.alertWithMessage("There was a problem getting offered services\n please try again")
+            }
+        }
+    }
+    /*
+        offered service
+        put method
+        service pk
+     */
+    func updatingOfferedService(_ title: String, description: String, price: String) {
+        if let myToken = defaults.object(forKey: "userToken") as? String {
+            print("token-> \"\(myToken)\"")
+            let headers = [
+                "Authorization": myToken
+            ]
+            let URL = "\(AppDelegate.URL)/offeredservice/"
+            let imagesDictonaryList = [[String : AnyObject]]()
+            let service : [String: AnyObject] = [
+                "title": title as AnyObject,
+                "description": description as AnyObject,
+                "price": price as AnyObject
+            ]
+            print("service pk is \(serviceID!)")
+            let parameters = [
+                "service": service,
+                "servicepk":serviceID!,
+                "serviceimage_set": imagesDictonaryList
+            ] as [String : Any]
+            print("im here")
+            Alamofire.request(.PUT, URL, parameters: parameters as? [String : AnyObject], headers: headers, encoding: .json).responseJSON { response in
+                //            print(response.request)  // original URL request
+                print(response.response) // URL response
+                print(response.data)     // server data
+                print(response.result)   // result of response serialization
+                if let dataString = String(data: response.data!, encoding: String.Encoding.utf8) {
+                    print(dataString)
+                }
+                if let JSON = response.result.value {
+                    print("JSON: \(JSON)")
+                }
+                if response.response?.statusCode == 200 {
+                    self.navigationController?.popViewController(animated: true)
+                }else {
+                    self.alertWithMessage("could not create offered service, please try again")
+                }
+            }
+        }
+    }
+    func imagesToBase64(_ images: [UIImage]) -> [String]{
         var imagesData = [String]()
         for image in images {
             let imageData = UIImagePNGRepresentation(image)
-            let base64String = imageData!.base64EncodedStringWithOptions(.Encoding64CharacterLineLength)
+            let base64String = imageData!.base64EncodedString(options: .lineLength64Characters)
             imagesData.append(base64String)
         }
         return imagesData

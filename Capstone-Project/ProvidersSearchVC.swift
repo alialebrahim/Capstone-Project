@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import Alamofire
+import SwiftyJSON
 
 class ProvidersSearchVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
@@ -14,25 +16,33 @@ class ProvidersSearchVC: UIViewController, UITableViewDelegate, UITableViewDataS
     @IBOutlet weak var tableView: UITableView!
     //MARK: Variables
     let CellID = "ProviderCell"
+    var users = [Profile]()
+    let defaults = UserDefaults.standard
+    var profiles: JSON?
+    var category = ""
     //MARK: ViewController lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
         setupTableView()
     }
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        searchUsers(category)
+    }
     //MARK: UITableView delegate functions
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 10
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return users.count
     }
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(CellID)
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: CellID)
         return cell!
     }
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        performSegueWithIdentifier("SearchedProvider", sender: nil)
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        performSegue(withIdentifier: "SearchedProvider", sender: nil)
     }
     //MARK: Functions
     func setup(){
@@ -41,7 +51,71 @@ class ProvidersSearchVC: UIViewController, UITableViewDelegate, UITableViewDataS
     func setupTableView() {
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.registerNib(UINib(nibName: "ProviderCell", bundle: nil), forCellReuseIdentifier: CellID)
+        tableView.register(UINib(nibName: "ProviderCell", bundle: nil), forCellReuseIdentifier: CellID)
         tableView.rowHeight = 137
+    }
+    func alertWithMessage(_ message: String) {
+        let alertController = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "Ok", style: .default, handler: nil)
+        alertController.addAction(okAction)
+        present(alertController, animated: true, completion: nil)
+    }
+    func jsonIntoArrayOfUsers() {
+        users = [Profile]()
+        if let usersProfile = profiles {
+            for index in 0..<usersProfile.count {
+                let username = usersProfile[index]["username"].string
+                let category = usersProfile[index]["category"].string
+                let about = usersProfile[index]["about"].string
+                let country = usersProfile[index]["country"].string
+                let phone = usersProfile[index]["phone_number"].string
+                let email = usersProfile[index]["email"].string
+                let area = usersProfile[index]["area"].string
+                let street = usersProfile[index]["street_address"].string
+//                let rating = usersProfile[index]["rating"].string
+                //TODO: use due date
+                let id = usersProfile[index]["pk"].int
+                //TODO: apply type safety
+                let user = Profile(username: username!, about: about!, rating: 0, country: country!, street: street!, area: area!, category: category!, phoneNumber: phone!, email: email!, id: id!)
+                users.append(user)
+                
+            }
+        }
+    }
+    
+    //BACKEND
+    func searchUsers(_ myCategory: String) {
+        let URL = "\(AppDelegate.URL)/search/"
+        if let myToken = defaults.object(forKey: "userToken") as? String{
+            print(myToken)
+            let headers = [
+                "Authorization": myToken
+            ]
+            let parameters = [
+                "category": myCategory
+            ]
+            Alamofire.request(.POST, URL, parameters: parameters, headers: headers, encoding: .json).responseJSON { response in
+                if let mydata = String(data: response.data!, encoding: String.Encoding.utf8) {
+                    print("my data is \(mydata)")
+                }
+                print(response.request)
+                print(response.response)
+                print(response.result)
+                if let myResponse = response.response {
+                    if myResponse.statusCode == 200 {
+                        if let json = response.result.value {
+                            print("my json")
+                            print(json)
+                            self.profiles = JSON(json)
+                            self.jsonIntoArrayOfUsers()
+                            self.tableView.reloadData()
+                        }
+                        //TODO: finish loading animation
+                    }else {
+                        self.alertWithMessage("Could not load Feed information, please try again")
+                    }
+                }
+            }
+        }
     }
 }

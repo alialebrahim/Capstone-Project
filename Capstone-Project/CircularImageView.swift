@@ -16,13 +16,13 @@ class CircularImageView: UIImageView {
         //this code is responsable for making a circular image.
         self.layer.cornerRadius = self.frame.size.width/2
         self.clipsToBounds = true
-        self.userInteractionEnabled = true
+        self.isUserInteractionEnabled = true
     }
     //MARK: Functions
-    func addBorderWith(color color: UIColor, borderWidth: CGFloat) {
+    func addBorderWith(color: UIColor, borderWidth: CGFloat) {
         //-borderWidth is used to make the border outside the imageview not to cover the picture.
-        self.frame = CGRectInset(self.frame, -borderWidth, -borderWidth)
-        self.layer.borderColor = color.CGColor
+        self.frame = self.frame.insetBy(dx: -borderWidth, dy: -borderWidth)
+        self.layer.borderColor = color.cgColor
         self.layer.borderWidth = borderWidth
     }
 }

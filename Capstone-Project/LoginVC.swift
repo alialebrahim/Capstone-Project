@@ -11,17 +11,8 @@ import Alamofire
 import NVActivityIndicatorView
 import SwiftyJSON
 
-//TODO: notificaion if email or password are incorrect!
 class LoginVC: UIViewController, SubmitButtonDelegate {
-//    let URL = "http://127.0.0.1:8000"
-    let URL = "http://81.4.110.27"
-	let username = "TomatoKetchup"
-	let password = "Heinz"
-	let userType = "provider"
-	
-	
-	
-	
+
     // MARK: IBOutlets
     @IBOutlet weak var logoLabel: UILabel!
     @IBOutlet weak var logoImageView: UIImageView!
@@ -33,7 +24,7 @@ class LoginVC: UIViewController, SubmitButtonDelegate {
     
     // MARK: Variables
     var loginAttempt = 0
-    let defaults = NSUserDefaults.standardUserDefaults()
+    let defaults = UserDefaults.standard
     var token = ""
     var activity: NVActivityIndicatorView! = nil
     
@@ -41,29 +32,54 @@ class LoginVC: UIViewController, SubmitButtonDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
+
+        
     }
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         //observer to notify the view when the keyboard appears or disappear.
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIKeyboardWillChangeFrameNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIKeyboardWillHideNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: NSNotification.Name.UIKeyboardWillChangeFrame, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        navigationController?.setNavigationBarHidden(false, animated: false)
  
     }
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        /*TEST CODE*/
+//        navigationController?.setNavigationBarHidden(true, animated: false)
+//        LoadingView.startAnimatingWithMessage("test message")
+//        NSTimer.schedule(delay: 5) { timer in
+//            self.navigationController?.setNavigationBarHidden(false, animated: false)
+//            LoadingView.stopAnimating()
+//        }
+//        NSTimer.schedule(delay: 15) { timer in
+//            self.navigationController?.setNavigationBarHidden(true, animated: false)
+//            LoadingView.startAnimatingWithMessage("test11 message")
+//        }
+        
+        
     }
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        navigationController?.setNavigationBarHidden(true, animated: false)
     }
     // MARK: IBActions
-    @IBAction func loginButtonPressed(sender: AnyObject) {
-        loginButton.startLoadingAnimation()
-        loginTest(emailTextField.text! , mypassword: passwordTextField.text!)
+    @IBAction func loginButtonPressed(_ sender: AnyObject) {
+        //TODO: add internet checking!
+        if validateIput(emailTextField, password: passwordTextField){
+            if Reachability.isConnectedToNetwork() {
+                loginButton.startLoadingAnimation()
+                loginTest(emailTextField.text! , mypassword: passwordTextField.text!)
+            }else {
+                self.alertWithMessage("check your internet connection!")
+            }
+        }
+        
     }
-    @IBAction func createAcccountButtonPressed(sender: AnyObject) {
-        performSegueWithIdentifier("SignUp", sender: nil)
+    @IBAction func createAcccountButtonPressed(_ sender: AnyObject) {
+        performSegue(withIdentifier: "SignUp", sender: nil)
     }
-    @IBAction func forgotYourPasswordButtonPressed(sender: AnyObject) {
+    @IBAction func forgotYourPasswordButtonPressed(_ sender: AnyObject) {
         print("forgot password")
     }
     // MARK: Functions
@@ -75,44 +91,47 @@ class LoginVC: UIViewController, SubmitButtonDelegate {
         //Tap gesture is added to hide the keyboard when the user tap on the screen.
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         view.addGestureRecognizer(tapGesture)
-        let colors = [UIColor(hex: 0xB39DDB), UIColor(hex: 0x7E57C2)]
-        self.view.setGradientBackground(colors)
+        //let colors = [UIColor(hex: 0xB39DDB), UIColor(hex: 0x7E57C2)]
+        //self.view.setGradientBackground(colors)
+        self.view.backgroundColor = UIColor.white
         /*
          *
          *setting up logo image
          */
         let origImage = logoImageView.image!
-        let tintedImage = origImage.imageWithRenderingMode(.AlwaysTemplate)
+        let tintedImage = origImage.withRenderingMode(.alwaysTemplate)
         logoImageView.image = tintedImage
-        logoImageView.tintColor = UIColor.whiteColor().colorWithAlphaComponent(0.5)
-        logoImageView.contentMode = .ScaleAspectFit
+        logoImageView.tintColor = UIColor(hex: 0xa85783)
+        logoImageView.contentMode = .scaleAspectFit
         
         /*
          *
          *setting up textFields
          */
-        emailTextField.textAlignment = .Left
-        emailTextField.keyboardType = .EmailAddress
-        passwordTextField.textAlignment = .Left
-        passwordTextField.keyboardType = .Default
-        passwordTextField.secureTextEntry = true
+        emailTextField.textAlignment = .left
+        emailTextField.keyboardType = .emailAddress
+        passwordTextField.textAlignment = .left
+        passwordTextField.keyboardType = .default
+        passwordTextField.isSecureTextEntry = true
         
         /*
          *
          *setting up login button
          */
-        loginButton.setTitle("Login", forState: .Normal)
+        loginButton.setTitle("Login", for: UIControlState())
         loginButton.cachedTitle = "Login"
-        loginButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-        loginButton.backgroundColor = UIColor.whiteColor().colorWithAlphaComponent(0.5)
+        loginButton.setTitleColor(UIColor.white, for: UIControlState())
+        loginButton.backgroundColor = UIColor(hex: 0xa85783)
         loginButton.delegate = self
         loginButton.layer.cornerRadius = self.loginButton.frame.height / 2
         
+        
+        navigationItem.title = "Login"
     }
     func dismissKeyboard() {
         view.endEditing(true)
     }
-    func keyboardWillShow(notification: NSNotification) {
+    func keyboardWillShow(_ notification: Notification) {
         //getting the keyboard height to move the bottom view above the keyboard by modifying its constraint
 //        let userInfo = notification.userInfo!
 //        let keyboardScreenEndFrame = (userInfo[UIKeyboardFrameEndUserInfoKey] as! NSValue).CGRectValue()
@@ -121,32 +140,32 @@ class LoginVC: UIViewController, SubmitButtonDelegate {
 //        bottomView.layoutIfNeeded()
 
     }
-    func keyboardWillHide(notification: NSNotification) {
+    func keyboardWillHide(_ notification: Notification) {
         //returning the bottom view to its original place.
 //        bottomViewButtomConstain.constant = 0
 //        bottomView.layoutIfNeeded()
     }
     
     //MARK: Submit Button Delegate function
-    func didAnimate(frame: CGRect) {
-        activity = NVActivityIndicatorView(frame: frame, type: .BallClipRotateMultiple, color: UIColor.whiteColor())
+    func didAnimate(_ frame: CGRect) {
+        activity = NVActivityIndicatorView(frame: frame, type: .ballClipRotateMultiple, color: UIColor.white)
         view.addSubview(activity)
-        view.bringSubviewToFront(activity)
+        view.bringSubview(toFront: activity)
         activity.startAnimation()
     }
-    override func preferredStatusBarStyle() -> UIStatusBarStyle {
-        return .LightContent
+    override var preferredStatusBarStyle : UIStatusBarStyle {
+        return .lightContent
 	}
-    func alertWithMessage(message: String) {
-        let alertController = UIAlertController(title: "Error", message: message, preferredStyle: .Alert)
-        let okAction = UIAlertAction(title: "Ok", style: .Default, handler: nil)
+    func alertWithMessage(_ message: String) {
+        let alertController = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "Ok", style: .default, handler: nil)
         alertController.addAction(okAction)
         
-        presentViewController(alertController, animated: true, completion: nil)
+        present(alertController, animated: true, completion: nil)
     }
-    func storeToken(token: String) {
+    func storeToken(_ token: String) {
         print(token)
-        defaults.setObject(token, forKey: "userToken")
+        defaults.set(token, forKey: "userToken")
         
         //this is how to get the token back.
         /*****************************************************
@@ -155,15 +174,25 @@ class LoginVC: UIViewController, SubmitButtonDelegate {
          }
          *****************************************************/
     }
-    //TODO: implement this function
-    func validateIput(username: UITextField, password: UITextField) -> Bool {
-        //if they are not empty return true
-        //if empty shake
-        //if invalid (for emails only) show error message
-        return true
+    func validateIput(_ email: UITextField, password: UITextField) -> Bool {
+        var isValid = true
+        if let myEmail = email.text {
+            if myEmail.isEmpty {
+                email.shakeView()
+                isValid = isValid && false
+            }
+        }
+        if let myPassword = password.text {
+            if myPassword.isEmpty {
+                password.shakeView()
+                isValid = isValid && false
+            }
+        }
+        return isValid
     }
     //MARK: BACKEND
-    func loginTest(myusername: String, mypassword: String) {
+    //TODO: Check response code and apply appropriate message
+    func loginTest(_ myusername: String, mypassword: String) {
         let URL = "\(AppDelegate.URL)/login/"
         let parameters = [
             "username": myusername,
@@ -173,41 +202,46 @@ class LoginVC: UIViewController, SubmitButtonDelegate {
         print("username -> \"\(parameters["username"])\"")
         print("password -> \"\(parameters["password"])\"")
         
-        Alamofire.request(.POST, URL, parameters: parameters, encoding: .JSON).validate().responseJSON {
+        Alamofire.request(.POST, URL, parameters: parameters, encoding: .json).validate().responseJSON {
             (response) in
             print(response.request)  // original URL request
             print(response.response) // URL response
             print(response.data)     // server data
             print(response.result)   // result of response serialization
-            if let mydata = String(data: response.data!, encoding: NSUTF8StringEncoding) {
+            if let mydata = String(data: response.data!, encoding: String.Encoding.utf8) {
                 print(mydata)
             }
-            if (response.response!.statusCode) == 200 {
-                if let json = response.result.value {
-                    print("my json")
-                    print(json)
-                    let myJson = JSON(json)
-                    if let myToken = myJson["token"].string {
-                        print(myToken)
-                        self.storeToken(myToken)
-                        if let myType = myJson["usertype"].string {
-                            print(myType)
-                            if myType == "seeker" {
-                                self.performSegueWithIdentifier("SeekerFeedVC", sender: nil)
-                            }else if myType == "provider" {
-                                self.performSegueWithIdentifier("ProfileVC", sender: nil)
+            //TODO: validate its not empty
+            if let myResponse = response.response {
+                if myResponse.statusCode == 200 {
+                    if let json = response.result.value {
+                        print("my json")
+                        print(json)
+                        let myJson = JSON(json)
+                        if let myToken = myJson["token"].string {
+                            print(myToken)
+                            self.storeToken(myToken)
+                            if let myType = myJson["usertype"].string {
+                                print(myType)
+                                if myType == "seeker" {
+                                    self.performSegue(withIdentifier: "SeekerFeedVC", sender: nil)
+                                }else if myType == "provider" {
+                                    self.performSegue(withIdentifier: "ProfileVC", sender: nil)
+                                }
                             }
                         }
                     }
+                }else {
+                    print("did not login")
+                    self.loginButton.returnToOriginalState()
+                    self.activity.removeFromSuperview()
+                    self.alertWithMessage("check your email and password")
                 }
-                
             }else {
-                print("did not login")
                 self.loginButton.returnToOriginalState()
                 self.activity.removeFromSuperview()
-                self.alertWithMessage("error in login in")
+                self.alertWithMessage("Server error\nPlease try again.")
             }
-            
         }
     }
 

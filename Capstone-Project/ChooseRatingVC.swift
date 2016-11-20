@@ -10,7 +10,7 @@ import UIKit
 import Cosmos
 
 protocol ChooseRatingVCDelegate: class {
-    func didSelectRating(rating: Int)
+    func didSelectRating(_ rating: Int)
 }
 
 class ChooseRatingVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
@@ -30,23 +30,23 @@ class ChooseRatingVC: UIViewController, UITableViewDelegate, UITableViewDataSour
         // Do any additional setup after loading the view.
     }
     //MARK: TableViewDelegate functions
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 5
     }
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(CellID) as? RatingCell
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: CellID) as? RatingCell
         cell?.rating.settings.updateOnTouch = false
-        cell?.rating.settings.fillMode = .Full
+        cell?.rating.settings.fillMode = .full
         cell?.rating.rating = Double(5) - Double(indexPath.row)
         return cell!
     }
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let rating = 5-indexPath.row
         delegate?.didSelectRating(rating)
-        navigationController?.popViewControllerAnimated(true)
+        navigationController?.popViewController(animated: true)
     }
     //MARK: Functions
     func setup() {
@@ -55,6 +55,6 @@ class ChooseRatingVC: UIViewController, UITableViewDelegate, UITableViewDataSour
     func setupTableView() {
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.registerNib(UINib(nibName: "RatingCell", bundle: nil), forCellReuseIdentifier: CellID)
+        tableView.register(UINib(nibName: "RatingCell", bundle: nil), forCellReuseIdentifier: CellID)
     }
 }

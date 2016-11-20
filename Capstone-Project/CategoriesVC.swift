@@ -10,24 +10,23 @@ import UIKit
 
 //MARK: Protocols
 protocol CategoriesVCDelegate: class {
-    func shouldDismissCategoriesView(categories: [String])
+    func shouldDismissCategoriesView(_ categories: [String])
 }
 
 //MARK: Enum
 enum Categories: String {
-    case Cleaning = "Cleaning Services"
-    case Food = "Food Services"
-    case Errands = "Errands Services"
-    case Pet = "Pet Services"
-    case RealEstate = "Real Estate Services"
-    case Beauty = "Beauty Services"
-    case Others = "Others"
+    case Cleaning = "cleaning"
+    case Food = "food"
+    case Errands = "errands"
+    case Pet = "pet"
+    case RealEstate = "real estate"
+    case Beauty = "beauty"
+    case Others = "other"
 }
 
 class CategoriesVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     //MARK: IBOutlets
-    @IBOutlet weak var saveCancelButton: UIButton!
     @IBOutlet weak var tableView: UITableView!
     
     //MARK: Variables
@@ -44,6 +43,7 @@ class CategoriesVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         return categoriesArray
     }()
     var categoriesString = [String]()
+    var savedCategory = [String]()
     let CellID = "CategoryCell"
     weak var delegate: CategoriesVCDelegate?
     
@@ -51,61 +51,97 @@ class CategoriesVC: UIViewController, UITableViewDelegate, UITableViewDataSource
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
+        setupNavigation()
         setupTableView()
+        print("Saved categories are \(savedCategory)")
     }
     
-    //MARK: IBActions
-    @IBAction func CancelSaveButtonPressed() {
-        print("LOL")
-        delegate?.shouldDismissCategoriesView(categoriesString)
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        checkMarkSavedCategories()
     }
     //MARK: Functions
     func setup() {
-        saveCancelButton.setTitleColor(UIColor.redColor(), forState: .Normal)
         automaticallyAdjustsScrollViewInsets = false
+    }
+    func setupNavigation() {
+        let saveItem = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(saveCategory))
+        navigationItem.title = "Category"
+        navigationItem.rightBarButtonItem = saveItem
+
+    }
+    func saveCategory() {
+        delegate?.shouldDismissCategoriesView(categoriesString)
     }
     func setupTableView() {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.allowsMultipleSelection = true
     }
-    
+    func checkMarkSavedCategories() {
+        for category in savedCategory {
+            print(category)
+            for index in 0..<categories.count {
+                let rowToSelect:IndexPath = IndexPath(row: index, section: 0)
+                let myCell = tableView.cellForRow(at: rowToSelect)
+                print(myCell?.textLabel?.text)
+                if let myCategory = myCell?.textLabel?.text {
+                    if myCategory == category {
+                        myCell?.accessoryType = .checkmark
+                        categoriesString.append(myCategory)
+                    }
+                }
+            }
+        }
+//        days.removeAll()
+//        for index in 0..<daysString.count {
+//            days.append(index) //add selected days to the array
+//            let rowToSelect:NSIndexPath = NSIndexPath(forRow: index, inSection: 0)
+//            //add checkmark next to selected row
+//            tableView.cellForRowAtIndexPath(rowToSelect)?.accessoryType = .Checkmark
+//        }
+//        allSelected = true
+//        sender.setTitle("Deselect All Days", forState: .Normal)
+    }
     //MARK: TableView Delegate functions
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return categories.count
     }
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        if let myCell = tableView.dequeueReusableCellWithIdentifier(CellID) {
-            myCell.selectionStyle = .None
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if let myCell = tableView.dequeueReusableCell(withIdentifier: CellID) {
+            myCell.selectionStyle = .none
             myCell.textLabel?.text = categories[indexPath.row].rawValue
             return myCell
         }else {
-            let myCell = UITableViewCell(style: .Default, reuseIdentifier: CellID)
-            myCell.selectionStyle = .None
+            let myCell = UITableViewCell(style: .default, reuseIdentifier: CellID)
+            myCell.selectionStyle = .none
             myCell.textLabel?.text = categories[indexPath.row].rawValue
             return myCell
         }
     }
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         //add checkmark next to selected row
-        tableView.cellForRowAtIndexPath(indexPath)?.accessoryType = .Checkmark
-        categoriesString.append(categories[indexPath.row].rawValue)
-        print(categoriesString)
-        if categoriesString.count != 0 {
-            saveCancelButton.setTitle("Save", forState: .Normal)
+        if tableView.cellForRow(at: indexPath)?.accessoryType != .checkmark {
+            print("checked")
+            tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark
+            categoriesString.append(categories[indexPath.row].rawValue)
+            print(categoriesString)
+           
+        }else {
+            tableView.cellForRow(at: indexPath)?.accessoryType = .none
+            tableView.cellForRow(at: indexPath)?.isSelected = false
+            categoriesString.removeObject(categories[indexPath.row].rawValue)
         }
+        
     }
-    func tableView(tableView: UITableView, didDeselectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
         //removing checkmark next to selected row
-        tableView.cellForRowAtIndexPath(indexPath)?.accessoryType = .None
+        tableView.cellForRow(at: indexPath)?.accessoryType = .none
         categoriesString.removeObject(categories[indexPath.row].rawValue)
         print(categoriesString)
-        if categoriesString.count == 0 {
-            saveCancelButton.setTitle("Cancel", forState: .Normal)
-        }
     }
     
 }

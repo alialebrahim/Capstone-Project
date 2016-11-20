@@ -33,25 +33,25 @@ class RequestLogVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         tableView.delegate = self
         tableView.dataSource = self
         let nibFile = UINib(nibName: "seekerLogCell", bundle: nil)
-        tableView.registerNib(nibFile, forCellReuseIdentifier: CellID)
+        tableView.register(nibFile, forCellReuseIdentifier: CellID)
         tableView.rowHeight = 200
     }
     func setupNavigationBar() {
         navigationItem.title = "Request Log"
     }
     func submitPublicService() {
-        performSegueWithIdentifier("SubmitPublicService", sender: nil)
+        performSegue(withIdentifier: "SubmitPublicService", sender: nil)
     }
     
     
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return data.count
     }
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(CellID)
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: CellID)
         return cell!
     }
     /*

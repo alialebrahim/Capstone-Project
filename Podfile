@@ -1,17 +1,16 @@
 # Uncomment this line to define a global platform for your project
 
 source 'https://github.com/CocoaPods/Specs.git'
-platform :ios, '9.0'
 
 use_frameworks!
 
 target 'Capstone-Project' do
   
-  pod 'Alamofire', '~> 3.4' #there is swift3 support
-  pod 'SwiftyJSON', :git => 'https://github.com/SwiftyJSON/SwiftyJSON.git'
-  pod "TextFieldEffects" # there is swift3 support
-  pod 'Cosmos', '~> 1.2' #there is swift3 support
-  pod 'RAMAnimatedTabBarController'
+  pod 'Alamofire', '~> 4.0'
+  pod 'SwiftyJSON', '3.0.0'
+  pod "TextFieldEffects" 
+  pod 'Cosmos', '~> 7.0'
+  pod 'RAMAnimatedTabBarController', "~> 2.0.13" 
   pod 'NVActivityIndicatorView'
   
 end

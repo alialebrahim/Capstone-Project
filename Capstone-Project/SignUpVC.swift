@@ -25,13 +25,13 @@ class SignUpVC: UIViewController, UIImagePickerControllerDelegate, UINavigationC
     @IBOutlet weak var contentViewHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var seekerProviderSegmentedControl: UISegmentedControl!
     @IBOutlet weak var registerButton: SubmitButton!
+
     // MARK: Variables
-    //let imagePicker = UIImagePickerController()
     var userCountry = ""
     var errorButtons = [String: ErrorButton]()
     var userType: String!
     var didChoosePicture = false
-    let defaults = NSUserDefaults.standardUserDefaults()
+    let defaults = UserDefaults.standard
     var activity: NVActivityIndicatorView! = nil
     // MARK: ViewController life cycle
     override func viewDidLoad() {
@@ -44,72 +44,76 @@ class SignUpVC: UIViewController, UIImagePickerControllerDelegate, UINavigationC
         passwordTextfield.delegate = self
         userNameTextField.delegate = self
     }
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         //observer to notify the view when the keyboard appears or disappear.
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIKeyboardWillChangeFrameNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIKeyboardWillHideNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: NSNotification.Name.UIKeyboardWillChangeFrame, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        navigationController?.setNavigationBarHidden(false, animated: false)
     }
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         createErrorButtons()
         adjustContentViewHeight()
     }
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        NSNotificationCenter.defaultCenter().removeObserver(self)
+        NotificationCenter.default.removeObserver(self)
+        navigationController?.setNavigationBarHidden(true, animated: false)
     }
     //MARK: IBActions
-    
-    @IBAction func profileImageButtonPressed(sender: AnyObject) {
-        //presentViewController(imagePicker, animated: true, completion: nil)
-        let alert = UIAlertController(title: nil, message: "Choose option", preferredStyle: .ActionSheet)
-        let cameraAction = UIAlertAction(title: "Camera", style: .Default) { (UIAlertAction) in
+    @IBAction func profileImageButtonPressed(_ sender: AnyObject) {
+        let alert = UIAlertController(title: nil, message: "Choose option", preferredStyle: .actionSheet)
+        let cameraAction = UIAlertAction(title: "Camera", style: .default) { (UIAlertAction) in
             
-            if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera) {
+            if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.camera) {
                 let imagePicker = UIImagePickerController()
                 imagePicker.delegate = self
-                imagePicker.sourceType = UIImagePickerControllerSourceType.Camera;
+                imagePicker.sourceType = UIImagePickerControllerSourceType.camera;
                 imagePicker.allowsEditing = false
-                self.presentViewController(imagePicker, animated: true, completion: nil)
+                self.present(imagePicker, animated: true, completion: nil)
             }else {
+                //TODO: alert
                 print("camera not available")
             }
         }
-        let photoAction = UIAlertAction(title: "Choose Photo", style: .Default) { (UIAlertAction) in
+        let photoAction = UIAlertAction(title: "Choose Photo", style: .default) { (UIAlertAction) in
             let imagePicker = UIImagePickerController()
             imagePicker.delegate = self
-            self.presentViewController(imagePicker, animated: true, completion: nil)
-            
-            
+            self.present(imagePicker, animated: true, completion: nil)
         }
-        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         
         alert.addAction(cameraAction)
         alert.addAction(photoAction)
         alert.addAction(cancelAction)
         
-        presentViewController(alert, animated: true, completion: nil)
+        present(alert, animated: true, completion: nil)
 
         
     }
-    @IBAction func seekerProviderSegmentedControlAction(sender: AnyObject) {
-        let segmentedControl = sender as! UISegmentedControl
-        if segmentedControl.selectedSegmentIndex == 0 {
+    @IBAction func seekerProviderSegmentedControlAction(_ sender: AnyObject) {
+        if let segmentedControl = sender as? UISegmentedControl {
+            if segmentedControl.selectedSegmentIndex == 0 {
             userType = "seeker"
-        }else {
-            userType = "provider"
+            }else {
+                userType = "provider"
+            }
         }
     }
     
-    @IBAction func registerButtonPresser(sender: AnyObject) {
+    @IBAction func registerButtonPresser(_ sender: AnyObject) {
         if checkRequiredFields() {
             if validateInput() {
-                registerButton.startLoadingAnimation()
-                //check internet connection
-                signupUser(userNameTextField.text!, password: passwordTextfield.text!)
-                print("did choose image : \(didChoosePicture)")
-                print("user type : \(userType)")
+                if Reachability.isConnectedToNetwork() {
+                    registerButton.startLoadingAnimation()
+                    signupUser(userNameTextField.text!, password: passwordTextfield.text!)
+                    print("did choose image : \(didChoosePicture)")
+                    print("user type : \(userType)")
+                }else {
+                    self.alertWithMessage("check your internet connection!")
+                }
+                
             }
         }
     }
@@ -122,21 +126,21 @@ class SignUpVC: UIViewController, UIImagePickerControllerDelegate, UINavigationC
         from invalid state (red text, invalid placeholder, and visible error button) to normal
         state (black text, normal placeholder, invisible error button)
      */
-    func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
 
         switch textField.placeholder! {
             case "Invalid email":
                 textField.placeholder = "Email"
-                textField.textColor = UIColor.blackColor()
-                errorButtons["email"]!.hidden = !(errorButtons["email"]!.hidden)
+                textField.textColor = UIColor.black
+                errorButtons["email"]!.isHidden = !(errorButtons["email"]!.isHidden)
             case "Invalid password":
                 textField.placeholder = "Password"
-                textField.textColor = UIColor.blackColor()
-                errorButtons["password"]!.hidden = !(errorButtons["password"]!.hidden)
+                textField.textColor = UIColor.black
+                errorButtons["password"]!.isHidden = !(errorButtons["password"]!.isHidden)
             case "Invalid username":
                 textField.placeholder = "Username"
-                textField.textColor = UIColor.blackColor()
-                errorButtons["username"]!.hidden = !(errorButtons["username"]!.hidden)
+                textField.textColor = UIColor.black
+                errorButtons["username"]!.isHidden = !(errorButtons["username"]!.isHidden)
         default:
             break
         }
@@ -145,49 +149,49 @@ class SignUpVC: UIViewController, UIImagePickerControllerDelegate, UINavigationC
     // MARK: Image picker controller delegate function.
     func selectProfileImage() {
         //presentViewController(imagePicker, animated: true, completion: nil)
-        let alert = UIAlertController(title: nil, message: "Choose option", preferredStyle: .ActionSheet)
-        let cameraAction = UIAlertAction(title: "Camera", style: .Default) { (UIAlertAction) in
+        let alert = UIAlertController(title: nil, message: "Choose option", preferredStyle: .actionSheet)
+        let cameraAction = UIAlertAction(title: "Camera", style: .default) { (UIAlertAction) in
             
-            if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera) {
+            if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.camera) {
                 let imagePicker = UIImagePickerController()
                 imagePicker.delegate = self
-                imagePicker.sourceType = UIImagePickerControllerSourceType.Camera;
+                imagePicker.sourceType = UIImagePickerControllerSourceType.camera;
                 imagePicker.allowsEditing = false
-                self.presentViewController(imagePicker, animated: true, completion: nil)
+                self.present(imagePicker, animated: true, completion: nil)
             }else {
                 print("camera not available")
             }
         }
-        let photoAction = UIAlertAction(title: "Choose Photo", style: .Default) { (UIAlertAction) in
+        let photoAction = UIAlertAction(title: "Choose Photo", style: .default) { (UIAlertAction) in
             let imagePicker = UIImagePickerController()
             imagePicker.delegate = self
-            self.presentViewController(imagePicker, animated: true, completion: nil)
+            self.present(imagePicker, animated: true, completion: nil)
             
             
         }
-        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         
         alert.addAction(cameraAction)
         alert.addAction(photoAction)
         alert.addAction(cancelAction)
         
-        presentViewController(alert, animated: true, completion: nil)
+        present(alert, animated: true, completion: nil)
     }
-    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         //grabing the selected image
         if let pickedImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
             didChoosePicture = true
-            profileImageButton.hidden = true
-            //profileImage.contentMode = .ScaleAspectFill
+            profileImageButton.isHidden = true
+            profileImage.contentMode = .scaleAspectFill
             profileImage.image = pickedImage
             //centerImageViewOnFace(profileImage)
         }
         
-        dismissViewControllerAnimated(true, completion: nil)
+        dismiss(animated: true, completion: nil)
     }
     
-    func imagePickerControllerDidCancel(picker: UIImagePickerController) {
-        dismissViewControllerAnimated(true, completion: nil)
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        dismiss(animated: true, completion: nil)
     }
     
     func dismissKeyboard() {
@@ -222,7 +226,7 @@ class SignUpVC: UIViewController, UIImagePickerControllerDelegate, UINavigationC
     func validateInput() -> Bool {
         dismissKeyboard()
         var validated = true
-        guard let /*email = emailTextfield.text,*/ password = passwordTextfield.text, username = userNameTextField.text else{
+        guard let /*email = emailTextfield.text,*/ password = passwordTextfield.text, let username = userNameTextField.text else{
             return false
         }
         /*
@@ -240,14 +244,14 @@ class SignUpVC: UIViewController, UIImagePickerControllerDelegate, UINavigationC
         if !username.isValidUsername() {
             validated = validated && false
             userNameTextField.placeholder = "Invalid username"
-            userNameTextField.textColor = UIColor.redColor()
-            errorButtons["username"]!.hidden = false
+            userNameTextField.textColor = UIColor.red
+            errorButtons["username"]!.isHidden = false
         }
         if !password.isValidPassword() {
             validated = validated && false
             passwordTextfield.placeholder = "Invalid password"
-            passwordTextfield.textColor = UIColor.redColor()
-            errorButtons["password"]!.hidden = false
+            passwordTextfield.textColor = UIColor.red
+            errorButtons["password"]!.isHidden = false
         }
         return validated
     }
@@ -273,46 +277,46 @@ class SignUpVC: UIViewController, UIImagePickerControllerDelegate, UINavigationC
         setupErrorButton(usernameErrorButton)
         errorButtons["username"] = usernameErrorButton
     }
-    func setupErrorButton(button: UIButton) {
-        button.addTarget(self, action: #selector(errorButtonPressed(_:)), forControlEvents: .TouchUpInside)
+    func setupErrorButton(_ button: UIButton) {
+        button.addTarget(self, action: #selector(errorButtonPressed(_:)), for: .touchUpInside)
         contentView.addSubview(button)
-        contentView.bringSubviewToFront(button)
+        contentView.bringSubview(toFront: button)
     }
     //displays an alert that displays the error message.
-    func errorButtonPressed(button: ErrorButton) {
+    func errorButtonPressed(_ button: ErrorButton) {
         dismissKeyboard()
         let message = button.errorMessage
         let _ = SCLAlertView().showError("OOPS", subTitle: message)
     }
     func detectUserCountry() {
-        let locale = NSLocale.currentLocale()
-        if let country = locale.objectForKey(NSLocaleCountryCode) as? String {
+        let locale = Locale.current
+        if let country = (locale as NSLocale).object(forKey: NSLocale.Key.countryCode) as? String {
             userCountry = country
         }
         print(userCountry)
     }
-    func keyboardWillShow(notification: NSNotification) {
+    func keyboardWillShow(_ notification: Notification) {
         //modify the scrollview when the keyboard appears.
         var userInfo = notification.userInfo!
-        let keyboardFrame = (userInfo[UIKeyboardFrameBeginUserInfoKey] as! NSValue).CGRectValue()
+        let keyboardFrame = (userInfo[UIKeyboardFrameBeginUserInfoKey] as! NSValue).cgRectValue
         var contentInset = scrollView.contentInset
         contentInset.bottom = keyboardFrame.size.height
         scrollView.contentInset = contentInset
         scrollView.contentInset.top = 0
 
     }
-    func keyboardWillHide(notification: NSNotification) {
+    func keyboardWillHide(_ notification: Notification) {
         //return the scrollview to its original position when the keyboard disappear
-        let contentInset:UIEdgeInsets = UIEdgeInsetsZero
+        let contentInset:UIEdgeInsets = UIEdgeInsets.zero
         self.scrollView.contentInset = contentInset
     }
 
     
     func adjustContentViewHeight() {
         
-        var contentRect = CGRectZero;
+        var contentRect = CGRect.zero;
         for view in self.contentView.subviews {
-            contentRect = CGRectUnion(contentRect, view.frame)
+            contentRect = contentRect.union(view.frame)
         }
         if contentRect.size.height > contentViewHeightConstraint.constant {
             contentViewHeightConstraint.constant = contentRect.size.height + 20
@@ -326,12 +330,13 @@ class SignUpVC: UIViewController, UIImagePickerControllerDelegate, UINavigationC
         /*
          *setting up view
          */
-        let colors = [UIColor(hex: 0xB39DDB), UIColor(hex: 0x7E57C2)]
-        self.view.setGradientBackground(colors)
-        self.view.bringSubviewToFront(scrollView)
-        self.view.bringSubviewToFront(contentView)
+        //let colors = [UIColor(hex: 0xB39DDB), UIColor(hex: 0x7E57C2)]
+        //self.view.setGradientBackground(colors)
+        self.view.backgroundColor = UIColor.white
+        self.view.bringSubview(toFront: scrollView)
+        self.view.bringSubview(toFront: contentView)
         
-        contentView.backgroundColor = UIColor.clearColor()
+        contentView.backgroundColor = UIColor.clear
         /*
          tap gesture on an image is used when the user press on the image
          an image picker will present for the use to choose his profile
@@ -350,71 +355,77 @@ class SignUpVC: UIViewController, UIImagePickerControllerDelegate, UINavigationC
         *
         *setup profile image view
         */
-        profileImage.backgroundColor = UIColor.whiteColor().colorWithAlphaComponent(0.5)
-         profileImage.addBorderWith(color: UIColor.whiteColor().colorWithAlphaComponent(0.7), borderWidth: 4)
+        profileImage.backgroundColor = UIColor.white.withAlphaComponent(0.5)
+         profileImage.addBorderWith(color: UIColor(hex: 0x404040), borderWidth: 4)
         
         /*
          *
          *setup select profile image button background image
          */
         let origImage = profileImageButton.imageView?.image!
-        let tintedImage = origImage!.imageWithRenderingMode(.AlwaysTemplate)
-        profileImageButton.setImage(tintedImage, forState: .Normal)
-        profileImageButton.tintColor = UIColor.whiteColor().colorWithAlphaComponent(0.5)
-        profileImageButton.contentMode = .ScaleAspectFit
+        let tintedImage = origImage!.withRenderingMode(.alwaysTemplate)
+        profileImageButton.setImage(tintedImage, for: UIControlState())
+        profileImageButton.tintColor = UIColor(hex: 0x404040)
+        profileImageButton.contentMode = .scaleAspectFit
         
         /*
          *
          *setup textfields
          */
-        userNameTextField.textColor = UIColor.whiteColor().colorWithAlphaComponent(0.7)
-        passwordTextfield.secureTextEntry = true
-        passwordTextfield.textColor = UIColor.whiteColor().colorWithAlphaComponent(0.7)
+//        userNameTextField.textColor = UIColor.whiteColor().colorWithAlphaComponent(0.7)
+        passwordTextfield.isSecureTextEntry = true
+//        passwordTextfield.textColor = UIColor.whiteColor().colorWithAlphaComponent(0.7)
         //emailTextfield.becomeFirstResponder()
         //emailTextfield.textColor = UIColor.whiteColor().colorWithAlphaComponent(0.7)
-        scrollView.userInteractionEnabled = true
+        scrollView.isUserInteractionEnabled = true
         
         /*
          *
          *setup Segmented Control
          */
         let segAttributes: NSDictionary = [
-            NSForegroundColorAttributeName: UIColor(hex: 0x7E57C2)
+            
+            //TODO: gray
+            NSForegroundColorAttributeName: UIColor.white
         ]
         
-        seekerProviderSegmentedControl.setTitleTextAttributes(segAttributes as [NSObject : AnyObject], forState: UIControlState.Selected)
+        seekerProviderSegmentedControl.setTitleTextAttributes(segAttributes as! [AnyHashable: Any], for: UIControlState.selected)
         seekerProviderSegmentedControl.selectedSegmentIndex = 0
         userType = "seeker"
-        seekerProviderSegmentedControl.tintColor = UIColor.whiteColor().colorWithAlphaComponent(0.7)
+        seekerProviderSegmentedControl.tintColor = UIColor(hex: 0xa85783)
         
         /*
          *
          *setup register Button
          */
-        registerButton.setTitle("Register", forState: .Normal)
+        registerButton.setTitle("Register", for: UIControlState())
         registerButton.cachedTitle = "Register"
-        registerButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-        registerButton.backgroundColor = UIColor.whiteColor().colorWithAlphaComponent(0.5)
+        registerButton.setTitleColor(UIColor.white, for: UIControlState())
+        registerButton.backgroundColor = UIColor(hex: 0xa85783)
         registerButton.delegate = self
         registerButton.layer.cornerRadius = self.registerButton.frame.height / 2
         
+        navigationItem.title = "Register"
+        self.navigationController?.view.backgroundColor = UIColor.white
+        
     }
     //MARK: Submit Button Delegate function
-    func didAnimate(frame: CGRect) {
-        activity = NVActivityIndicatorView(frame: frame, type: .BallClipRotateMultiple, color: UIColor.whiteColor())
+    func didAnimate(_ frame: CGRect) {
+        activity = NVActivityIndicatorView(frame: frame, type: .ballClipRotateMultiple, color: UIColor.white)
         contentView.addSubview(activity)
-        contentView.bringSubviewToFront(activity)
+        contentView.bringSubview(toFront: activity)
         activity.startAnimation()
     }
+    //TODO: remove this
     func removeAnimation() {
         print("should stop animation")
     }
-    override func preferredStatusBarStyle() -> UIStatusBarStyle {
-        return .LightContent
+    override var preferredStatusBarStyle : UIStatusBarStyle {
+        return .lightContent
     }
-    func storeToken(token: String) {
+    func storeToken(_ token: String) {
         print(token)
-        defaults.setObject(token, forKey: "userToken")
+        defaults.set(token, forKey: "userToken")
         
         //this is how to get the token back.
         /*****************************************************
@@ -423,15 +434,16 @@ class SignUpVC: UIViewController, UIImagePickerControllerDelegate, UINavigationC
          }
          *****************************************************/
     }
-    func alertWithMessage(message: String) {
-        let alertController = UIAlertController(title: "Error", message: message, preferredStyle: .Alert)
-        let okAction = UIAlertAction(title: "Ok", style: .Default, handler: nil)
+    func alertWithMessage(_ message: String) {
+        let alertController = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "Ok", style: .default, handler: nil)
         alertController.addAction(okAction)
         
-        presentViewController(alertController, animated: true, completion: nil)
+        present(alertController, animated: true, completion: nil)
     }
-    //MARK: BACKEND REQUEST FUNCTIONS
-    func signupUser(username: String, password: String) {
+    //MARK: BACKEND
+    //TODO: Check response code and apply appropriate message
+    func signupUser(_ username: String, password: String) {
         print("in sign up user test ---->  user type is : \(userType)")
         let URL = "\(AppDelegate.URL)/signup/"
         let parameters = [
@@ -441,41 +453,44 @@ class SignUpVC: UIViewController, UIImagePickerControllerDelegate, UINavigationC
         ]
         print("username: \(username)")
         print("password: \(password)")
-        Alamofire.request(.POST, URL, parameters: parameters, encoding: .JSON).responseJSON { response in
+        Alamofire.request(.POST, URL, parameters: parameters, encoding: .json).responseJSON { response in
             print(response.request)  // original URL request
             print(response.response) // URL response
             print(response.data)     // server data
             if let requestData = response.data {
-                if let dataString = String(data: requestData, encoding: NSUTF8StringEncoding) {
+                if let dataString = String(data: requestData, encoding: String.Encoding.utf8) {
                     print(dataString)
                 }
             }
             print(response.result)   // result of response serialization
-            if response.response?.statusCode == 201 {
-                if let json = response.result.value {
-                    print("my json")
-                    print(json)
-                    let myJson = JSON(json)
-                    if let userID = myJson["userid"].string {
-                        print("user id")
-                        print(userID)
+            if let myResponse = response.response {
+                if myResponse.statusCode == 201 {
+                    if let json = response.result.value {
+                        print("my json")
+                        print(json)
+                        let myJson = JSON(json)
+                        if let userID = myJson["userid"].string {
+                            print("user id")
+                            print(userID)
+                        }
                     }
+                    if let mydata = String(data: response.data!, encoding: String.Encoding.utf8) {
+                        print(mydata)
+                    }
+                    //perform login test to get token
+                    self.loginTest(username, mypassword: password)
+                }else {
+                    print("not successful")
+                    self.registerButton.returnToOriginalState()
+                    self.activity.removeFromSuperview()
+                    self.alertWithMessage("error in signing up")
                 }
-                if let mydata = String(data: response.data!, encoding: NSUTF8StringEncoding) {
-                    print(mydata)
-                }
-                //perform login test to get token
-                self.loginTest(username, mypassword: password)
             }else {
-                print("not successful")
-                self.registerButton.returnToOriginalState()
-                self.activity.removeFromSuperview()
-                self.alertWithMessage("error in signing up")
+                self.alertWithMessage("Server error\nPlease try again.")
             }
-            
         }
     }
-    func loginTest(myusername: String, mypassword: String) {
+    func loginTest(_ myusername: String, mypassword: String) {
         let URL = "\(AppDelegate.URL)/login/"
         let parameters = [
             "username": myusername,
@@ -485,82 +500,93 @@ class SignUpVC: UIViewController, UIImagePickerControllerDelegate, UINavigationC
         print("username -> \"\(parameters["username"])\"")
         print("password -> \"\(parameters["password"])\"")
         
-        Alamofire.request(.POST, URL, parameters: parameters, encoding: .JSON).validate().responseJSON {
+        Alamofire.request(.POST, URL, parameters: parameters, encoding: .json).validate().responseJSON {
             (response) in
-            if (response.response!.statusCode) == 200 {
-                if let json = response.result.value {
-                    print("my json")
-                    print(json)
-                    let myJson = JSON(json)
-                    if let myToken = myJson["token"].string {
-                        print(myToken)
-                        self.storeToken(myToken)
-                        self.setProfile()
+            if let myResponse = response.response {
+                if (myResponse.statusCode) == 200 {
+                    if let json = response.result.value {
+                        print("my json")
+                        print(json)
+                        let myJson = JSON(json)
+                        if let myToken = myJson["token"].string {
+                            print(myToken)
+                            self.storeToken(myToken)
+                            self.setProfile()
+                        }
                     }
+                }else {
+                    print("did not login")
+                    self.registerButton.returnToOriginalState()
+                    self.activity.removeFromSuperview()
+                    self.alertWithMessage("error in login in")
                 }
-                
-                
+
             }else {
-                print("did not login")
-                self.registerButton.returnToOriginalState()
-                self.activity.removeFromSuperview()
-                self.alertWithMessage("error in login in")
+                self.alertWithMessage("Server error\nPlease try again.")
             }
-            
+                        
         }
     }
     //will set country to make it part of the sign up
     func setProfile() {
         let URL = "\(AppDelegate.URL)/profile/"
         print(userCountry)
-        if let myToken = defaults.objectForKey("userToken") as? String{
+        if let myToken = defaults.object(forKey: "userToken") as? String{
             print(myToken)
             let headers = [
                 "Authorization": myToken
             ]
             //TODO: Add profile image if available
-            let parameters = [
-                "country": userCountry
-            ]
+            var parameters = [String: AnyObject]()
+            if didChoosePicture {
+                //TODO: add image parameter here
+                parameters = [
+                    "country": userCountry as AnyObject
+                ]
+            }else {
+                parameters = [
+                    "country": userCountry as AnyObject
+                ]
+            }
             
-            Alamofire.request(.PUT, URL, parameters: parameters, headers: headers, encoding: .JSON).responseJSON { response in
+            
+            Alamofire.request(.PUT, URL, parameters: parameters, headers: headers, encoding: .json).responseJSON { response in
                 print(response.request)  // original URL request
                 print(response.response) // URL response
                 print(response.data)     // server data
                 print(response.result)   // result of response serialization
                 
                 if let requestData = response.data {
-                    if let dataString = String(data: requestData, encoding: NSUTF8StringEncoding) {
+                    if let dataString = String(data: requestData, encoding: String.Encoding.utf8) {
                         print("data String : \(dataString)")
                     }
                 }
-                
-                if (response.response!.statusCode) == 200 {
-                    if let json = response.result.value {
-                        print("my json")
-                        print(json)
-                        let myJson = JSON(json)
-                        if let myType = myJson["usertype"].string {
-                            print("MY TYPE IS : \(myType)")
-                            if myType == "seeker" {
-                                self.performSegueWithIdentifier("SeekerFeedVC", sender: nil)
-                            }else if myType == "provider" {
-                                self.performSegueWithIdentifier("ProfileVC", sender: nil)
+                if let myResponse = response.response {
+                    if (myResponse.statusCode) == 200 {
+                        if let json = response.result.value {
+                            print("my json")
+                            print(json)
+                            let myJson = JSON(json)
+                            if let myType = myJson["usertype"].string {
+                                print("MY TYPE IS : \(myType)")
+                                if myType == "seeker" {
+                                    self.performSegue(withIdentifier: "SeekerFeedVC", sender: nil)
+                                }else if myType == "provider" {
+                                    self.performSegue(withIdentifier: "ProfileVC", sender: nil)
+                                }
                             }
                         }
+                    }else {
+                        //did not login
+                        print("did not set profile")
+                        self.registerButton.returnToOriginalState()
+                        self.activity.removeFromSuperview()
+                        self.alertWithMessage("could not set up profile")
                     }
                 }else {
-                    //did not login
-                    print("did not set profile")
-                    self.registerButton.returnToOriginalState()
-                    self.activity.removeFromSuperview()
-                    self.alertWithMessage("could not set up profile")
+                    self.alertWithMessage("Server error\nPlease try again.")
                 }
-                
-                
             }
         }
-    }
-
-    
+    }    
 }

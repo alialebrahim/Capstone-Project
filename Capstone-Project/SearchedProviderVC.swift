@@ -26,37 +26,37 @@ class SearchedProviderVC: UIViewController, ProfileDelegate, OfferedServicesDele
     //MARK: Functions
     func setup() {
         automaticallyAdjustsScrollViewInsets = false
-        view.userInteractionEnabled = true
+        view.isUserInteractionEnabled = true
         segmentedControl.segmentedControlItems = ["Provider","Offered Services"]
         segmentedControl.selectedIndex = 0
         displayCurrentTab(segmentedControl.selectedIndex)
-        segmentedControl.addTarget(self, action: #selector(segmentedControlValueChanged), forControlEvents: .ValueChanged)
+        segmentedControl.addTarget(self, action: #selector(segmentedControlValueChanged), for: .valueChanged)
     }
     func segmentedControlValueChanged() {
         currentViewController?.view.removeFromSuperview()
         currentViewController?.removeFromParentViewController()
         displayCurrentTab(segmentedControl.selectedIndex)
     }
-    func viewControllerForSelectedIndex(index: Int) -> UIViewController? {
+    func viewControllerForSelectedIndex(_ index: Int) -> UIViewController? {
         let storyboard = UIStoryboard(name: "Provider", bundle: nil)
         switch index {
             case 0:
-                let vc = storyboard.instantiateViewControllerWithIdentifier("ProviderProfile") as! ProfileVC
+                let vc = storyboard.instantiateViewController(withIdentifier: "ProviderProfile") as! ProfileVC
                 vc.delegate = self
                 return vc
             case 1:
-                let vc = storyboard.instantiateViewControllerWithIdentifier("OfferedServices") as! OfferedServicesVC
+                let vc = storyboard.instantiateViewController(withIdentifier: "OfferedServices") as! OfferedServicesVC
                 vc.delegate = self
                 return vc
             default: break
         }
         return nil
     }
-    func displayCurrentTab(tabIndex: Int) {
+    func displayCurrentTab(_ tabIndex: Int) {
         
         if let vc = viewControllerForSelectedIndex(tabIndex) {
             addChildViewController(vc)
-            didMoveToParentViewController(self)
+            didMove(toParentViewController: self)
             vc.view.frame = contentView.bounds
             contentView.addSubview(vc.view)
             currentViewController = vc

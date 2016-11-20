@@ -22,7 +22,7 @@ class OfferedServiceDetails: UIViewController, iCarouselDelegate, iCarouselDataS
     @IBOutlet weak var containerViewHeight: NSLayoutConstraint!
     var serviceImages = [UIImage]()
     var myService: JSON?
-    let defaults = NSUserDefaults.standardUserDefaults()
+    let defaults = UserDefaults.standard
     /*
      
      "serviceimage_set" : [
@@ -50,12 +50,12 @@ class OfferedServiceDetails: UIViewController, iCarouselDelegate, iCarouselDataS
         
         // Do any additional setup after loading the view.
     }
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         adjustContentViewHeight()
         print("OFFERED SERVICE DETAIL: \(myService)")
     }
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         
     }
@@ -73,7 +73,7 @@ class OfferedServiceDetails: UIViewController, iCarouselDelegate, iCarouselDataS
         
         picturesView.delegate = self
         picturesView.dataSource = self
-        picturesView.type = .Linear
+        picturesView.type = .linear
         picturesView .reloadData()
         picturesView.clipsToBounds = true
         
@@ -89,15 +89,15 @@ class OfferedServiceDetails: UIViewController, iCarouselDelegate, iCarouselDataS
     }
     func adjustContentViewHeight() {
         print("im here")
-        var contentRect = CGRectZero
+        var contentRect = CGRect.zero
         for view in containerView.subviews {
-            contentRect = CGRectUnion(contentRect, view.frame)
+            contentRect = contentRect.union(view.frame)
         }
         containerViewHeight.constant = contentRect.size.height+20
     }
     //MARK: iCarousel Delegate function
     //MARK: iCarousel Delegate Function (for services images)
-    func numberOfItemsInCarousel(carousel: iCarousel) -> Int {
+    func numberOfItems(in carousel: iCarousel) -> Int {
         if let serviceDectionary = myService!["serviceimage_set"] as? [NSDictionary] {
             print("my list is not empty")
         }else {
@@ -105,27 +105,27 @@ class OfferedServiceDetails: UIViewController, iCarouselDelegate, iCarouselDataS
         }
         return 0
     }
-    func carousel(carousel: iCarousel, viewForItemAtIndex index: Int, reusingView view: UIView?) -> UIView {
+    func carousel(_ carousel: iCarousel, viewForItemAt index: Int, reusing view: UIView?) -> UIView {
         let tempView = UIImageView(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
-        tempView.contentMode = .ScaleAspectFill
+        tempView.contentMode = .scaleAspectFill
         tempView.clipsToBounds = true
         tempView.image = serviceImages[index]
         return tempView
     }
-    func carousel(carousel: iCarousel, valueForOption option: iCarouselOption, withDefault value: CGFloat) -> CGFloat {
-        if option == iCarouselOption.Spacing {
+    func carousel(_ carousel: iCarousel, valueFor option: iCarouselOption, withDefault value: CGFloat) -> CGFloat {
+        if option == iCarouselOption.spacing {
             return value*1.1
         }
         return value
     }
-    func carousel(carousel: iCarousel, didSelectItemAtIndex index: Int) {
-        performSegueWithIdentifier("ImagePreviewVC", sender: index)
+    func carousel(_ carousel: iCarousel, didSelectItemAt index: Int) {
+        performSegue(withIdentifier: "ImagePreviewVC", sender: index)
     }
-    @IBAction func SelectDayButtonPressed(sender: AnyObject) {
-        performSegueWithIdentifier("SelectDay", sender: nil)
+    @IBAction func SelectDayButtonPressed(_ sender: AnyObject) {
+        performSegue(withIdentifier: "SelectDay", sender: nil)
     }
-    @IBAction func selectTimeButtonPressed(sender: AnyObject) {
-        performSegueWithIdentifier("SelectTime", sender: nil)
+    @IBAction func selectTimeButtonPressed(_ sender: AnyObject) {
+        performSegue(withIdentifier: "SelectTime", sender: nil)
     }
     
     
@@ -138,10 +138,10 @@ class OfferedServiceDetails: UIViewController, iCarouselDelegate, iCarouselDataS
         // Pass the selected object to the new view controller.
     }
     */
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let myIndex = sender as? Int
         if segue.identifier == "ImagePreviewVC" {
-            if let vc = segue.destinationViewController as? ImagePreview {
+            if let vc = segue.destination as? ImagePreview {
                 if let index = myIndex {
                     vc.imageIndex = index
                     vc.image = serviceImages[index]
@@ -150,19 +150,21 @@ class OfferedServiceDetails: UIViewController, iCarouselDelegate, iCarouselDataS
             }
         }
     }
-    @IBAction func requestServiceAction(sender: AnyObject) {
+    @IBAction func requestServiceAction(_ sender: AnyObject) {
         print("will request this service")
         requestOfferedServiceWithPK(myService!["id"].int!)
     }
-    func requestOfferedServiceWithPK(pk: Int) {
-        let URL = "\(AppDelegate.URL)/request/\(pk)/"
-        if let myToken = defaults.objectForKey("userToken") as? String{
+    func requestOfferedServiceWithPK(_ pk: Int) {
+        let URL = "\(AppDelegate.URL)/request/"
+        if let myToken = defaults.object(forKey: "userToken") as? String{
             print(myToken)
             let headers = [
                 "Authorization": myToken
             ]
-            
-            Alamofire.request(.POST, URL, parameters: nil, headers: headers).responseJSON { response in
+            let parameters = [
+                "servicepk": pk
+            ]
+            Alamofire.request(.POST, URL, parameters: parameters, headers: headers).responseJSON { response in
                 
                 if response.response?.statusCode == 201 {
                     if let json = response.result.value {
@@ -172,11 +174,11 @@ class OfferedServiceDetails: UIViewController, iCarouselDelegate, iCarouselDataS
                         print(myJson)
                     }
                     
-                    if let mydata = String(data: response.data!, encoding: NSUTF8StringEncoding) {
+                    if let mydata = String(data: response.data!, encoding: String.Encoding.utf8) {
                         print("my data from getting profile request is \(mydata)")
                     }
                 }else {
-                    if let mydata = String(data: response.data!, encoding: NSUTF8StringEncoding) {
+                    if let mydata = String(data: response.data!, encoding: String.Encoding.utf8) {
                         print("my data from getting profile request is \(mydata)")
                     }
                 }

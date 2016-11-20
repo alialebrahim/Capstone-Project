@@ -3,6 +3,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
         <!--Image Preview-->
@@ -100,19 +101,19 @@
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Description" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gIh-yI-glz">
                                                 <rect key="frame" x="256" y="8" width="88" height="21"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Price" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wS5-gx-AQ9">
                                                 <rect key="frame" x="281" y="128" width="39" height="21"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="5 KWD" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eiC-XI-Sza">
                                                 <rect key="frame" x="273" y="157" width="54" height="21"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="icH-Nb-iJX">
@@ -138,7 +139,7 @@
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Pictures" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JBU-XX-QdX">
                                                 <rect key="frame" x="269" y="262" width="63" height="21"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0MG-f2-ynn" customClass="iCarousel">
@@ -228,10 +229,91 @@
                     <view key="view" contentMode="scaleToFill" id="YIT-lV-3E2">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="k0y-k5-KfY">
+                                <rect key="frame" x="50" y="214" width="500" height="200"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Choose Category" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PUK-0U-vSI">
+                                        <rect key="frame" x="172" y="30" width="157" height="24"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="20"/>
+                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oGE-u5-nem">
+                                        <rect key="frame" x="20" y="62" width="460" height="30"/>
+                                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="15"/>
+                                        <color key="tintColor" white="0.25" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                        <state key="normal" title="Categories  &gt;"/>
+                                        <connections>
+                                            <action selector="chooseCategoryButtonPressed:" destination="EIE-2a-9M5" eventType="touchUpInside" id="QQb-gn-VuD"/>
+                                        </connections>
+                                    </button>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Choose Rating" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cmX-h2-Ryi">
+                                        <rect key="frame" x="184" y="112" width="133" height="24"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="20"/>
+                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7d4-pT-R1H">
+                                        <rect key="frame" x="20" y="144" width="460" height="30"/>
+                                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="15"/>
+                                        <color key="tintColor" white="0.25" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                        <state key="normal" title="Ratings  &gt;">
+                                            <color key="titleColor" white="0.25" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="chooseRatingButtonPressed:" destination="EIE-2a-9M5" eventType="touchUpInside" id="ZtP-nY-bnn"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" red="0.6588235294" green="0.3411764706" blue="0.51372549020000002" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstItem="cmX-h2-Ryi" firstAttribute="top" secondItem="oGE-u5-nem" secondAttribute="bottom" constant="20" id="8ld-2Q-TJ4"/>
+                                    <constraint firstItem="7d4-pT-R1H" firstAttribute="leading" secondItem="k0y-k5-KfY" secondAttribute="leading" constant="20" id="Cdg-bq-sDe"/>
+                                    <constraint firstItem="7d4-pT-R1H" firstAttribute="top" secondItem="cmX-h2-Ryi" secondAttribute="bottom" constant="8" id="DLo-LJ-FMu"/>
+                                    <constraint firstItem="oGE-u5-nem" firstAttribute="centerX" secondItem="k0y-k5-KfY" secondAttribute="centerX" id="IzG-Cw-LFw"/>
+                                    <constraint firstItem="oGE-u5-nem" firstAttribute="leading" secondItem="k0y-k5-KfY" secondAttribute="leading" constant="20" id="Kt8-zJ-NLm"/>
+                                    <constraint firstItem="PUK-0U-vSI" firstAttribute="centerX" secondItem="k0y-k5-KfY" secondAttribute="centerX" id="Mab-1v-Emg"/>
+                                    <constraint firstAttribute="trailing" secondItem="7d4-pT-R1H" secondAttribute="trailing" constant="20" id="UnL-e0-IBX"/>
+                                    <constraint firstAttribute="height" constant="200" id="Vch-Qo-nkv"/>
+                                    <constraint firstItem="PUK-0U-vSI" firstAttribute="top" secondItem="k0y-k5-KfY" secondAttribute="top" constant="30" id="jEs-x3-MFC"/>
+                                    <constraint firstItem="cmX-h2-Ryi" firstAttribute="centerX" secondItem="k0y-k5-KfY" secondAttribute="centerX" id="oaQ-qC-SrI"/>
+                                    <constraint firstItem="oGE-u5-nem" firstAttribute="top" secondItem="PUK-0U-vSI" secondAttribute="bottom" constant="8" id="xgm-da-T48"/>
+                                </constraints>
+                            </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eUp-Lz-Amn">
+                                <rect key="frame" x="240" y="434" width="120" height="36"/>
+                                <color key="backgroundColor" red="0.6588235294" green="0.3411764706" blue="0.51372549020000002" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="120" id="qMB-lO-cbX"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="20"/>
+                                <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <state key="normal" title="Search">
+                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="searchButtonPressed:" destination="EIE-2a-9M5" eventType="touchUpInside" id="q4y-0p-4X6"/>
+                                </connections>
+                            </button>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="eUp-Lz-Amn" firstAttribute="centerX" secondItem="YIT-lV-3E2" secondAttribute="centerX" id="afi-jP-wT2"/>
+                            <constraint firstItem="eUp-Lz-Amn" firstAttribute="top" secondItem="k0y-k5-KfY" secondAttribute="bottom" constant="20" id="fPv-IQ-ZVo"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="k0y-k5-KfY" secondAttribute="trailing" constant="30" id="jge-c3-AER"/>
+                            <constraint firstItem="k0y-k5-KfY" firstAttribute="leading" secondItem="YIT-lV-3E2" secondAttribute="leadingMargin" constant="30" id="vak-t4-jad"/>
+                            <constraint firstItem="k0y-k5-KfY" firstAttribute="top" secondItem="f9h-7t-eVl" secondAttribute="bottom" constant="150" id="wNF-he-7Kt"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="KLj-yC-l6s"/>
                     <connections>
+                        <outlet property="chooseCategoryButton" destination="oGE-u5-nem" id="2Xt-hc-uH4"/>
+                        <outlet property="chooseRatingButton" destination="7d4-pT-R1H" id="Qmd-YK-jys"/>
+                        <outlet property="containerView" destination="k0y-k5-KfY" id="cTk-YW-52i"/>
+                        <outlet property="searchButton" destination="eUp-Lz-Amn" id="0kr-I2-Oif"/>
                         <segue destination="iB3-lV-1xw" kind="show" identifier="ChooseCategoriesVC" id="xST-6U-YNe"/>
                         <segue destination="e37-6k-uVq" kind="show" identifier="ChooseRatingVC" id="mhc-zE-noa"/>
                         <segue destination="FgI-z4-XIW" kind="show" identifier="ShowProviders" id="lsv-ha-u38"/>
@@ -506,7 +588,7 @@
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dBQ-7o-tLs">
                                                 <rect key="frame" x="8" y="8" width="34" height="21"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Title" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="1Bd-22-H3N">
@@ -520,25 +602,25 @@
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Category" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iwq-zI-g6M">
                                                 <rect key="frame" x="8" y="75" width="71" height="21"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Description" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5H6-ng-83v">
                                                 <rect key="frame" x="8" y="109" width="88" height="21"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Price" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ghP-1g-3eR">
                                                 <rect key="frame" x="0.0" y="-64" width="39" height="21"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Due to" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mPh-DG-ZM4">
                                                 <rect key="frame" x="8" y="179" width="51" height="21"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iLL-05-1aw">
@@ -650,10 +732,10 @@
                     <tabBarItem key="tabBarItem" title="Feed" image="Feed" id="Lj1-gk-qP8" customClass="RAMAnimatedTabBarItem" customModule="RAMAnimatedTabBarController">
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="color" keyPath="textColor">
-                                <color key="value" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="value" white="0.25" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                             </userDefinedRuntimeAttribute>
                             <userDefinedRuntimeAttribute type="color" keyPath="iconColor">
-                                <color key="value" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="value" white="0.25" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                             </userDefinedRuntimeAttribute>
                         </userDefinedRuntimeAttributes>
                         <connections>
@@ -671,21 +753,30 @@
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zrz-HD-els" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <customObject id="UsH-vG-m4e" customClass="RAMBounceAnimation" customModule="RAMAnimatedTabBarController"/>
+                <customObject id="UsH-vG-m4e" customClass="RAMBounceAnimation" customModule="RAMAnimatedTabBarController">
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="color" keyPath="textSelectedColor">
+                            <color key="value" red="0.6588235294" green="0.3411764706" blue="0.51372549020000002" alpha="1" colorSpace="calibratedRGB"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="color" keyPath="iconSelectedColor">
+                            <color key="value" red="0.6588235294" green="0.3411764706" blue="0.51372549020000002" alpha="1" colorSpace="calibratedRGB"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
+                </customObject>
             </objects>
             <point key="canvasLocation" x="190" y="135"/>
         </scene>
-        <!--test-->
+        <!--Search-->
         <scene sceneID="fgI-yU-vLl">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="jkB-G4-zUU" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="test" image="Feed" id="tew-j5-sdN" customClass="RAMAnimatedTabBarItem" customModule="RAMAnimatedTabBarController">
+                    <tabBarItem key="tabBarItem" title="Search" image="Feed" id="tew-j5-sdN" customClass="RAMAnimatedTabBarItem" customModule="RAMAnimatedTabBarController">
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="color" keyPath="textColor">
-                                <color key="value" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="value" white="0.25" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                             </userDefinedRuntimeAttribute>
                             <userDefinedRuntimeAttribute type="color" keyPath="iconColor">
-                                <color key="value" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="value" white="0.25" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                             </userDefinedRuntimeAttribute>
                         </userDefinedRuntimeAttributes>
                         <connections>
@@ -703,15 +794,32 @@
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lRK-FR-hmu" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <customObject id="dts-mN-wRr" customClass="RAMBounceAnimation" customModule="RAMAnimatedTabBarController"/>
+                <customObject id="dts-mN-wRr" customClass="RAMBounceAnimation" customModule="RAMAnimatedTabBarController">
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="color" keyPath="textSelectedColor">
+                            <color key="value" red="0.6588235294" green="0.3411764706" blue="0.51372549020000002" alpha="1" colorSpace="calibratedRGB"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="color" keyPath="iconSelectedColor">
+                            <color key="value" red="0.6588235294" green="0.3411764706" blue="0.51372549020000002" alpha="1" colorSpace="calibratedRGB"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
+                </customObject>
             </objects>
             <point key="canvasLocation" x="-588" y="907"/>
         </scene>
-        <!--Requests-->
+        <!--Request-->
         <scene sceneID="El7-vj-6iU">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="eXO-f0-vuW" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Requests" image="Services" id="HXl-b5-S1O" customClass="RAMAnimatedTabBarItem" customModule="RAMAnimatedTabBarController">
+                    <tabBarItem key="tabBarItem" title="Request" image="Services" id="HXl-b5-S1O" customClass="RAMAnimatedTabBarItem" customModule="RAMAnimatedTabBarController">
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="color" keyPath="textColor">
+                                <color key="value" white="0.25" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="color" keyPath="iconColor">
+                                <color key="value" white="0.25" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
                         <connections>
                             <outlet property="animation" destination="xab-lm-avK" id="Lpg-P2-ucS"/>
                         </connections>
@@ -727,7 +835,16 @@
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="utH-UQ-XeA" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <customObject id="xab-lm-avK" customClass="RAMBounceAnimation" customModule="RAMAnimatedTabBarController"/>
+                <customObject id="xab-lm-avK" customClass="RAMBounceAnimation" customModule="RAMAnimatedTabBarController">
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="color" keyPath="textSelectedColor">
+                            <color key="value" red="0.6588235294" green="0.3411764706" blue="0.51372549020000002" alpha="1" colorSpace="calibratedRGB"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="color" keyPath="iconSelectedColor">
+                            <color key="value" red="0.6588235294" green="0.3411764706" blue="0.51372549020000002" alpha="1" colorSpace="calibratedRGB"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
+                </customObject>
             </objects>
             <point key="canvasLocation" x="-588" y="2474"/>
         </scene>
@@ -737,6 +854,6 @@
         <image name="Services" width="30" height="30"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="VXL-zX-1Gc"/>
+        <segue reference="xST-6U-YNe"/>
     </inferredMetricsTieBreakers>
 </document>

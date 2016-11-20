@@ -9,6 +9,10 @@
 /* Begin PBXBuildFile section */
 		411879D41D6876BA00A23DD6 /* SubmitButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 411879D31D6876BA00A23DD6 /* SubmitButton.swift */; };
 		411879F81D6C3FBB00A23DD6 /* ProviderInfoTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 411879F71D6C3FB500A23DD6 /* ProviderInfoTVC.swift */; };
+		4121FF6A1DC5AAB60017C0FF /* offeredServiceModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4121FF691DC5AAB50017C0FF /* offeredServiceModel.swift */; };
+		41294A5B1DD5A2100045C557 /* PublicServiceModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41294A5A1DD5A2100045C557 /* PublicServiceModel.swift */; };
+		41294A5F1DD5B2C10045C557 /* Bid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41294A5E1DD5B2C00045C557 /* Bid.swift */; };
+		4132BE571DBB5C2100B1E4F1 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4132BE561DBB5C1F00B1E4F1 /* LoadingView.swift */; };
 		4136DB2A1D59C9AA0030A685 /* predefinedServiceCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4136DB221D59C9AA0030A685 /* predefinedServiceCell.xib */; };
 		4136DB2B1D59C9AA0030A685 /* WorkingOnServiceCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4136DB231D59C9AA0030A685 /* WorkingOnServiceCell.xib */; };
 		4136DB2C1D59C9AA0030A685 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4136DB241D59C9AA0030A685 /* Main.storyboard */; };
@@ -59,12 +63,15 @@
 		414777801D6393450097D34D /* ProviderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4147777F1D6393450097D34D /* ProviderCell.swift */; };
 		414777821D63936D0097D34D /* ProvidersSearchVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 414777811D63936D0097D34D /* ProvidersSearchVC.swift */; };
 		414777841D63938E0097D34D /* ProviderCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 414777831D63938E0097D34D /* ProviderCell.xib */; };
+		4164DC5E1DDEFB330011F1E6 /* profileModal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4164DC5D1DDEFB330011F1E6 /* profileModal.swift */; };
 		418CA4291D64A0B7007852F6 /* SearchedProviderVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 418CA4281D64A0B7007852F6 /* SearchedProviderVC.swift */; };
 		41A8A78C1D87F50D00F7E1AC /* PublicServiceCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 41A8A78B1D87F50D00F7E1AC /* PublicServiceCell.xib */; };
 		41A8A78E1D8800B800F7E1AC /* PublicServiceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41A8A78D1D8800B800F7E1AC /* PublicServiceCell.swift */; };
 		41ACDE111D86C87F00CA7438 /* Feed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41ACDE101D86C87F00CA7438 /* Feed.swift */; };
 		41ACDE131D86C8AB00CA7438 /* PublicServiceRequestVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41ACDE121D86C8AB00CA7438 /* PublicServiceRequestVC.swift */; };
 		41ACDE151D86C94A00CA7438 /* RequestLogVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41ACDE141D86C94A00CA7438 /* RequestLogVC.swift */; };
+		41B1DF451DD8FEFC00E5BF95 /* serviceWithBidCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 41B1DF441DD8FEFB00E5BF95 /* serviceWithBidCell.xib */; };
+		41B1DF471DD8FF8800E5BF95 /* serviceWithBidCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41B1DF461DD8FF8800E5BF95 /* serviceWithBidCell.swift */; };
 		41CCA2361D9CF366009E9FBE /* backendTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41CCA2351D9CF366009E9FBE /* backendTests.swift */; };
 		41EF4EAE1D8C63AF007F1772 /* seekerLogCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 41EF4EAD1D8C63AE007F1772 /* seekerLogCell.xib */; };
 		41EF4EB01D9021E0007F1772 /* OfferedServiceDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41EF4EAF1D9021E0007F1772 /* OfferedServiceDetails.swift */; };
@@ -79,6 +86,10 @@
 		26287226B2656FFFE3435268 /* Pods-Capstone-Project.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Capstone-Project.release.xcconfig"; path = "Pods/Target Support Files/Pods-Capstone-Project/Pods-Capstone-Project.release.xcconfig"; sourceTree = "<group>"; };
 		411879D31D6876BA00A23DD6 /* SubmitButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubmitButton.swift; sourceTree = "<group>"; };
 		411879F71D6C3FB500A23DD6 /* ProviderInfoTVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProviderInfoTVC.swift; sourceTree = "<group>"; };
+		4121FF691DC5AAB50017C0FF /* offeredServiceModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = offeredServiceModel.swift; sourceTree = "<group>"; };
+		41294A5A1DD5A2100045C557 /* PublicServiceModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PublicServiceModel.swift; sourceTree = "<group>"; };
+		41294A5E1DD5B2C00045C557 /* Bid.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Bid.swift; sourceTree = "<group>"; };
+		4132BE561DBB5C1F00B1E4F1 /* LoadingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 		4136DB0B1D59C81E0030A685 /* Capstone-Project.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Capstone-Project.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4136DB1A1D59C81F0030A685 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4136DB211D59C9A80030A685 /* Capstone-Project-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Capstone-Project-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -133,12 +144,15 @@
 		4147777F1D6393450097D34D /* ProviderCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProviderCell.swift; sourceTree = "<group>"; };
 		414777811D63936D0097D34D /* ProvidersSearchVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProvidersSearchVC.swift; sourceTree = "<group>"; };
 		414777831D63938E0097D34D /* ProviderCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ProviderCell.xib; sourceTree = "<group>"; };
+		4164DC5D1DDEFB330011F1E6 /* profileModal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = profileModal.swift; sourceTree = "<group>"; };
 		418CA4281D64A0B7007852F6 /* SearchedProviderVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchedProviderVC.swift; sourceTree = "<group>"; };
 		41A8A78B1D87F50D00F7E1AC /* PublicServiceCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PublicServiceCell.xib; sourceTree = "<group>"; };
 		41A8A78D1D8800B800F7E1AC /* PublicServiceCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PublicServiceCell.swift; sourceTree = "<group>"; };
 		41ACDE101D86C87F00CA7438 /* Feed.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Feed.swift; sourceTree = "<group>"; };
 		41ACDE121D86C8AB00CA7438 /* PublicServiceRequestVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PublicServiceRequestVC.swift; sourceTree = "<group>"; };
 		41ACDE141D86C94A00CA7438 /* RequestLogVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestLogVC.swift; sourceTree = "<group>"; };
+		41B1DF441DD8FEFB00E5BF95 /* serviceWithBidCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = serviceWithBidCell.xib; sourceTree = "<group>"; };
+		41B1DF461DD8FF8800E5BF95 /* serviceWithBidCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = serviceWithBidCell.swift; sourceTree = "<group>"; };
 		41CCA2351D9CF366009E9FBE /* backendTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = backendTests.swift; sourceTree = "<group>"; };
 		41EF4EAD1D8C63AE007F1772 /* seekerLogCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = seekerLogCell.xib; sourceTree = "<group>"; };
 		41EF4EAF1D9021E0007F1772 /* OfferedServiceDetails.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OfferedServiceDetails.swift; sourceTree = "<group>"; };
@@ -217,6 +231,7 @@
 				414777831D63938E0097D34D /* ProviderCell.xib */,
 				41A8A78B1D87F50D00F7E1AC /* PublicServiceCell.xib */,
 				41EF4EAD1D8C63AE007F1772 /* seekerLogCell.xib */,
+				41B1DF441DD8FEFB00E5BF95 /* serviceWithBidCell.xib */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -251,19 +266,19 @@
 			isa = PBXGroup;
 			children = (
 				4136DB421D59CAB50030A685 /* ProfileVC.swift */,
-				4136DB431D59CAB50030A685 /* OfferedServicesVC.swift */,
 				4136DB461D59CAB50030A685 /* EditProfileVC.swift */,
 				411879F71D6C3FB500A23DD6 /* ProviderInfoTVC.swift */,
 				4136DB7A1D5B19F80030A685 /* CategoriesVC.swift */,
+				4136DB451D59CAB50030A685 /* addPredefinedService.swift */,
+				41EF4EB51D91123E007F1772 /* OfferedServiceDetailsP.swift */,
+				4136DB431D59CAB50030A685 /* OfferedServicesVC.swift */,
 				4136DB411D59CAB50030A685 /* ServicesVC.swift */,
 				4136DB781D5A510F0030A685 /* RequestedServicesVC.swift */,
 				4136DB4A1D59CAB50030A685 /* WorkingOnVC.swift */,
-				4136DB451D59CAB50030A685 /* addPredefinedService.swift */,
 				4136DB471D59CAB50030A685 /* AvailableServiceHoursVC.swift */,
 				4136DB481D59CAB50030A685 /* AvailableServiceDaysVC.swift */,
 				4136DB491D59CAB50030A685 /* ImagePreview.swift */,
 				41ACDE101D86C87F00CA7438 /* Feed.swift */,
-				41EF4EB51D91123E007F1772 /* OfferedServiceDetailsP.swift */,
 			);
 			name = Provider;
 			sourceTree = "<group>";
@@ -316,6 +331,12 @@
 				4147777F1D6393450097D34D /* ProviderCell.swift */,
 				411879D31D6876BA00A23DD6 /* SubmitButton.swift */,
 				41A8A78D1D8800B800F7E1AC /* PublicServiceCell.swift */,
+				4132BE561DBB5C1F00B1E4F1 /* LoadingView.swift */,
+				4121FF691DC5AAB50017C0FF /* offeredServiceModel.swift */,
+				41294A5A1DD5A2100045C557 /* PublicServiceModel.swift */,
+				41294A5E1DD5B2C00045C557 /* Bid.swift */,
+				41B1DF461DD8FF8800E5BF95 /* serviceWithBidCell.swift */,
+				4164DC5D1DDEFB330011F1E6 /* profileModal.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -335,12 +356,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 4136DB1D1D59C81F0030A685 /* Build configuration list for PBXNativeTarget "Capstone-Project" */;
 			buildPhases = (
-				60588284888F43E57B4DD9A8 /* 📦 Check Pods Manifest.lock */,
+				60588284888F43E57B4DD9A8 /* [CP] Check Pods Manifest.lock */,
 				4136DB071D59C81E0030A685 /* Sources */,
 				4136DB081D59C81E0030A685 /* Frameworks */,
 				4136DB091D59C81E0030A685 /* Resources */,
-				35E1118E370D35CC40AB574F /* 📦 Embed Pods Frameworks */,
-				CC3D07F5D1CC5ACBA04EAED7 /* 📦 Copy Pods Resources */,
+				35E1118E370D35CC40AB574F /* [CP] Embed Pods Frameworks */,
+				CC3D07F5D1CC5ACBA04EAED7 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -358,12 +379,13 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0730;
-				LastUpgradeCheck = 0730;
+				LastUpgradeCheck = 0810;
 				ORGANIZATIONNAME = "Ali Alebrahim";
 				TargetAttributes = {
 					4136DB0A1D59C81E0030A685 = {
 						CreatedOnToolsVersion = 7.3.1;
 						DevelopmentTeam = D7FY5S7KQL;
+						LastSwiftMigration = 0810;
 					};
 				};
 			};
@@ -397,6 +419,7 @@
 				4136DB301D59C9AA0030A685 /* LaunchScreen.storyboard in Resources */,
 				4136DB311D59C9AA0030A685 /* Assets.xcassets in Resources */,
 				414777721D5F0F640097D34D /* RequestedServiceCell.xib in Resources */,
+				41B1DF451DD8FEFC00E5BF95 /* serviceWithBidCell.xib in Resources */,
 				4147777C1D6325230097D34D /* RatingCell.xib in Resources */,
 				41EF4EAE1D8C63AF007F1772 /* seekerLogCell.xib in Resources */,
 				4136DB2A1D59C9AA0030A685 /* predefinedServiceCell.xib in Resources */,
@@ -409,14 +432,14 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		35E1118E370D35CC40AB574F /* 📦 Embed Pods Frameworks */ = {
+		35E1118E370D35CC40AB574F /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Embed Pods Frameworks";
+			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -424,29 +447,29 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Capstone-Project/Pods-Capstone-Project-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		60588284888F43E57B4DD9A8 /* 📦 Check Pods Manifest.lock */ = {
+		60588284888F43E57B4DD9A8 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Check Pods Manifest.lock";
+			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
-		CC3D07F5D1CC5ACBA04EAED7 /* 📦 Copy Pods Resources */ = {
+		CC3D07F5D1CC5ACBA04EAED7 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Copy Pods Resources";
+			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -464,6 +487,7 @@
 				414777801D6393450097D34D /* ProviderCell.swift in Sources */,
 				414777741D5F13470097D34D /* RequestedServiceCell.swift in Sources */,
 				41ACDE131D86C8AB00CA7438 /* PublicServiceRequestVC.swift in Sources */,
+				4121FF6A1DC5AAB60017C0FF /* offeredServiceModel.swift in Sources */,
 				4136DB771D59CB060030A685 /* ErrorButton.swift in Sources */,
 				41EF4EB61D91123E007F1772 /* OfferedServiceDetailsP.swift in Sources */,
 				41EF4EB21D910AA0007F1772 /* SelectOfferedServiceTime.swift in Sources */,
@@ -476,8 +500,10 @@
 				4136DB391D59CA070030A685 /* SCLExtensions.swift in Sources */,
 				4136DB531D59CAB50030A685 /* ImagePreview.swift in Sources */,
 				4136DB751D59CB060030A685 /* PredefinedServicesCell.swift in Sources */,
+				4132BE571DBB5C2100B1E4F1 /* LoadingView.swift in Sources */,
 				414777781D62FEA60097D34D /* ChooseCategoriesVC.swift in Sources */,
 				4136DB2F1D59C9AA0030A685 /* WorkingHoursCell.swift in Sources */,
+				41294A5F1DD5B2C10045C557 /* Bid.swift in Sources */,
 				4147777A1D6320C80097D34D /* ChooseRatingVC.swift in Sources */,
 				41CCA2361D9CF366009E9FBE /* backendTests.swift in Sources */,
 				4136DB381D59CA070030A685 /* SCLAlertView.swift in Sources */,
@@ -489,6 +515,7 @@
 				4147777E1D63304B0097D34D /* RatingCell.swift in Sources */,
 				414777821D63936D0097D34D /* ProvidersSearchVC.swift in Sources */,
 				4136DB7B1D5B19F80030A685 /* CategoriesVC.swift in Sources */,
+				4164DC5E1DDEFB330011F1E6 /* profileModal.swift in Sources */,
 				411879D41D6876BA00A23DD6 /* SubmitButton.swift in Sources */,
 				41EF4EBC1D913455007F1772 /* PublicServiceViewController.swift in Sources */,
 				411879F81D6C3FBB00A23DD6 /* ProviderInfoTVC.swift in Sources */,
@@ -499,6 +526,7 @@
 				41ACDE151D86C94A00CA7438 /* RequestLogVC.swift in Sources */,
 				4136DB731D59CB060030A685 /* CustomSearchController.swift in Sources */,
 				4136DB701D59CB060030A685 /* Reachability.swift in Sources */,
+				41294A5B1DD5A2100045C557 /* PublicServiceModel.swift in Sources */,
 				4136DB511D59CAB50030A685 /* AvailableServiceHoursVC.swift in Sources */,
 				4136DB3B1D59CA280030A685 /* AppDelegate.swift in Sources */,
 				4136DB601D59CAE30030A685 /* LoginVC.swift in Sources */,
@@ -509,6 +537,7 @@
 				41ACDE111D86C87F00CA7438 /* Feed.swift in Sources */,
 				4136DB351D59C9FD0030A685 /* iCarousel.m in Sources */,
 				418CA4291D64A0B7007852F6 /* SearchedProviderVC.swift in Sources */,
+				41B1DF471DD8FF8800E5BF95 /* serviceWithBidCell.swift in Sources */,
 				4136DB721D59CB060030A685 /* customTextView.swift in Sources */,
 				4136DB5E1D59CAE30030A685 /* WelcomeVC.swift in Sources */,
 				4136DB4F1D59CAB50030A685 /* addPredefinedService.swift in Sources */,
@@ -533,8 +562,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -578,8 +609,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -598,6 +631,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -606,6 +640,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = D2697E035B9466973F2B46CC /* Pods-Capstone-Project.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -617,6 +652,7 @@
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Capstone-Project/Capstone-Project-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0.1;
 			};
 			name = Debug;
 		};
@@ -624,6 +660,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 26287226B2656FFFE3435268 /* Pods-Capstone-Project.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -634,6 +671,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Capstone-Project/Capstone-Project-Bridging-Header.h";
+				SWIFT_VERSION = 3.0.1;
 			};
 			name = Release;
 		};

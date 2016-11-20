@@ -9,8 +9,8 @@
 import UIKit
 
 protocol RequestServiceCellDelegate: class {
-    func acceptButtonTapped(cell: RequestedServiceCell)
-    func declineButtonTapped(cell: RequestedServiceCell)
+    func acceptButtonTapped(_ cell: RequestedServiceCell)
+    func declineButtonTapped(_ cell: RequestedServiceCell)
 }
 
 class RequestedServiceCell: UICollectionViewCell {
@@ -28,17 +28,18 @@ class RequestedServiceCell: UICollectionViewCell {
     weak var delegate: RequestServiceCellDelegate?
     
     //MARK: IBActions
-    @IBAction func acceptButtonPressed(sender: AnyObject) {
+    @IBAction func acceptButtonPressed(_ sender: AnyObject) {
         self.delegate?.acceptButtonTapped(self)
     }
-    @IBAction func declineButtonPressed(sender: AnyObject) {
+    @IBAction func declineButtonPressed(_ sender: AnyObject) {
         self.delegate?.declineButtonTapped(self)
     }
     
     //Functions
     override func awakeFromNib() {
-        self.layer.borderColor = UIColor(hex: 0x3399CC).CGColor
+        self.layer.borderColor = UIColor(hex: 0xa85783).cgColor
         self.layer.borderWidth = 1
+        self.layer.cornerRadius = 5
     }
     override func prepareForReuse() {
         super.prepareForReuse()

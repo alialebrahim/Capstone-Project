@@ -20,7 +20,9 @@ class SeekerFeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource
     var offeredServices: JSON?
     lazy var refreshControl = UIRefreshControl()
     var choosenService: JSON?
-    let defaults = NSUserDefaults.standardUserDefaults()
+    let defaults = UserDefaults.standard
+    var servicesObject = [OfferedServiceModel]()
+    var filteredServicesObjects = [OfferedServiceModel]()
     //MARK: IBOutlets
     @IBOutlet weak var tableView: UITableView!
     
@@ -35,46 +37,43 @@ class SeekerFeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         configureSearchController()
         
     }
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         gettingOfferedService()
+        //TODO: load countries into array of objects after the request finishes
     }
     //MARK: tableview delegate functions
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if shouldShowSearchResult {
-            return filteredArray.count
+            return filteredServicesObjects.count
         }else {
-            if let service = offeredServices {
-                return service.count
-            }else {
-                return 0
-            }
+            return servicesObject.count
         }
     }
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let myCell = tableView.dequeueReusableCellWithIdentifier(cellID, forIndexPath: indexPath) as! PredefinedServicesCell
-        let service = offeredServices![indexPath.row]
-        //Cell configuration.
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let myCell = tableView.dequeueReusableCell(withIdentifier: cellID, for: indexPath) as! PredefinedServicesCell
+        var service: OfferedServiceModel!
         if shouldShowSearchResult {
-            myCell.serviceTitle.text = service["service"]["title"].string
+            service = filteredServicesObjects[indexPath.row]
         }else {
-            myCell.serviceTitle.text = service["service"]["title"].string
+            service = servicesObject[indexPath.row]
         }
         
-        
-        myCell.servicePrice.text = "\(service["service"]["price"].float!)"
+        //Cell configuration.
+        myCell.serviceTitle.text = service.title
+        myCell.servicePrice.text = "\(service.price)"
         myCell.serviceCurrency.text = "KWD"
         
-        myCell.serviceDescription.text = service["service"]["description"].string
+        myCell.serviceDescription.text = service.description
         return myCell
     }
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         choosenService = offeredServices![indexPath.row]
-        performSegueWithIdentifier("OfferedServicesDetails", sender: nil)
+        performSegue(withIdentifier: "OfferedServicesDetails", sender: nil)
         
     }
     
@@ -100,13 +99,13 @@ class SeekerFeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         automaticallyAdjustsScrollViewInsets = false
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.registerNib(UINib(nibName: "predefinedServiceCell", bundle: nil), forCellReuseIdentifier: "ServiceCell")
+        tableView.register(UINib(nibName: "predefinedServiceCell", bundle: nil), forCellReuseIdentifier: "ServiceCell")
         tableView.rowHeight = 129
-        tableView.separatorStyle = .None
+        tableView.separatorStyle = .none
         
         //add refresh controller programmativcally.
         refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh")
-        refreshControl.addTarget(self, action: #selector(SeekerFeedVC.refreshTableView), forControlEvents: .ValueChanged)
+        refreshControl.addTarget(self, action: #selector(SeekerFeedVC.refreshTableView), for: .valueChanged)
         tableView.addSubview(refreshControl)
     }
     func configureNavigationBar() {
@@ -114,9 +113,9 @@ class SeekerFeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource
     }
     func configureSearchController() {
         //creating and configurating custom search bar
-        let searchBarFrame = CGRectMake(0.0, 0.0, tableView.frame.size.width, 50.0)
-        let searchBarTextColor = UIColor(hex: 0x3399CC)
-        let searchBarTintColor = UIColor.whiteColor()
+        let searchBarFrame = CGRect(x: 0.0, y: 0.0, width: tableView.frame.size.width, height: 50.0)
+        let searchBarTextColor = UIColor(hex: 0x404040)
+        let searchBarTintColor = UIColor.white
         customSearchController = CustomSearchController(searchResultsController: self, searchBarFrame: searchBarFrame,  searchBarTextColor: searchBarTextColor, searchBarTintColor: searchBarTintColor)
         customSearchController.customSearchBar.placeholder = "Search here....."
         customSearchController.customDelegate = self
@@ -124,6 +123,7 @@ class SeekerFeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource
     }
     func refreshTableView() {
         print("refreshing tableview")
+        gettingOfferedService()
         //do whatever needed to update tableview
         //then use
         //tableView.reloadData()
@@ -151,53 +151,117 @@ class SeekerFeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         shouldShowSearchResult = false
         tableView.reloadData()
     }
-    func didChangeSearchText(searchText: String){
-        filteredArray = dataArray.filter({ (country) -> Bool in
-            let countryText: NSString = country
-            return countryText.rangeOfString(searchText, options: NSStringCompareOptions.CaseInsensitiveSearch).location != NSNotFound
-        })
-        tableView.reloadData()
+    /*
+     {
+     "category" : "test category",
+     "id" : 35,
+     "service" : {
+     "status" : "pending",
+     "providerpk" : null,
+     "id" : 44,
+     "price" : 500,
+     "title" : "Title",
+     "due_date" : null,
+     "created" : "2016-09-23T08:40:27Z",
+     "seekerpk" : null,
+     "description" : "Shared self feel headless wehef",
+     "is_special" : false
+     },
+     "serviceimage_set" : [
+     
+     ]
+     }
+     */
+    func jsonIntoArrayOfObjects() {
+        servicesObject = [OfferedServiceModel]()
+        if let myOfferedServices = offeredServices {
+            for index in 0..<myOfferedServices.count {
+                let title = myOfferedServices[index]["service"]["title"].string
+                let description = myOfferedServices[index]["service"]["description"].string
+                let category = myOfferedServices[index]["category"].string
+                let price = myOfferedServices[index]["service"]["price"].float
+                let id = myOfferedServices[index]["id"].int
+                //TODO: apply type safety
+                let service = OfferedServiceModel(category: category!, price: price!, title: title!, description: description!, id: id!)
+                servicesObject.append(service)
+            }
+        }
     }
-    
+
+    func didChangeSearchText(_ searchText: String){
+        filteredServicesObjects = [OfferedServiceModel]()
+        var servicesTitles = [String]()
+        var filteredTitles = [String]()
+        for service in servicesObject {
+            servicesTitles.append(service.title)
+        }
+        filteredTitles = servicesTitles.filter({ (title) -> Bool in
+            let titleText: NSString = title as NSString
+            return titleText.range(of: searchText, options: NSString.CompareOptions.caseInsensitive).location != NSNotFound
+        })
+        for service in servicesObject {
+            for title in filteredTitles {
+                if service.title == title {
+                    filteredServicesObjects.append(service)
+                    break
+                }
+            }
+        }
+        print(filteredServicesObjects.count)
+        tableView.reloadData()
+        print(filteredTitles)
+    }
+    func alertWithMessage(_ message: String) {
+        let alertController = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "Ok", style: .default, handler: nil)
+        alertController.addAction(okAction)
+        
+        present(alertController, animated: true, completion: nil)
+    }
     //TODO: delete this function - for testing only
     //MARK: loading countries list for testing purposes
     func loadCountries() {
-        let countryPath = NSBundle.mainBundle().pathForResource("countries", ofType: "txt")
+        let countryPath = Bundle.main.path(forResource: "countries", ofType: "txt")
         if let path = countryPath {
             do {
-                let countryString = try String(contentsOfFile: path, encoding: NSUTF8StringEncoding)
-                dataArray = countryString.componentsSeparatedByString("\n")
+                let countryString = try String(contentsOfFile: path, encoding: String.Encoding.utf8)
+                dataArray = countryString.components(separatedBy: "\n")
             }catch _{
                 print("error converting file content into a string")
             }
             
         }
     }
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "OfferedServicesDetails" {
-            if let vc = segue.destinationViewController as? OfferedServiceDetails {
+            if let vc = segue.destination as? OfferedServiceDetails {
                 vc.myService = choosenService
             }
         }
     }
     //BACKEND
     func gettingOfferedService() {
+        //TODO: add loading animation only for the first time.
         let URL = "\(AppDelegate.URL)/offeredservice/"
-        Alamofire.request(.GET, URL, parameters: nil, encoding: .JSON).responseJSON { response in
-            print(response.request)  // original URL request
-            print(response.response) // URL response
-            print(response.data)     // server data
-            print(response.result)   // result of response serialization
-            if let dataString = String(data: response.data!, encoding: NSUTF8StringEncoding) {
-                print(dataString)
-            }
-            if let json = response.result.value {
-                self.offeredServices = JSON(json)
-                print(self.offeredServices!)
-                print(self.offeredServices?.count)
-                self.tableView.reloadData()
+        Alamofire.request(.GET, URL, parameters: nil, encoding: .json).responseJSON { response in
+            if let myResponse = response.response {
+                if myResponse.statusCode == 200 {
+                    if let json = response.result.value {
+                        self.offeredServices = JSON(json)
+                        self.jsonIntoArrayOfObjects()
+                        self.refreshControl.endRefreshing()
+                        self.tableView.reloadData()
+                    }
+                }else {
+                    self.alertWithMessage("There was a problem getting offered services\n please try again")
+                    self.refreshControl.endRefreshing()
+                }
+            }else {
+                self.alertWithMessage("There was a problem getting offered services\n please try again")
+                self.refreshControl.endRefreshing()
             }
         }
+            
     }
 
 }

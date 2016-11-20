@@ -14,7 +14,7 @@ class WorkingOnVC: UIViewController, UITableViewDelegate, UITableViewDataSource 
     var requestedServices = [String]()
     var CellID = "WorkingOnServiceCell"
     lazy var refreshControl = UIRefreshControl()
-    var data = [0,1,2,3,4,5,6,7,8,9,10]
+    var data = ["Service title","Service title","Service title","Service title","Service title","Service title","Service title","Service title","Service title","Service title","Service title"]
     
     //MARK: IBOutlets
     @IBOutlet weak var tableView: UITableView!
@@ -26,44 +26,44 @@ class WorkingOnVC: UIViewController, UITableViewDelegate, UITableViewDataSource 
     }
     
     //MARK: Tableview delegate functions
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return data.count
     }
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(CellID) as? WorkingOnServiceCell
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: CellID) as? WorkingOnServiceCell
         //CONFIGURE CELL
         cell?.titleLabel.text = "\(data[indexPath.row])"
         return cell!
     }
-    func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [UITableViewRowAction]? {
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         
-        let done = UITableViewRowAction(style: .Normal, title: "Done") { action, index in
+        let done = UITableViewRowAction(style: .normal, title: "Done") { action, index in
 
-            let alertController = UIAlertController(title: "Confirmation", message: "Are you sure you want to mark this service as \"Done\"?  \nMarking this service \"Done\" the seeker will get the confirmation", preferredStyle: .Alert)
-            let doneAction = UIAlertAction(title: "Done", style: .Destructive, handler: { (UIAlertAction) in
+            let alertController = UIAlertController(title: "Confirmation", message: "Are you sure you want to mark this service as \"Done\"?  \nMarking this service \"Done\" the seeker will get the confirmation", preferredStyle: .alert)
+            let doneAction = UIAlertAction(title: "Done", style: .destructive, handler: { (UIAlertAction) in
                 //TODO: BACKEND STUFF
                 self.tableView.beginUpdates()
-                self.data.removeAtIndex(indexPath.row)
-                self.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+                self.data.remove(at: indexPath.row)
+                self.tableView.deleteRows(at: [indexPath], with: .fade)
                 self.tableView.reloadData()
                 self.tableView.endUpdates()
                 
             })
-            let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
+            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
             
             alertController.addAction(doneAction)
             alertController.addAction(cancelAction)
             
-            self.presentViewController(alertController, animated: true, completion: nil)
+            self.present(alertController, animated: true, completion: nil)
         }
         done.backgroundColor = UIColor(hex: 0x009900)
         
         return [done]
     }
-    func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true
     }
     //MARK: Functions
@@ -71,12 +71,13 @@ class WorkingOnVC: UIViewController, UITableViewDelegate, UITableViewDataSource 
     
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.registerNib(UINib(nibName: "WorkingOnServiceCell", bundle: nil), forCellReuseIdentifier: CellID)
+        tableView.separatorStyle = .none
+        tableView.register(UINib(nibName: "WorkingOnServiceCell", bundle: nil), forCellReuseIdentifier: CellID)
         tableView.rowHeight = 173
         
-        //add refresh controller programmativcally.
+        //TODO: Chnage color to 404040
         refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh")
-        refreshControl.addTarget(self, action: #selector(refreshTableView), forControlEvents: .ValueChanged)
+        refreshControl.addTarget(self, action: #selector(refreshTableView), for: .valueChanged)
         tableView.addSubview(refreshControl)
     }
     func refreshTableView() {

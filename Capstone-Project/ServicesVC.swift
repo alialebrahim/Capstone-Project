@@ -28,7 +28,7 @@ class ServicesVC: UIViewController {
         setup()
         
     }
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
     }
@@ -36,21 +36,21 @@ class ServicesVC: UIViewController {
     func setup() {
         segmentedControl.selectedIndex = 0
         displayCurrentTab(segmentedControl.selectedIndex)
-        segmentedControl.addTarget(self, action: #selector(segmentedControlValueChanged), forControlEvents: .ValueChanged)
+        segmentedControl.addTarget(self, action: #selector(segmentedControlValueChanged), for: .valueChanged)
         
         navigationItem.title = "Username"
     }
     /*this function gets an instance of the view controller depending on the selected tab index*/
-    func viewControllerForSelectedSegmentIndex(index: Int) -> UIViewController? {
+    func viewControllerForSelectedSegmentIndex(_ index: Int) -> UIViewController? {
         
         //TODO: change identified
         switch index {
         case 0 :
-            if let vc = self.storyboard?.instantiateViewControllerWithIdentifier("RequestedServicesVC") {
+            if let vc = self.storyboard?.instantiateViewController(withIdentifier: "RequestedServicesVC") {
                 return vc
             }
         case 1 :
-            if let vc = self.storyboard?.instantiateViewControllerWithIdentifier("WorkingOnVC") {
+            if let vc = self.storyboard?.instantiateViewController(withIdentifier: "WorkingOnVC") {
                 return vc
             }
         default:
@@ -60,7 +60,7 @@ class ServicesVC: UIViewController {
     }
     
     //adds the current tab view controller as a child to this view controller and setup its frame.
-    func displayCurrentTab(tabIndex: Int) {
+    func displayCurrentTab(_ tabIndex: Int) {
         self.navigationItem.rightBarButtonItem = nil
         
         if let vc = viewControllerForSelectedSegmentIndex(tabIndex) {
@@ -68,15 +68,16 @@ class ServicesVC: UIViewController {
             if tabIndex == 0 {
                 //TODO: Get username from the server
                 navigationItem.title = "Requests"
-                navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Refresh, target: self, action: #selector(refreshView))
+                navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(refreshView))
             }else if tabIndex == 1{
                 navigationItem.title = "Working on"
             }
             self.addChildViewController(vc)
-            vc.didMoveToParentViewController(self)
+            vc.didMove(toParentViewController: self)
             vc.view.frame = self.contentView.bounds
             self.contentView.addSubview(vc.view)
             self.currentViewController = vc
+            
         }
     }
     /*

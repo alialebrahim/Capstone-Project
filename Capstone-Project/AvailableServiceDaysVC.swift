@@ -26,7 +26,7 @@ NOTE:
 import UIKit
 //MARK: Protocol
 protocol AvailableServiceDaysDelegate: class {
-    func shouldDismissDaysView(days: [Int])
+    func shouldDismissDaysView(_ days: [Int])
 }
 class AvailableServiceDaysVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
@@ -49,8 +49,8 @@ class AvailableServiceDaysVC: UIViewController, UITableViewDelegate, UITableView
         tableView.dataSource = self
         tableView.allowsMultipleSelection = true
         if !provider {
-            selectAllDaysButton.hidden = true
-            saveButton.hidden = true
+            selectAllDaysButton.isHidden = true
+            saveButton.isHidden = true
         }
         
     }
@@ -66,7 +66,7 @@ class AvailableServiceDaysVC: UIViewController, UITableViewDelegate, UITableView
         }
         
     }
-    @IBAction func selectDeselectAllDaysButtonPressed(sender: UIButton) {
+    @IBAction func selectDeselectAllDaysButtonPressed(_ sender: UIButton) {
         /*
             if not all days are selected
                 iterate over each day in the daysString array and append its index to days array
@@ -78,73 +78,73 @@ class AvailableServiceDaysVC: UIViewController, UITableViewDelegate, UITableView
             days.removeAll()
             for index in 0..<daysString.count {
                 days.append(index) //add selected days to the array
-                let rowToSelect:NSIndexPath = NSIndexPath(forRow: index, inSection: 0)
+                let rowToSelect:IndexPath = IndexPath(row: index, section: 0)
                 //add checkmark next to selected row
-                tableView.cellForRowAtIndexPath(rowToSelect)?.accessoryType = .Checkmark
+                tableView.cellForRow(at: rowToSelect)?.accessoryType = .checkmark
             }
             allSelected = true
-            sender.setTitle("Deselect All Days", forState: .Normal)
+            sender.setTitle("Deselect All Days", for: UIControlState())
         }else {
             for index in 0..<daysString.count {
-                days.removeAtIndex(0) //remove all selected days from the array
+                days.remove(at: 0) //remove all selected days from the array
                 //remove checkmark next to selected row
-                let rowToSelect: NSIndexPath = NSIndexPath(forRow: index, inSection: 0)
-                tableView.cellForRowAtIndexPath(rowToSelect)?.accessoryType = .None
+                let rowToSelect: IndexPath = IndexPath(row: index, section: 0)
+                tableView.cellForRow(at: rowToSelect)?.accessoryType = .none
             }
             allSelected = false
-            sender.setTitle("Select All Days", forState: .Normal)
+            sender.setTitle("Select All Days", for: UIControlState())
         }
     }
 
     //MARK: TableView Delegate functions
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return daysString.count
     }
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 
-        if let myCell = tableView.dequeueReusableCellWithIdentifier(CellID) {
+        if let myCell = tableView.dequeueReusableCell(withIdentifier: CellID) {
             myCell.textLabel?.text = "\(daysString[indexPath.row])"
-            myCell.selectionStyle = .None
+            myCell.selectionStyle = .none
             if !availableDays.contains(indexPath.row){
-               myCell.textLabel?.textColor = UIColor.grayColor()
+               myCell.textLabel?.textColor = UIColor.gray
             }
             return myCell
         }else {
-            let myCell = UITableViewCell(style: .Default, reuseIdentifier: CellID)
+            let myCell = UITableViewCell(style: .default, reuseIdentifier: CellID)
             myCell.textLabel?.text = "\(daysString[indexPath.row])"
-            myCell.selectionStyle = .None
+            myCell.selectionStyle = .none
             if !availableDays.contains(indexPath.row){
-               myCell.textLabel?.textColor = UIColor.grayColor()
+               myCell.textLabel?.textColor = UIColor.gray
             }
             return myCell
         }
         
     }
     
-    func tableView(tableView: UITableView, shouldHighlightRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+    func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
         if !availableDays.contains(indexPath.row){
             return false
         }
         return true
     }
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         days.append(indexPath.row)
-        days.sortInPlace() { $0 < $1 }
+        days.sort() { $0 < $1 }
         if !provider {
             delegate?.shouldDismissDaysView(days)
-            self.navigationController?.popViewControllerAnimated(true)
+            self.navigationController?.popViewController(animated: true)
         }
         //add checkmark next to selected row
-        tableView.cellForRowAtIndexPath(indexPath)?.accessoryType = .Checkmark
+        tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark
     }
     
-    func tableView(tableView: UITableView, didDeselectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
         days = days.filter() { $0 != indexPath.row }
         //remove checkmark next to selected row
-        tableView.cellForRowAtIndexPath(indexPath)?.accessoryType = .None
+        tableView.cellForRow(at: indexPath)?.accessoryType = .none
     }
 }

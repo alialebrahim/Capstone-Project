@@ -10,7 +10,7 @@ import UIKit
 
 //MARK: Protocol
 protocol AvailableServiceHoursDelegate: class {
-    func shouldDismissHoursView(time: [(from: NSDate, to: NSDate)])
+    func shouldDismissHoursView(_ time: [(from: Date, to: Date)])
 }
 //TODO: how many user can request a service at a spesific time?
 class AvailableServiceHoursVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
@@ -23,22 +23,22 @@ class AvailableServiceHoursVC: UIViewController, UITableViewDelegate, UITableVie
     
     //MARK: Variables
     weak var delegate: AvailableServiceHoursDelegate?
-    var availableTimes = [(from: NSDate,to: NSDate)]()
+    var availableTimes = [(from: Date,to: Date)]()
     let cellID = "hoursCell"
-    var timeFormatter = NSDateFormatter()
+    var timeFormatter = DateFormatter()
     //var toTime = NSDateFormatter()
     
     //MARK: ViewController lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        toDatePicker.datePickerMode = .Time
-        fromDatePicker.datePickerMode = .Time
+        toDatePicker.datePickerMode = .time
+        fromDatePicker.datePickerMode = .time
         //tableview configuration
         tableView.delegate = self
         tableView.dataSource = self
         tableView.allowsSelection = false
         //time objects configuration.
-        timeFormatter.timeStyle = .ShortStyle
+        timeFormatter.timeStyle = .short
 
     }
     //MARK: IBActions
@@ -47,39 +47,39 @@ class AvailableServiceHoursVC: UIViewController, UITableViewDelegate, UITableVie
         let toTime = toDatePicker.date
         if !TimeIntervalManager.correctTimeInterval(FromTime: fromTime, ToTime: toTime) {
             //TODO: alert to notify the user with the wrong time interval
-        }else if TimeIntervalManager.conflicts(TimeIntervalArray: availableTimes, TimeInterval: (fromTime, toTime)) {
+        }else if TimeIntervalManager.conflicts(TimeIntervalArray: availableTimes as! [(from: NSDate, to: NSDate)], TimeInterval: (fromTime, toTime)) {
             //TODO: alert to notify the user with time conflicts
         }else {
             //if the time given was correct, add it to the array and sort it.
             availableTimes.append((from: fromTime, to: toTime))
-            availableTimes.sortInPlace { (from1, from2) -> Bool in
-                from1.from.earlierDate(from2.from) == from1.from
+            availableTimes.sort { (from1, from2) -> Bool in
+                (from1.from as NSDate).earlierDate(from2.from) == from1.from
             }
             tableView.flashScrollIndicators()
             tableView.reloadData()
-            saveCancelButton.setTitle("Save", forState: .Normal)
+            saveCancelButton.setTitle("Save", for: UIControlState())
         }
     }
-    @IBAction func saveButtonPressed(sender: AnyObject) {
+    @IBAction func saveButtonPressed(_ sender: AnyObject) {
         delegate?.shouldDismissHoursView(availableTimes)
     }
     
     //MARK: TableView delegate functions
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return availableTimes.count
     }
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let time = availableTimes[indexPath.row]
-        let from = timeFormatter.stringFromDate(time.from)
-        let to = timeFormatter.stringFromDate(time.to)
-        if let myCell = tableView.dequeueReusableCellWithIdentifier(cellID) {
+        let from = timeFormatter.string(from: time.from)
+        let to = timeFormatter.string(from: time.to)
+        if let myCell = tableView.dequeueReusableCell(withIdentifier: cellID) {
             myCell.textLabel?.text = "from \(from) to \(to)"
             return myCell
         }else {
-            let myCell = UITableViewCell(style: .Default, reuseIdentifier: cellID)
+            let myCell = UITableViewCell(style: .default, reuseIdentifier: cellID)
             myCell.textLabel?.text = "from \(from) to \(to)"
             return myCell
         }
@@ -90,14 +90,14 @@ class AvailableServiceHoursVC: UIViewController, UITableViewDelegate, UITableVie
         this is needed to prevent any error as numberOfRowsInSection will return the length of the array
         if data was not removed from the array, there will be runtime error
      */
-    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if editingStyle == .Delete {
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
             tableView.beginUpdates()
-            availableTimes.removeAtIndex(indexPath.row)
-            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Right)
+            availableTimes.remove(at: indexPath.row)
+            tableView.deleteRows(at: [indexPath], with: .right)
             tableView.endUpdates()
             if availableTimes.count == 0 {
-                saveCancelButton.setTitle("Cancel", forState: .Normal)
+                saveCancelButton.setTitle("Cancel", for: UIControlState())
             }
         }
     }

@@ -14,7 +14,7 @@ import Foundation
     // MARK: Variables
     
     //UILabel array that will hold the labels that will go into the segmented control
-    private var segmentedControlLabels = [UILabel]()
+    fileprivate var segmentedControlLabels = [UILabel]()
     //UIView that will go over the selected item (Label)
     var selectedItemView = UIView()
     //title of segmented control items.
@@ -30,27 +30,27 @@ import Foundation
     }
     
     //IBInspectable variables are used to control different segmented control properties in the storyboard
-    @IBInspectable var selectedLabelColor: UIColor = UIColor.clearColor() {
+    @IBInspectable var selectedLabelColor: UIColor = UIColor.clear {
         didSet {
             setSelectedColor()
         }
     }
-    @IBInspectable var unselectedLabelColor: UIColor = UIColor.clearColor() {
+    @IBInspectable var unselectedLabelColor: UIColor = UIColor.clear {
         didSet {
             setSelectedColor()
         }
     }
-    @IBInspectable var selectedItemViewColor: UIColor = UIColor.clearColor() {
+    @IBInspectable var selectedItemViewColor: UIColor = UIColor.clear {
         didSet {
             setSelectedColor()
         }
     }
-    @IBInspectable var borderColor: UIColor = UIColor.clearColor() {
+    @IBInspectable var borderColor: UIColor = UIColor.clear {
         didSet {
-            layer.borderColor = borderColor.CGColor
+            layer.borderColor = borderColor.cgColor
         }
     }
-    @IBInspectable var lineViewColor: UIColor = UIColor.clearColor()
+    @IBInspectable var lineViewColor: UIColor = UIColor.clear
     // MARK: Inits
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -77,7 +77,7 @@ import Foundation
         for index in 0..<segmentedControlLabels.count {
             let label = segmentedControlLabels[index]
             let xPosition = CGFloat(index) * labelWidth
-            label.frame = CGRectMake(xPosition, 0, labelWidth, labelHeight)
+            label.frame = CGRect(x: xPosition, y: 0, width: labelWidth, height: labelHeight)
         }
     }
     
@@ -85,14 +85,14 @@ import Foundation
     
     //this function is responsable for setting up segmented control view
     func setupView() {
-        backgroundColor = UIColor.clearColor()
+        backgroundColor = UIColor.clear
         setUpLabels()
-        insertSubview(selectedItemView, atIndex: 0)
+        insertSubview(selectedItemView, at: 0)
     }
     func setupSelectedItemView() {
         var containerViewFrame = self.bounds
         //the width of the line view depends on the total width / number of items in the controller.
-        let selectedItemViewWidth = CGRectGetWidth(containerViewFrame) / CGFloat(segmentedControlItems.count)
+        let selectedItemViewWidth = containerViewFrame.width / CGFloat(segmentedControlItems.count)
         containerViewFrame.size.width = selectedItemViewWidth
         selectedItemView.frame = containerViewFrame
         selectedItemView.backgroundColor = selectedItemViewColor
@@ -107,13 +107,13 @@ import Foundation
             label.removeFromSuperview()
         }
         //we remove all elements from the array but keeping the memory allocated to improve performance.
-        segmentedControlLabels.removeAll(keepCapacity: true)
+        segmentedControlLabels.removeAll(keepingCapacity: true)
         for index in 1...segmentedControlItems.count {
             //creating labels according to the number of items in segmentedControlItems.
-            let label = UILabel(frame: CGRectZero)
+            let label = UILabel(frame: CGRect.zero)
             //setting up segmentedcontrol label
             label.text = segmentedControlItems[index-1]
-            label.textAlignment = .Center
+            label.textAlignment = .center
             /*
              initially, selected index will be 1. the line of code below sets the color if the selected label 
              when the segmentedcontrol first load.
@@ -140,12 +140,12 @@ import Foundation
         if the touch occured over one of segment control elements 
         the index value of that tab will be stored.
      */
-    override func beginTrackingWithTouch(touch: UITouch, withEvent event: UIEvent?) -> Bool {
+    override func beginTracking(_ touch: UITouch, with event: UIEvent?) -> Bool {
         //returns the location of touch in the view. This location is in CGPoint.
-        let location = touch.locationInView(self)
+        let location = touch.location(in: self)
         var calculatedIndex : Int?
         
-        for (index, item) in segmentedControlLabels.enumerate() {
+        for (index, item) in segmentedControlLabels.enumerated() {
             /*if the touch occures inside one of the labels store the label index*/
             if item.frame.contains(location) {
                 calculatedIndex = index
@@ -153,7 +153,7 @@ import Foundation
 
             if calculatedIndex != nil {
                 selectedIndex = calculatedIndex!
-                sendActionsForControlEvents(.ValueChanged)
+                sendActions(for: .valueChanged)
             }
         }
         return false

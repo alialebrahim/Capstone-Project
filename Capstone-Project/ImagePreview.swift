@@ -15,7 +15,7 @@ class ImagePreview: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        myImageView.contentMode = .ScaleAspectFit
+        myImageView.contentMode = .scaleAspectFit
         myImageView.clipsToBounds = true
         if let myImage = image {
             myImageView.image = myImage

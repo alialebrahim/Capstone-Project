@@ -7,7 +7,8 @@
 //
 
 import UIKit
-
+import Alamofire
+import SwiftyJSON
 class PublicServiceViewController: UIViewController {
     
     var userType = "provider"
@@ -23,79 +24,93 @@ class PublicServiceViewController: UIViewController {
     @IBOutlet weak var containerView: UIView!
     @IBOutlet weak var scrollView: UIScrollView!
     
+    let defaults = UserDefaults.standard
+    var serviceID: Int!
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
         // Do any additional setup after loading the view.
     }
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        //TODO: adjust content height inside getpublicservice
+        getPublicService()
         adjustContentViewHeight()
     }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
     func setup() {
         automaticallyAdjustsScrollViewInsets = false
-        descriptionTextView.text = "sdljbsljdbfljbsdjfdfj lsdjfblwjbeflwbef weljf wlje flwje flwe flwh elfhw elf wleh lwh elhw lfe wlfe lwhe sdljbsljdbfljbsdjfdfj lsdjfblwjbeflwbef weljf wlje flwje flwe flwh elfhw elf wleh lwh elhw lfe wlfe lwhe sdljbsljdbfljbsdjfdfj lsdjfblwjbeflwbef weljf wlje flwje flwe flwh elfhw elf wleh lwh elhw lfe wlfe lwhe sdljbsljdbfljbsdjfdfj lsdjfblwjbeflwbef weljf wlje flwje flwe flwh elfhw elf wleh lwh elhw lfe wlfe lwhe sdljbsljdbfljbsdjfdfj lsdjfblwjbeflwbef weljf wlje flwje flwe flwh elfhw elf wleh lwh elhw lfe wlfe lwhe sdljbsljdbfljbsdjfdfj lsdjfblwjbeflwbef weljf wlje flwje flwe flwh elfhw elf wleh lwh elhw lfe wlfe lwhe sdljbsljdbfljbsdjfdfj lsdjfblwjbeflwbef weljf wlje flwje flwe flwh elfhw elf wleh lwh elhw lfe wlfe lwhe sdljbsljdbfljbsdjfdfj lsdjfblwjbeflwbef weljf wlje flwje flwe flwh elfhw elf wleh lwh elhw lfe wlfe lwhe sdljbsljdbfljbsdjfdfj lsdjfblwjbeflwbef weljf wlje flwje flwe flwh elfhw elf wleh lwh elhw lfe wlfe lwhe sdljbsljdbfljbsdjfdfj lsdjfblwjbeflwbef weljf wlje flwje flwe flwh elfhw elf wleh lwh elhw lfe wlfe lwhe sdljbsljdbfljbsdjfdfj lsdjfblwjbeflwbef weljf wlje flwje flwe flwh elfhw elf wleh lwh elhw lfe wlfe lwhe sdljbsljdbfljbsdjfdfj lsdjfblwjbeflwbef weljf wlje flwje flwe flwh elfhw elf wleh lwh elhw lfe wlfe lwhe sdljbsljdbfljbsdjfdfj lsdjfblwjbeflwbef weljf wlje flwje flwe flwh elfhw elf wleh lwh elhw lfe wlfe lwhe sdljbsljdbfljbsdjfdfj lsdjfblwjbeflwbef weljf wlje flwje flwe flwh elfhw elf wleh lwh elhw lfe wlfe lwhe sdljbsljdbfljbsdjfdfj lsdjfblwjbeflwbef weljf wlje flwje flwe flwh elfhw elf wleh lwh elhw lfe wlfe lwhe sdljbsljdbfljbsdjfdfj lsdjfblwjbeflwbef weljf wlje flwje flwe flwh elfhw elf wleh lwh elhw lfe wlfe lwhe sdljbsljdbfljbsdjfdfj lsdjfblwjbeflwbef weljf wlje flwje flwe flwh elfhw elf wleh lwh elhw lfe wlfe lwhe sdljbsljdbfljbsdjfdfj lsdjfblwjbeflwbef weljf wlje flwje flwe flwh elfhw elf wleh lwh elhw lfe wlfe lwhe sdljbsljdbfljbsdjfdfj lsdjfblwjbeflwbef weljf wlje flwje flwe flwh elfhw elf wleh lwh elhw lfe wlfe lwhe "
+        descriptionTextView.text = ""
+        priceLabel.text = ""
+        statusLabel.text = ""
+        createdLabel.text = ""
+        categoryLabel.text = ""
         setupNavigationBar()
         if userType == "provider" {
             let button = UIButton()
             button.translatesAutoresizingMaskIntoConstraints = false
-            button.addTarget(self, action: #selector(bidOnService), forControlEvents: .TouchUpInside)
-            button.setTitle("bid on this service", forState: .Normal)
-            button.setTitleColor(UIColor.blackColor(), forState: .Normal)
-            button.layer.borderColor = UIColor.blackColor().CGColor
+            button.addTarget(self, action: #selector(bidOnService), for: .touchUpInside)
+            button.setTitle("bid on this service", for: UIControlState())
+            button.setTitleColor(UIColor.black, for: UIControlState())
+            button.layer.borderColor = UIColor.black.cgColor
             button.layer.borderWidth = 1
             containerView.addSubview(button)
-            button.topAnchor.constraintEqualToAnchor(priceLabel.bottomAnchor, constant: 8).active = true
-            button.centerXAnchor.constraintEqualToAnchor(view.centerXAnchor).active = true
-            button.widthAnchor.constraintEqualToConstant(view.frame.size.width/2).active = true
+            button.topAnchor.constraint(equalTo: priceLabel.bottomAnchor, constant: 8).isActive = true
+            button.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+            button.widthAnchor.constraint(equalToConstant: view.frame.size.width/2).isActive = true
         }else if userType == "seeker" {
             let button = UIButton()
             button.translatesAutoresizingMaskIntoConstraints = false
-            button.addTarget(self, action: #selector(showBids), forControlEvents: .TouchUpInside)
-            button.setTitle("Show bids", forState: .Normal)
-            button.setTitleColor(UIColor.blackColor(), forState: .Normal)
-            button.layer.borderColor = UIColor.blackColor().CGColor
+            button.addTarget(self, action: #selector(showBids), for: .touchUpInside)
+            button.setTitle("Show bids", for: UIControlState())
+            button.setTitleColor(UIColor.black, for: UIControlState())
+            button.layer.borderColor = UIColor.black.cgColor
             button.layer.borderWidth = 1
             containerView.addSubview(button)
-            button.topAnchor.constraintEqualToAnchor(priceLabel.bottomAnchor, constant: 8).active = true
-            button.centerXAnchor.constraintEqualToAnchor(view.centerXAnchor).active = true
-            button.widthAnchor.constraintEqualToConstant(view.frame.size.width/2).active = true
+            button.topAnchor.constraint(equalTo: priceLabel.bottomAnchor, constant: 8).isActive = true
+            button.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+            button.widthAnchor.constraint(equalToConstant: view.frame.size.width/2).isActive = true
         }
     }
     func showBids(){
         print("showing bids")
     }
     func bidOnService() {
-        
-        let alertController = UIAlertController(title: "Bid", message: "You are bidding on - Service title", preferredStyle: .Alert)
-        let bidAction = UIAlertAction(title: "Bid", style: .Destructive) { (UIAlertAction) in
+        //TODO: change it to real service title
+        let alertController = UIAlertController(title: "Bid", message: "You are bidding on - Service title", preferredStyle: .alert)
+        let bidAction = UIAlertAction(title: "Bid", style: .destructive) { (UIAlertAction) in
             print("bidding on service")
             print(self.myTextField.text)
         }
-        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         alertController.addAction(bidAction)
         alertController.addAction(cancelAction)
-        alertController.addTextFieldWithConfigurationHandler { (textField) in
+        alertController.addTextField { (textField) in
             textField.placeholder = "You bid"
-            textField.keyboardType = .NumbersAndPunctuation
+            textField.keyboardType = .numbersAndPunctuation
             self.myTextField = textField
         }
-        presentViewController(alertController, animated: true, completion: nil)
+        present(alertController, animated: true, completion: nil)
     }
     func setupNavigationBar() {
         navigationItem.title = "Service title"
     }
     func adjustContentViewHeight() {
-        var contentRect = CGRectZero
+        var contentRect = CGRect.zero
         for view in containerView.subviews {
-            contentRect = CGRectUnion(contentRect, view.frame)
+            contentRect = contentRect.union(view.frame)
         }
         containerViewHeightConstraint.constant = contentRect.size.height+20
+    }
+    func alertWithMessage(_ message: String) {
+        let alertController = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "Ok", style: .default, handler: nil)
+        alertController.addAction(okAction)
+        
+        present(alertController, animated: true, completion: nil)
     }
     /*
     // MARK: - Navigation
@@ -106,5 +121,58 @@ class PublicServiceViewController: UIViewController {
         // Pass the selected object to the new view controller.
     }
     */
+    //MARK: BACKEND
+    func getPublicService() {
+        print("spongebob")
+        let URL = "\(AppDelegate.URL)/pubs/"
+        if let myToken = defaults.object(forKey: "userToken") as? String{
+            let headers = [
+                "Authorization": myToken
+            ]
+            let parameters = [
+                "servicepk": serviceID
+            ]
+            
+            Alamofire.request(.GET, URL, parameters: parameters,headers: headers, encoding: .json).responseJSON { response in
+                print(response.request)  // original URL request
+                print(response.response) // URL response
+                print(response.data)     // server data
+                print(response.result)   // result of response serialization
+                if let myResponse = response.response {
+                    if myResponse.statusCode == 200 {
+                        if let json = response.result.value {
+                            print("my json")
+                            print(json)
+                            let myJson = JSON(json)
+                            if let tite = myJson["service"]["title"].string {
+                                
+                            }
+                            if let description = myJson["service"]["description"].string {
+                                self.descriptionTextView.text = description
+                            }
+                            if let price = myJson["service"]["price"].float {
+                                self.priceLabel.text = "\(price) kWD"
+                            }
+                            if let created = myJson["service"]["status"].string {
+                                self.createdLabel.text = created
+                            }
+                            if let status = myJson["service"]["status"].string {
+                                self.statusLabel.text = status
+                            }
+                            if let category = myJson["category"].string {
+                                self.categoryLabel.text = "\(category)"
+                            }
+                            
+                            
+                        }
+                    }else {
+                        self.alertWithMessage("Could not load profile information, please try again")
+                    }
+                }
+            }
+        }
+//        navigationController?.setNavigationBarHidden(false, animated: false)
+//        LoadingView.stopAnimating()
+    }
 
 }

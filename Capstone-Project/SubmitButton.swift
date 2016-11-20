@@ -9,14 +9,14 @@
 import UIKit
 import NVActivityIndicatorView
 protocol SubmitButtonDelegate: class {
-    func didAnimate(frame: CGRect)
+    func didAnimate(_ frame: CGRect)
     //func removeAnimation()
 }
 class SubmitButton: UIButton {
     
     weak var delegate: SubmitButtonDelegate?
     lazy var indicator: NVActivityIndicatorView! = {
-        let activityIndicator = NVActivityIndicatorView(frame: self.bounds, type: .BallScaleRippleMultiple, color: UIColor.whiteColor())
+        let activityIndicator = NVActivityIndicatorView(frame: self.bounds, type: .ballScaleRippleMultiple, color: UIColor.white)
         return activityIndicator
     }()
      var didEndFinishAnimation : (()->())? = nil
@@ -27,7 +27,7 @@ class SubmitButton: UIButton {
     let shrinkDuration: CFTimeInterval  = 0.1
     var cachedTitle: String?
     
-     override init(frame: CGRect) {
+    override init(frame: CGRect) {
         super.init(frame: frame)
         self.setup()
     }
@@ -42,23 +42,23 @@ class SubmitButton: UIButton {
     }
     
      func startLoadingAnimation() {
-        self.setTitle("", forState: .Normal)
-        UIView.animateWithDuration(0.1, animations: { () -> Void in
+        self.setTitle("", for: UIControlState())
+        UIView.animate(withDuration: 0.1, animations: { () -> Void in
             self.layer.cornerRadius = self.frame.height / 2
-        }) { (done) -> Void in
+        }, completion: { (done) -> Void in
             self.shrink()
-        }
+        }) 
         
     }
     
-     func startFinishAnimation(delay: NSTimeInterval, completion:(()->())?) {
-        NSTimer.schedule(delay: delay) { timer in
+     func startFinishAnimation(_ delay: TimeInterval, completion:(()->())?) {
+        Timer.schedule(delay: delay) { timer in
             self.didEndFinishAnimation = completion
             self.expand()
         }
     }
     
-     func animate(duration: NSTimeInterval, completion:(()->())?) {
+     func animate(_ duration: TimeInterval, completion:(()->())?) {
         startLoadingAnimation()
         startFinishAnimation(duration, completion: completion)
     }
@@ -67,11 +67,11 @@ class SubmitButton: UIButton {
         self.returnToOriginalState()
     }
     
-     override func animationDidStop(anim: CAAnimation, finished flag: Bool) {
+     override func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
         let a = anim as! CABasicAnimation
         if a.keyPath == "transform.scale" {
             didEndFinishAnimation?()
-            NSTimer.schedule(delay: 1) { timer in
+            Timer.schedule(delay: 1) { timer in
                 self.returnToOriginalState()
             }
         }
@@ -80,7 +80,7 @@ class SubmitButton: UIButton {
      func returnToOriginalState() {
         
         self.layer.removeAllAnimations()
-        self.setTitle(self.cachedTitle, forState: .Normal)
+        self.setTitle(self.cachedTitle, for: UIControlState())
         //self.delegate.removeAnimation()
     }
     
@@ -91,8 +91,8 @@ class SubmitButton: UIButton {
         shrinkAnim.duration = shrinkDuration
         shrinkAnim.timingFunction = shrinkCurve
         shrinkAnim.fillMode = kCAFillModeForwards
-        shrinkAnim.removedOnCompletion = false
-        layer.addAnimation(shrinkAnim, forKey: shrinkAnim.keyPath)
+        shrinkAnim.isRemovedOnCompletion = false
+        layer.add(shrinkAnim, forKey: shrinkAnim.keyPath)
         self.delegate?.didAnimate(self.frame)
     }
     
@@ -104,7 +104,7 @@ class SubmitButton: UIButton {
         expandAnim.duration = 0.3
         expandAnim.delegate = self
         expandAnim.fillMode = kCAFillModeForwards
-        expandAnim.removedOnCompletion = false
-        layer.addAnimation(expandAnim, forKey: expandAnim.keyPath)
+        expandAnim.isRemovedOnCompletion = false
+        layer.add(expandAnim, forKey: expandAnim.keyPath)
     }
 }
