@@ -243,7 +243,7 @@ class SeekerFeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource
     func gettingOfferedService() {
         //TODO: add loading animation only for the first time.
         let URL = "\(AppDelegate.URL)/offeredservice/"
-        Alamofire.request(.GET, URL, parameters: nil, encoding: .json).responseJSON { response in
+        Alamofire.request(URL, method: .get, parameters: nil, encoding: JSONEncoding.default, headers: nil).responseJSON { (response) in
             if let myResponse = response.response {
                 if myResponse.statusCode == 200 {
                     if let json = response.result.value {
@@ -261,7 +261,25 @@ class SeekerFeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource
                 self.refreshControl.endRefreshing()
             }
         }
-            
+//        Alamofire.request(.GET, URL, parameters: nil, encoding: .json).responseJSON { response in
+//            if let myResponse = response.response {
+//                if myResponse.statusCode == 200 {
+//                    if let json = response.result.value {
+//                        self.offeredServices = JSON(json)
+//                        self.jsonIntoArrayOfObjects()
+//                        self.refreshControl.endRefreshing()
+//                        self.tableView.reloadData()
+//                    }
+//                }else {
+//                    self.alertWithMessage("There was a problem getting offered services\n please try again")
+//                    self.refreshControl.endRefreshing()
+//                }
+//            }else {
+//                self.alertWithMessage("There was a problem getting offered services\n please try again")
+//                self.refreshControl.endRefreshing()
+//            }
+//        }
+        
     }
 
 }

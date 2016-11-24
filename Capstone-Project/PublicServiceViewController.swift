@@ -132,11 +132,10 @@ class PublicServiceViewController: UIViewController {
             let parameters = [
                 "servicepk": serviceID
             ]
-            
-            Alamofire.request(.GET, URL, parameters: parameters,headers: headers, encoding: .json).responseJSON { response in
-                print(response.request)  // original URL request
-                print(response.response) // URL response
-                print(response.data)     // server data
+            Alamofire.request(URL, method: .get, parameters: parameters, encoding: JSONEncoding.default, headers: headers).responseJSON(completionHandler: { (response) in
+                print(response.request!)  // original URL request
+                print(response.response!) // URL response
+                print(response.data!)     // server data
                 print(response.result)   // result of response serialization
                 if let myResponse = response.response {
                     if myResponse.statusCode == 200 {
@@ -144,7 +143,7 @@ class PublicServiceViewController: UIViewController {
                             print("my json")
                             print(json)
                             let myJson = JSON(json)
-                            if let tite = myJson["service"]["title"].string {
+                            if let title = myJson["service"]["title"].string {
                                 
                             }
                             if let description = myJson["service"]["description"].string {
@@ -169,7 +168,44 @@ class PublicServiceViewController: UIViewController {
                         self.alertWithMessage("Could not load profile information, please try again")
                     }
                 }
-            }
+            })
+//            Alamofire.request(.GET, URL, parameters: parameters,headers: headers, encoding: .json).responseJSON { response in
+//                print(response.request)  // original URL request
+//                print(response.response) // URL response
+//                print(response.data)     // server data
+//                print(response.result)   // result of response serialization
+//                if let myResponse = response.response {
+//                    if myResponse.statusCode == 200 {
+//                        if let json = response.result.value {
+//                            print("my json")
+//                            print(json)
+//                            let myJson = JSON(json)
+//                            if let tite = myJson["service"]["title"].string {
+//                                
+//                            }
+//                            if let description = myJson["service"]["description"].string {
+//                                self.descriptionTextView.text = description
+//                            }
+//                            if let price = myJson["service"]["price"].float {
+//                                self.priceLabel.text = "\(price) kWD"
+//                            }
+//                            if let created = myJson["service"]["status"].string {
+//                                self.createdLabel.text = created
+//                            }
+//                            if let status = myJson["service"]["status"].string {
+//                                self.statusLabel.text = status
+//                            }
+//                            if let category = myJson["category"].string {
+//                                self.categoryLabel.text = "\(category)"
+//                            }
+//                            
+//                            
+//                        }
+//                    }else {
+//                        self.alertWithMessage("Could not load profile information, please try again")
+//                    }
+//                }
+//            }
         }
 //        navigationController?.setNavigationBarHidden(false, animated: false)
 //        LoadingView.stopAnimating()

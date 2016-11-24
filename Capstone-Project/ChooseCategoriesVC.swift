@@ -59,7 +59,7 @@ class ChooseCategoriesVC: UIViewController, UITableViewDelegate, UITableViewData
         let cell = tableView.cellForRow(at: indexPath)
         let category = (cell?.textLabel?.text)!
         delegate?.didSelectCategory(category)
-        navigationController?.popViewController(animated: true)
+        _ = navigationController?.popViewController(animated: true)
     }
     //MARK: Functions
     func setup() {

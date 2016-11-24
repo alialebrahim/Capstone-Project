@@ -46,7 +46,7 @@ class ChooseRatingVC: UIViewController, UITableViewDelegate, UITableViewDataSour
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let rating = 5-indexPath.row
         delegate?.didSelectRating(rating)
-        navigationController?.popViewController(animated: true)
+        _ = navigationController?.popViewController(animated: true)
     }
     //MARK: Functions
     func setup() {

@@ -48,10 +48,16 @@ class OfferedServicesVC: UIViewController, UITableViewDelegate, UITableViewDataS
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         if tableData.count > 0 {
-            if (addServiceLabel.superview != nil) == self.view {
-                addServiceLabel.removeFromSuperview()
-                tableView.alwaysBounceVertical = true
+            if let myView = addServiceLabel.superview {
+                if myView == self.view {
+                    addServiceLabel.removeFromSuperview()
+                    tableView.alwaysBounceVertical = true
+                }
             }
+//            if (addServiceLabel.superview != nil) == (self.view) {
+//                addServiceLabel.removeFromSuperview()
+//                tableView.alwaysBounceVertical = true
+//            }
         }
         
     }
@@ -249,7 +255,7 @@ class OfferedServicesVC: UIViewController, UITableViewDelegate, UITableViewDataS
         let parameter = [
             "providerpk": 46
         ]
-        Alamofire.request(.GET, URL, parameters: parameter).responseJSON { response in
+        Alamofire.request(URL, method: .get, parameters: parameter).responseJSON { (response) in
             if let myResponse = response.response {
                 if myResponse.statusCode == 200 {
                     if let json = response.result.value {
@@ -265,10 +271,30 @@ class OfferedServicesVC: UIViewController, UITableViewDelegate, UITableViewDataS
                 }
             }else {
                 self.alertWithMessage("There was a problem getting offered services\n please try again")
-              self.refreshControl.endRefreshing()
+                self.refreshControl.endRefreshing()
             }
         }
-        
+//        Alamofire.request(.GET, URL, parameters: parameter).responseJSON { response in
+//            if let myResponse = response.response {
+//                if myResponse.statusCode == 200 {
+//                    if let json = response.result.value {
+//                        self.offeredServices = JSON(json)
+//                        self.jsonIntoArrayOfObjects()
+//                        self.refreshControl.endRefreshing()
+//                        self.tableView.reloadData()
+//                        self.animateTableViewCells()
+//                    }
+//                }else {
+//                    self.alertWithMessage("There was a problem getting offered services\n please try again")
+//                    self.refreshControl.endRefreshing()
+//                }
+//            }else {
+//                self.alertWithMessage("There was a problem getting offered services\n please try again")
+//              self.refreshControl.endRefreshing()
+//            }
+//        }
+//        
+//    }
     }
     ///
     func deleteOfferedService(_ pk: Int) {
@@ -284,12 +310,12 @@ class OfferedServicesVC: UIViewController, UITableViewDelegate, UITableViewDataS
         let parameter = [
             "servicepk": pk
         ]
-        Alamofire.request(.DELETE, URL, parameters: parameter,headers: headers, encoding: .json).responseJSON { response in
+        Alamofire.request(URL, method: .delete, parameters: parameter, encoding: JSONEncoding.default, headers: headers).responseJSON { (response) in
             if let mydata = String(data: response.data!, encoding: String.Encoding.utf8) {
                 print("my data is \(mydata)")
             }
-            print(response.request)
-            print(response.response)
+            print(response.request!)
+            print(response.response!)
             print(response.result)
             if let myResponse = response.response {
                 if myResponse.statusCode == 200 {
@@ -301,6 +327,23 @@ class OfferedServicesVC: UIViewController, UITableViewDelegate, UITableViewDataS
                 self.alertWithMessage("There is a problem with the server\nPlease try again")
             }
         }
+//        Alamofire.request(.DELETE, URL, parameters: parameter,headers: headers, encoding: .json).responseJSON { response in
+//            if let mydata = String(data: response.data!, encoding: String.Encoding.utf8) {
+//                print("my data is \(mydata)")
+//            }
+//            print(response.request)
+//            print(response.response)
+//            print(response.result)
+//            if let myResponse = response.response {
+//                if myResponse.statusCode == 200 {
+//                    print("its working")
+//                }else {
+//                    self.alertWithMessage("There was a problem deleting offered services\n please try again")
+//                }
+//            }else {
+//                self.alertWithMessage("There is a problem with the server\nPlease try again")
+//            }
+//        }
         
     }
 }

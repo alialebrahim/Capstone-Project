@@ -200,8 +200,7 @@ class Feed: UIViewController, UITableViewDelegate, UITableViewDataSource {
             let headers = [
                 "Authorization": myToken
             ]
-            
-            Alamofire.request(.GET, URL, parameters: nil, headers: headers, encoding: .json).responseJSON { response in
+            Alamofire.request(URL, method: .get, parameters: nil, encoding: JSONEncoding.default, headers: headers).responseJSON(completionHandler: { (response) in
                 if let myResponse = response.response {
                     if myResponse.statusCode == 200 {
                         if let json = response.result.value {
@@ -213,14 +212,35 @@ class Feed: UIViewController, UITableViewDelegate, UITableViewDataSource {
                             self.tableView.reloadData()
                         }
                         //TODO: finish loading animation
-//                        if let mydata = String(data: response.data!, encoding: NSUTF8StringEncoding) {
-//                            print("my data from getting profile request is \(mydata)")
-//                        }
+                        //                        if let mydata = String(data: response.data!, encoding: NSUTF8StringEncoding) {
+                        //                            print("my data from getting profile request is \(mydata)")
+                        //                        }
                     }else {
                         self.alertWithMessage("Could not load Feed information, please try again")
                     }
                 }
-            }
+            })
+            
+//            Alamofire.request(.GET, URL, parameters: nil, headers: headers, encoding: .json).responseJSON { response in
+//                if let myResponse = response.response {
+//                    if myResponse.statusCode == 200 {
+//                        if let json = response.result.value {
+//                            print("my json")
+//                            print(json)
+//                            self.publicServicesJSON = JSON(json)
+//                            self.jsonIntoArrayOfPublicObjects()
+//                            self.jsonIntoArrayOfBidObjects()
+//                            self.tableView.reloadData()
+//                        }
+//                        //TODO: finish loading animation
+////                        if let mydata = String(data: response.data!, encoding: NSUTF8StringEncoding) {
+////                            print("my data from getting profile request is \(mydata)")
+////                        }
+//                    }else {
+//                        self.alertWithMessage("Could not load Feed information, please try again")
+//                    }
+//                }
+//            }
         }
 //        navigationController?.setNavigationBarHidden(false, animated: false)
 //        LoadingView.stopAnimating()

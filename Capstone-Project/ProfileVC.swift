@@ -231,8 +231,7 @@ class ProfileVC: UIViewController, UIScrollViewDelegate {
             let headers = [
                 "Authorization": myToken
             ]
-            
-            Alamofire.request(.GET, URL, parameters: nil, headers: headers, encoding: .json).responseJSON { response in
+            Alamofire.request(URL, method: .get, parameters: nil, encoding: JSONEncoding.default, headers: headers).responseJSON(completionHandler: { (response) in
                 if let myResponse = response.response {
                     if myResponse.statusCode == 200 {
                         if let json = response.result.value {
@@ -282,7 +281,58 @@ class ProfileVC: UIViewController, UIScrollViewDelegate {
                         self.alertWithMessage("Could not load profile information, please try again")
                     }
                 }
-            }
+            })
+//            Alamofire.request(.GET, URL, parameters: nil, headers: headers, encoding: .json).responseJSON { response in
+//                if let myResponse = response.response {
+//                    if myResponse.statusCode == 200 {
+//                        if let json = response.result.value {
+//                            print("my json")
+//                            print(json)
+//                            let myJson = JSON(json)
+//                            if let myUsername = myJson["username"].string {
+//                                self.username.text = myUsername
+//                            }
+//                            if let myAbout = myJson["about"].string {
+//                                self.bioTextView.text = myAbout
+//                            }else{
+//                                self.bioTextView.text = "no description"
+//                            }
+//                            if let phoneNo = myJson["phone_number"].string {
+//                                self.providersMobileNumber.setTitle(phoneNo, for: UIControlState())
+//                            }else {
+//                                self.providersMobileNumber.setTitle("no phone number", for: UIControlState())
+//                            }
+//                            if let email = myJson["email"].string {
+//                                self.providersEmailAddress.setTitle(email, for: UIControlState())
+//                            }else {
+//                                self.providersEmailAddress.setTitle("no email", for: UIControlState())
+//                            }
+//                            if let area = myJson["area"].string {
+//                                self.address.text = "\(area)"
+//                            }
+//                            if  let street = myJson["street_address"].string {
+//                                self.address.text = "\(self.address.text!) \(street)"
+//                            }
+//                            if let country = myJson["country"].string {
+//                                self.address.text = "\(self.address.text!) \(country)"
+//                            }
+//                            if let category = myJson["category"].string {
+//                                self.categories.text = "\(category)"
+//                            }
+//                            if let pk = myJson["pk"].int {
+//                                print("providers pk is \(pk)")
+//                                self.providersPK = pk
+//                            }
+//                        }
+//                        //TODO: finish loading anumation
+//                        if let mydata = String(data: response.data!, encoding: String.Encoding.utf8) {
+//                            print("my data from getting profile request is \(mydata)")
+//                        }
+//                    }else {
+//                        self.alertWithMessage("Could not load profile information, please try again")
+//                    }
+//                }
+//            }
         }
         navigationController?.setNavigationBarHidden(false, animated: false)
         LoadingView.stopAnimating()

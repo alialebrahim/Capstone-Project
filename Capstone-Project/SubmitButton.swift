@@ -12,7 +12,7 @@ protocol SubmitButtonDelegate: class {
     func didAnimate(_ frame: CGRect)
     //func removeAnimation()
 }
-class SubmitButton: UIButton {
+class SubmitButton: UIButton, CAAnimationDelegate {
     
     weak var delegate: SubmitButtonDelegate?
     lazy var indicator: NVActivityIndicatorView! = {
@@ -66,12 +66,12 @@ class SubmitButton: UIButton {
      func setOriginalState() {
         self.returnToOriginalState()
     }
-    
-     override func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
+    //MARK: there was override here
+    func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
         let a = anim as! CABasicAnimation
         if a.keyPath == "transform.scale" {
             didEndFinishAnimation?()
-            Timer.schedule(delay: 1) { timer in
+            _ = Timer.schedule(delay: 1) { timer in
                 self.returnToOriginalState()
             }
         }

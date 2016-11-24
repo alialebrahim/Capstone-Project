@@ -22,8 +22,6 @@
 		4136DB301D59C9AA0030A685 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4136DB281D59C9AA0030A685 /* LaunchScreen.storyboard */; };
 		4136DB311D59C9AA0030A685 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4136DB291D59C9AA0030A685 /* Assets.xcassets */; };
 		4136DB351D59C9FD0030A685 /* iCarousel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4136DB341D59C9FD0030A685 /* iCarousel.m */; };
-		4136DB381D59CA070030A685 /* SCLAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4136DB361D59CA070030A685 /* SCLAlertView.swift */; };
-		4136DB391D59CA070030A685 /* SCLExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4136DB371D59CA070030A685 /* SCLExtensions.swift */; };
 		4136DB3B1D59CA280030A685 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4136DB3A1D59CA280030A685 /* AppDelegate.swift */; };
 		4136DB3D1D59CA4F0030A685 /* countries.txt in Resources */ = {isa = PBXBuildFile; fileRef = 4136DB3C1D59CA4F0030A685 /* countries.txt */; };
 		4136DB4B1D59CAB50030A685 /* ServicesVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4136DB411D59CAB50030A685 /* ServicesVC.swift */; };
@@ -103,8 +101,6 @@
 		4136DB291D59C9AA0030A685 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4136DB331D59C9FD0030A685 /* iCarousel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iCarousel.h; sourceTree = "<group>"; };
 		4136DB341D59C9FD0030A685 /* iCarousel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iCarousel.m; sourceTree = "<group>"; };
-		4136DB361D59CA070030A685 /* SCLAlertView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCLAlertView.swift; sourceTree = "<group>"; };
-		4136DB371D59CA070030A685 /* SCLExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCLExtensions.swift; sourceTree = "<group>"; };
 		4136DB3A1D59CA280030A685 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4136DB3C1D59CA4F0030A685 /* countries.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = countries.txt; sourceTree = "<group>"; };
 		4136DB411D59CAB50030A685 /* ServicesVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ServicesVC.swift; sourceTree = "<group>"; };
@@ -240,8 +236,6 @@
 			isa = PBXGroup;
 			children = (
 				4136DB1A1D59C81F0030A685 /* Info.plist */,
-				4136DB361D59CA070030A685 /* SCLAlertView.swift */,
-				4136DB371D59CA070030A685 /* SCLExtensions.swift */,
 				4136DB331D59C9FD0030A685 /* iCarousel.h */,
 				4136DB341D59C9FD0030A685 /* iCarousel.m */,
 				4136DB3A1D59CA280030A685 /* AppDelegate.swift */,
@@ -497,7 +491,6 @@
 				4136DB4C1D59CAB50030A685 /* ProfileVC.swift in Sources */,
 				414777761D61D8EB0097D34D /* SearchVC.swift in Sources */,
 				4136DB4B1D59CAB50030A685 /* ServicesVC.swift in Sources */,
-				4136DB391D59CA070030A685 /* SCLExtensions.swift in Sources */,
 				4136DB531D59CAB50030A685 /* ImagePreview.swift in Sources */,
 				4136DB751D59CB060030A685 /* PredefinedServicesCell.swift in Sources */,
 				4132BE571DBB5C2100B1E4F1 /* LoadingView.swift in Sources */,
@@ -506,7 +499,6 @@
 				41294A5F1DD5B2C10045C557 /* Bid.swift in Sources */,
 				4147777A1D6320C80097D34D /* ChooseRatingVC.swift in Sources */,
 				41CCA2361D9CF366009E9FBE /* backendTests.swift in Sources */,
-				4136DB381D59CA070030A685 /* SCLAlertView.swift in Sources */,
 				4136DB711D59CB060030A685 /* TimeIntervalManager.swift in Sources */,
 				4136DB761D59CB060030A685 /* WorkingOnServiceCell.swift in Sources */,
 				4136DB6E1D59CB060030A685 /* CustomSegmentedControl.swift in Sources */,

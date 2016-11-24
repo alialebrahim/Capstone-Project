@@ -272,11 +272,10 @@ class PublicServiceRequestVC: UIViewController, UITextViewDelegate, ChooseCatego
                 "category": category,
                 "service": service
             ] as [String : Any]
-            
-            Alamofire.request(.POST, URL, parameters: parameters as? [String : AnyObject], headers: headers, encoding: .json).responseJSON { response in
-                print(response.request)  // original URL request
-                print(response.response) // URL response
-                print(response.data)     // server data
+            Alamofire.request(URL, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers).responseJSON(completionHandler: { (response) in
+                print(response.request!)  // original URL request
+                print(response.response!) // URL response
+                print(response.data!)     // server data
                 print(response.result)   // result of response serialization
                 if let mydata = String(data: response.data!, encoding: String.Encoding.utf8) {
                     print(mydata)
@@ -289,7 +288,25 @@ class PublicServiceRequestVC: UIViewController, UITextViewDelegate, ChooseCatego
                 }else {
                     print("could not create public service")
                 }
-            }
+
+            })
+//            Alamofire.request(.POST, URL, parameters: parameters as? [String : AnyObject], headers: headers, encoding: .json).responseJSON { response in
+//                print(response.request)  // original URL request
+//                print(response.response) // URL response
+//                print(response.data)     // server data
+//                print(response.result)   // result of response serialization
+//                if let mydata = String(data: response.data!, encoding: String.Encoding.utf8) {
+//                    print(mydata)
+//                }
+//                if let JSON = response.result.value {
+//                    print("JSON: \(JSON)")
+//                }
+//                if response.response?.statusCode == 201 {
+//                    // TODO: go to the detailed page of the offered service.
+//                }else {
+//                    print("could not create public service")
+//                }
+//            }
             
         }
     }

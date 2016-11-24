@@ -173,7 +173,7 @@ class OfferedServiceDetailsP: UIViewController, UITableViewDelegate, UITableView
                 "servicepk": 0
             ]
         }
-        Alamofire.request(.GET, URL, parameters: parameter).responseJSON { response in
+        Alamofire.request(URL, method: .post, parameters: parameter, encoding: JSONEncoding.default, headers: nil).responseJSON { (response) in
             if let myResponse = response.response {
                 if myResponse.statusCode == 200 {
                     if let json = response.result.value {
@@ -209,6 +209,44 @@ class OfferedServiceDetailsP: UIViewController, UITableViewDelegate, UITableView
             }else {
                 self.alertWithMessage("There was a problem getting offered services\n please try again")
             }
+
         }
+//        Alamofire.request(.GET, URL, parameters: parameter).responseJSON { response in
+//            if let myResponse = response.response {
+//                if myResponse.statusCode == 200 {
+//                    if let json = response.result.value {
+//                        let myJson = JSON(json)
+//                        /*
+//                         
+//                         let title = myOfferedServices[index]["service"]["title"].string
+//                         let description = myOfferedServices[index]["service"]["description"].string
+//                         let category = myOfferedServices[index]["category"].string
+//                         let price = myOfferedServices[index]["service"]["price"].float
+//                         let id = myOfferedServices[index]["id"].int
+//                         
+//                         */
+//                        if let myTitle = myJson["service"]["title"].string {
+//                            self.navigationItem.title = myTitle
+//                        }else {
+//                            self.navigationItem.title = "no title"
+//                        }
+//                        if let myDescription = myJson["service"]["description"].string {
+//                            self.descriptionTextView.text = myDescription
+//                        }else {
+//                            self.descriptionTextView.text = "no description"
+//                        }
+//                        if let myPrice = myJson["service"]["price"].float {
+//                            self.priceLabel.text = "\(myPrice)"
+//                        }else {
+//                            self.descriptionTextView.text = "no price"
+//                        }
+//                    }
+//                }else {
+//                    self.alertWithMessage("There was a problem getting offered services\n please try again")
+//                }
+//            }else {
+//                self.alertWithMessage("There was a problem getting offered services\n please try again")
+//            }
+//        }
     }
 }

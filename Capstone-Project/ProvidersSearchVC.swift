@@ -94,12 +94,12 @@ class ProvidersSearchVC: UIViewController, UITableViewDelegate, UITableViewDataS
             let parameters = [
                 "category": myCategory
             ]
-            Alamofire.request(.POST, URL, parameters: parameters, headers: headers, encoding: .json).responseJSON { response in
+            Alamofire.request(URL, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers).responseJSON(completionHandler: { (response) in
                 if let mydata = String(data: response.data!, encoding: String.Encoding.utf8) {
                     print("my data is \(mydata)")
                 }
-                print(response.request)
-                print(response.response)
+                print(response.request!)
+                print(response.response!)
                 print(response.result)
                 if let myResponse = response.response {
                     if myResponse.statusCode == 200 {
@@ -115,7 +115,29 @@ class ProvidersSearchVC: UIViewController, UITableViewDelegate, UITableViewDataS
                         self.alertWithMessage("Could not load Feed information, please try again")
                     }
                 }
-            }
+            })
+//            Alamofire.request(.POST, URL, parameters: parameters, headers: headers, encoding: .json).responseJSON { response in
+//                if let mydata = String(data: response.data!, encoding: String.Encoding.utf8) {
+//                    print("my data is \(mydata)")
+//                }
+//                print(response.request)
+//                print(response.response)
+//                print(response.result)
+//                if let myResponse = response.response {
+//                    if myResponse.statusCode == 200 {
+//                        if let json = response.result.value {
+//                            print("my json")
+//                            print(json)
+//                            self.profiles = JSON(json)
+//                            self.jsonIntoArrayOfUsers()
+//                            self.tableView.reloadData()
+//                        }
+//                        //TODO: finish loading animation
+//                    }else {
+//                        self.alertWithMessage("Could not load Feed information, please try again")
+//                    }
+//                }
+//            }
         }
     }
 }

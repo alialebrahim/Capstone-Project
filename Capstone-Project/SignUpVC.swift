@@ -286,7 +286,7 @@ class SignUpVC: UIViewController, UIImagePickerControllerDelegate, UINavigationC
     func errorButtonPressed(_ button: ErrorButton) {
         dismissKeyboard()
         let message = button.errorMessage
-        let _ = SCLAlertView().showError("OOPS", subTitle: message)
+        //let _ = SCLAlertView().showError("OOPS", subTitle: message)
     }
     func detectUserCountry() {
         let locale = Locale.current
@@ -389,7 +389,7 @@ class SignUpVC: UIViewController, UIImagePickerControllerDelegate, UINavigationC
             NSForegroundColorAttributeName: UIColor.white
         ]
         
-        seekerProviderSegmentedControl.setTitleTextAttributes(segAttributes as! [AnyHashable: Any], for: UIControlState.selected)
+        seekerProviderSegmentedControl.setTitleTextAttributes(segAttributes as? [AnyHashable: Any], for: UIControlState.selected)
         seekerProviderSegmentedControl.selectedSegmentIndex = 0
         userType = "seeker"
         seekerProviderSegmentedControl.tintColor = UIColor(hex: 0xa85783)
@@ -414,7 +414,7 @@ class SignUpVC: UIViewController, UIImagePickerControllerDelegate, UINavigationC
         activity = NVActivityIndicatorView(frame: frame, type: .ballClipRotateMultiple, color: UIColor.white)
         contentView.addSubview(activity)
         contentView.bringSubview(toFront: activity)
-        activity.startAnimation()
+        activity.startAnimating()
     }
     //TODO: remove this
     func removeAnimation() {
@@ -453,7 +453,7 @@ class SignUpVC: UIViewController, UIImagePickerControllerDelegate, UINavigationC
         ]
         print("username: \(username)")
         print("password: \(password)")
-        Alamofire.request(.POST, URL, parameters: parameters, encoding: .json).responseJSON { response in
+        Alamofire.request(URL, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: nil).responseJSON { (response) in
             print(response.request)  // original URL request
             print(response.response) // URL response
             print(response.data)     // server data
@@ -488,7 +488,44 @@ class SignUpVC: UIViewController, UIImagePickerControllerDelegate, UINavigationC
             }else {
                 self.alertWithMessage("Server error\nPlease try again.")
             }
+
         }
+//        Alamofire.request(.POST, URL, parameters: parameters, encoding: .json).responseJSON { response in
+//            print(response.request)  // original URL request
+//            print(response.response) // URL response
+//            print(response.data)     // server data
+//            if let requestData = response.data {
+//                if let dataString = String(data: requestData, encoding: String.Encoding.utf8) {
+//                    print(dataString)
+//                }
+//            }
+//            print(response.result)   // result of response serialization
+//            if let myResponse = response.response {
+//                if myResponse.statusCode == 201 {
+//                    if let json = response.result.value {
+//                        print("my json")
+//                        print(json)
+//                        let myJson = JSON(json)
+//                        if let userID = myJson["userid"].string {
+//                            print("user id")
+//                            print(userID)
+//                        }
+//                    }
+//                    if let mydata = String(data: response.data!, encoding: String.Encoding.utf8) {
+//                        print(mydata)
+//                    }
+//                    //perform login test to get token
+//                    self.loginTest(username, mypassword: password)
+//                }else {
+//                    print("not successful")
+//                    self.registerButton.returnToOriginalState()
+//                    self.activity.removeFromSuperview()
+//                    self.alertWithMessage("error in signing up")
+//                }
+//            }else {
+//                self.alertWithMessage("Server error\nPlease try again.")
+//            }
+//        }
     }
     func loginTest(_ myusername: String, mypassword: String) {
         let URL = "\(AppDelegate.URL)/login/"
@@ -500,8 +537,8 @@ class SignUpVC: UIViewController, UIImagePickerControllerDelegate, UINavigationC
         print("username -> \"\(parameters["username"])\"")
         print("password -> \"\(parameters["password"])\"")
         
-        Alamofire.request(.POST, URL, parameters: parameters, encoding: .json).validate().responseJSON {
-            (response) in
+        
+        Alamofire.request(URL, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: nil).responseJSON { (response) in
             if let myResponse = response.response {
                 if (myResponse.statusCode) == 200 {
                     if let json = response.result.value {
@@ -520,12 +557,39 @@ class SignUpVC: UIViewController, UIImagePickerControllerDelegate, UINavigationC
                     self.activity.removeFromSuperview()
                     self.alertWithMessage("error in login in")
                 }
-
+                
             }else {
                 self.alertWithMessage("Server error\nPlease try again.")
             }
-                        
+
         }
+
+//        Alamofire.request(.POST, URL, parameters: parameters, encoding: .json).validate().responseJSON {
+//            (response) in
+//            if let myResponse = response.response {
+//                if (myResponse.statusCode) == 200 {
+//                    if let json = response.result.value {
+//                        print("my json")
+//                        print(json)
+//                        let myJson = JSON(json)
+//                        if let myToken = myJson["token"].string {
+//                            print(myToken)
+//                            self.storeToken(myToken)
+//                            self.setProfile()
+//                        }
+//                    }
+//                }else {
+//                    print("did not login")
+//                    self.registerButton.returnToOriginalState()
+//                    self.activity.removeFromSuperview()
+//                    self.alertWithMessage("error in login in")
+//                }
+//
+//            }else {
+//                self.alertWithMessage("Server error\nPlease try again.")
+//            }
+//                        
+//        }
     }
     //will set country to make it part of the sign up
     func setProfile() {
@@ -548,12 +612,10 @@ class SignUpVC: UIViewController, UIImagePickerControllerDelegate, UINavigationC
                     "country": userCountry as AnyObject
                 ]
             }
-            
-            
-            Alamofire.request(.PUT, URL, parameters: parameters, headers: headers, encoding: .json).responseJSON { response in
-                print(response.request)  // original URL request
-                print(response.response) // URL response
-                print(response.data)     // server data
+            Alamofire.request(URL, method: .put, parameters: parameters, encoding: JSONEncoding.default, headers: headers).responseJSON(completionHandler: { (response) in
+                print(response.request!)  // original URL request
+                print(response.response!) // URL response
+                print(response.data!)     // server data
                 print(response.result)   // result of response serialization
                 
                 if let requestData = response.data {
@@ -586,7 +648,45 @@ class SignUpVC: UIViewController, UIImagePickerControllerDelegate, UINavigationC
                 }else {
                     self.alertWithMessage("Server error\nPlease try again.")
                 }
-            }
+            })
+            
+//            Alamofire.request(.PUT, URL, parameters: parameters, headers: headers, encoding: .json).responseJSON { response in
+//                print(response.request)  // original URL request
+//                print(response.response) // URL response
+//                print(response.data)     // server data
+//                print(response.result)   // result of response serialization
+//                
+//                if let requestData = response.data {
+//                    if let dataString = String(data: requestData, encoding: String.Encoding.utf8) {
+//                        print("data String : \(dataString)")
+//                    }
+//                }
+//                if let myResponse = response.response {
+//                    if (myResponse.statusCode) == 200 {
+//                        if let json = response.result.value {
+//                            print("my json")
+//                            print(json)
+//                            let myJson = JSON(json)
+//                            if let myType = myJson["usertype"].string {
+//                                print("MY TYPE IS : \(myType)")
+//                                if myType == "seeker" {
+//                                    self.performSegue(withIdentifier: "SeekerFeedVC", sender: nil)
+//                                }else if myType == "provider" {
+//                                    self.performSegue(withIdentifier: "ProfileVC", sender: nil)
+//                                }
+//                            }
+//                        }
+//                    }else {
+//                        //did not login
+//                        print("did not set profile")
+//                        self.registerButton.returnToOriginalState()
+//                        self.activity.removeFromSuperview()
+//                        self.alertWithMessage("could not set up profile")
+//                    }
+//                }else {
+//                    self.alertWithMessage("Server error\nPlease try again.")
+//                }
+//            }
         }
-    }    
+    }
 }

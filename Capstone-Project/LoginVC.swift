@@ -151,7 +151,7 @@ class LoginVC: UIViewController, SubmitButtonDelegate {
         activity = NVActivityIndicatorView(frame: frame, type: .ballClipRotateMultiple, color: UIColor.white)
         view.addSubview(activity)
         view.bringSubview(toFront: activity)
-        activity.startAnimation()
+        activity.startAnimating()
     }
     override var preferredStatusBarStyle : UIStatusBarStyle {
         return .lightContent
@@ -201,12 +201,10 @@ class LoginVC: UIViewController, SubmitButtonDelegate {
         
         print("username -> \"\(parameters["username"])\"")
         print("password -> \"\(parameters["password"])\"")
-        
-        Alamofire.request(.POST, URL, parameters: parameters, encoding: .json).validate().responseJSON {
-            (response) in
-            print(response.request)  // original URL request
-            print(response.response) // URL response
-            print(response.data)     // server data
+        Alamofire.request(URL, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: nil).validate().responseJSON { (response) in
+            print(response.request!)  // original URL request
+            print(response.response!) // URL response
+            print(response.data!)     // server data
             print(response.result)   // result of response serialization
             if let mydata = String(data: response.data!, encoding: String.Encoding.utf8) {
                 print(mydata)
@@ -243,6 +241,47 @@ class LoginVC: UIViewController, SubmitButtonDelegate {
                 self.alertWithMessage("Server error\nPlease try again.")
             }
         }
+//        Alamofire.request(.POST, URL, parameters: parameters, encoding: .json).validate().responseJSON {
+//            (response) in
+//            print(response.request)  // original URL request
+//            print(response.response) // URL response
+//            print(response.data)     // server data
+//            print(response.result)   // result of response serialization
+//            if let mydata = String(data: response.data!, encoding: String.Encoding.utf8) {
+//                print(mydata)
+//            }
+//            //TODO: validate its not empty
+//            if let myResponse = response.response {
+//                if myResponse.statusCode == 200 {
+//                    if let json = response.result.value {
+//                        print("my json")
+//                        print(json)
+//                        let myJson = JSON(json)
+//                        if let myToken = myJson["token"].string {
+//                            print(myToken)
+//                            self.storeToken(myToken)
+//                            if let myType = myJson["usertype"].string {
+//                                print(myType)
+//                                if myType == "seeker" {
+//                                    self.performSegue(withIdentifier: "SeekerFeedVC", sender: nil)
+//                                }else if myType == "provider" {
+//                                    self.performSegue(withIdentifier: "ProfileVC", sender: nil)
+//                                }
+//                            }
+//                        }
+//                    }
+//                }else {
+//                    print("did not login")
+//                    self.loginButton.returnToOriginalState()
+//                    self.activity.removeFromSuperview()
+//                    self.alertWithMessage("check your email and password")
+//                }
+//            }else {
+//                self.loginButton.returnToOriginalState()
+//                self.activity.removeFromSuperview()
+//                self.alertWithMessage("Server error\nPlease try again.")
+//            }
+//        }
     }
 
 }

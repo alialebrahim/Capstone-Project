@@ -47,7 +47,7 @@ class AvailableServiceHoursVC: UIViewController, UITableViewDelegate, UITableVie
         let toTime = toDatePicker.date
         if !TimeIntervalManager.correctTimeInterval(FromTime: fromTime, ToTime: toTime) {
             //TODO: alert to notify the user with the wrong time interval
-        }else if TimeIntervalManager.conflicts(TimeIntervalArray: availableTimes as! [(from: NSDate, to: NSDate)], TimeInterval: (fromTime, toTime)) {
+        }else if TimeIntervalManager.conflicts(TimeIntervalArray: availableTimes , TimeInterval: (fromTime, toTime)) {
             //TODO: alert to notify the user with time conflicts
         }else {
             //if the time given was correct, add it to the array and sort it.

@@ -164,8 +164,7 @@ class OfferedServiceDetails: UIViewController, iCarouselDelegate, iCarouselDataS
             let parameters = [
                 "servicepk": pk
             ]
-            Alamofire.request(.POST, URL, parameters: parameters, headers: headers).responseJSON { response in
-                
+            Alamofire.request(URL, method: .post, parameters: parameters, headers: headers).responseJSON(completionHandler: { (response) in
                 if response.response?.statusCode == 201 {
                     if let json = response.result.value {
                         print("my json")
@@ -182,9 +181,28 @@ class OfferedServiceDetails: UIViewController, iCarouselDelegate, iCarouselDataS
                         print("my data from getting profile request is \(mydata)")
                     }
                 }
-                
-                
-            }
+            })
+//            Alamofire.request(.POST, URL, parameters: parameters, headers: headers).responseJSON { response in
+//                
+//                if response.response?.statusCode == 201 {
+//                    if let json = response.result.value {
+//                        print("my json")
+//                        print(json)
+//                        let myJson = JSON(json)
+//                        print(myJson)
+//                    }
+//                    
+//                    if let mydata = String(data: response.data!, encoding: String.Encoding.utf8) {
+//                        print("my data from getting profile request is \(mydata)")
+//                    }
+//                }else {
+//                    if let mydata = String(data: response.data!, encoding: String.Encoding.utf8) {
+//                        print("my data from getting profile request is \(mydata)")
+//                    }
+//                }
+//                
+//                
+//            }
         }
     }
 }
