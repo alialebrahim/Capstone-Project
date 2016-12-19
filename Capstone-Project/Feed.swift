@@ -24,6 +24,7 @@ class Feed: UIViewController, UITableViewDelegate, UITableViewDataSource {
     let CellID2 = "PublicBid"
     var publicServicesJSON: JSON?
     var publicServicesWithBids = [Int]()
+    var myService: PublicServiceModel!
     //MARK: ViewController lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -82,9 +83,13 @@ class Feed: UIViewController, UITableViewDelegate, UITableViewDataSource {
 //    }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if indexPath.section == 0 {
+            myService = providerBidServices[indexPath.row]
+            performSegue(withIdentifier: "PublicServiceDetails", sender: true)
+        }
         if indexPath.section == 1 {
-            let id = publicServices[indexPath.row].id
-            performSegue(withIdentifier: "PublicServiceDetails", sender: id)
+            myService = publicServices[indexPath.row]
+            performSegue(withIdentifier: "PublicServiceDetails", sender: false)
         }
         
     }
@@ -117,9 +122,9 @@ class Feed: UIViewController, UITableViewDelegate, UITableViewDataSource {
         if segue.identifier == "PublicServiceDetails" {
             if let vc = segue.destination as? PublicServiceViewController {
                 //TODO: apply type safety
-                print("sender is")
-                print(sender as! Int)
-                vc.serviceID = sender as! Int
+                vc.myService = myService
+                vc.withBid = sender as? Bool
+                
             }
         }
     }
@@ -134,13 +139,13 @@ class Feed: UIViewController, UITableViewDelegate, UITableViewDataSource {
                     let providerBid = myPublicService["feed"][index]["bid_set"][myIndex]["bid"].int
                     let bidder = myPublicService["feed"][index]["bid_set"][myIndex]["bidder"].int
                     let id = myPublicService["feed"][index]["bid_set"][myIndex]["id"].int
-                    let myBid = Bid(bid: providerBid!, bidder: bidder!, id: id!)
                     print("provider bid")
                     print(providerBid)
                     print("bidder")
                     print(bidder)
                     print("id")
                     print(id)
+                    let myBid = Bid(bid: providerBid!, bidder: bidder!, id: id!)
                     bidding.append(myBid)
                     
                 }
@@ -149,6 +154,7 @@ class Feed: UIViewController, UITableViewDelegate, UITableViewDataSource {
                 let price = myPublicService["feed"][index]["service"]["price"].float
                 let title = myPublicService["feed"][index]["service"]["title"].string
                 //TODO: use due date
+                //ADD CREATED DATE
                 let dueData = myPublicService["feed"][index]["service"]["due_date"].string
                 let id = myPublicService["feed"][index]["id"].int
                 //TODO: apply type safety
@@ -202,6 +208,14 @@ class Feed: UIViewController, UITableViewDelegate, UITableViewDataSource {
             ]
             Alamofire.request(URL, method: .get, parameters: nil, encoding: JSONEncoding.default, headers: headers).responseJSON(completionHandler: { (response) in
                 if let myResponse = response.response {
+                    print("request")
+                    print(response.request!)  // original URL request
+                    print("response")
+                    print(response.response!) // URL response
+                    print("data")
+                    print(response.data!)     // server data
+                    print("result")
+                    print(response.result)   // result of response serialization
                     if myResponse.statusCode == 200 {
                         if let json = response.result.value {
                             print("my json")

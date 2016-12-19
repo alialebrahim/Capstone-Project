@@ -10,6 +10,9 @@ import UIKit
 
 class ProviderCell: UITableViewCell {
 
+    @IBOutlet weak var about: UILabel!
+    @IBOutlet weak var username: UILabel!
+    @IBOutlet weak var profileImageView: CircularImageView!
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

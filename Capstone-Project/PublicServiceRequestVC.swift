@@ -8,6 +8,7 @@
 
 import UIKit
 import Alamofire
+import DateTimePicker
 
 class PublicServiceRequestVC: UIViewController, UITextViewDelegate, ChooseCategoriesVCDelegate {
 
@@ -17,25 +18,30 @@ class PublicServiceRequestVC: UIViewController, UITextViewDelegate, ChooseCatego
     @IBOutlet weak var contentView: UIView!
     @IBOutlet weak var scrollView: UIScrollView!
 
-    @IBOutlet weak var datePicker: UIDatePicker!
+    @IBOutlet weak var priceTextField: UITextField!
+    @IBOutlet weak var submitButton: UIButton!
     @IBOutlet weak var serviceDescription: UITextView!
+    @IBOutlet weak var dueTo: UIButton!
+    var isSpecial: Bool?
     var year: Int!
     var month: Int!
     var day: Int!
     var choosenCategory: String = Categories.Others.rawValue
     let defaults = UserDefaults.standard
-    var submitRequestButton: UIButton = {
-        let button = UIButton()
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("submit", for: UIControlState())
-        button.layer.borderWidth = 1
-        button.layer.borderColor = UIColor.black.cgColor
-        button.setTitleColor(UIColor.black, for: UIControlState())
-        return button
-    }()
+//    var submitRequestButton: UIButton = {
+//        let button = UIButton()
+//        button.translatesAutoresizingMaskIntoConstraints = false
+//        button.setTitle("submit", for: UIControlState())
+//        button.layer.borderWidth = 1
+//        button.layer.borderColor = UIColor.black.cgColor
+//        button.setTitleColor(UIColor.black, for: UIControlState())
+//        return button
+//    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        print("YAY!! im here")
+        print(isSpecial)
         serviceDescription.delegate = self
         setup()
         // Do any additional setup after loading the view.
@@ -60,22 +66,22 @@ class PublicServiceRequestVC: UIViewController, UITextViewDelegate, ChooseCatego
         self.view.addGestureRecognizer(keyboardGesture)
         
         
-        datePicker.addTarget(self, action: #selector(datePickerValueChanged), for: .valueChanged)
+//        datePicker.addTarget(self, action: #selector(datePickerValueChanged), for: .valueChanged)
+//        
+//        let components = datePicker.calendar.dateComponents([.year, .month, .day],
+//                                                        from: datePicker.date)
+//        year = components.year
+//        month = components.month
+//        day = components.day
+//        
+//        print(year)
+//        print(month)
+//        print(day)
         
-        let components = datePicker.calendar.dateComponents([.year, .month, .day],
-                                                        from: datePicker.date)
-        year = components.year
-        month = components.month
-        day = components.day
-        
-        print(year)
-        print(month)
-        print(day)
-        
-        self.view.addSubview(submitRequestButton)
-        submitRequestButton.addTarget(self, action: #selector(submitButtonAction), for: .touchUpInside)
-        submitRequestButton.topAnchor.constraint(equalTo: datePicker.bottomAnchor, constant: 20).isActive = true
-        submitRequestButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+//        self.view.addSubview(submitRequestButton)
+//        submitRequestButton.addTarget(self, action: #selector(submitButtonAction), for: .touchUpInside)
+//        submitRequestButton.topAnchor.constraint(equalTo: datePicker.bottomAnchor, constant: 20).isActive = true
+//        submitRequestButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
         
         //textview placeholder setup
         serviceDescription.delegate = self
@@ -83,19 +89,32 @@ class PublicServiceRequestVC: UIViewController, UITextViewDelegate, ChooseCatego
         serviceDescription.textColor = UIColor(hex: 0xC7C7CD)
         serviceDescription.selectedTextRange = serviceDescription.textRange(from: serviceDescription.beginningOfDocument, to: serviceDescription.beginningOfDocument)
         //////////////////////////////
+        //setup buttons
+        dueTo.backgroundColor = UIColor(hex: 0x404040)
+        dueTo.setTitleColor(UIColor.white, for: .normal)
+        dueTo.layer.cornerRadius = 10
+        categoryButton.backgroundColor = UIColor(hex: 0x404040)
+        categoryButton.setTitleColor(UIColor.white, for: .normal)
+        categoryButton.layer.cornerRadius = 10
+        submitButton.backgroundColor = UIColor(hex: 0xa85783)
+        submitButton.setTitleColor(UIColor.white, for: .normal)
+        submitButton.layer.cornerRadius = 10
+        //setup fields
+        titleTextField.addBottomBorderWithColor(UIColor(hex: 0xa85783), width: 1)
+        priceTextField.addBottomBorderWithColor(UIColor(hex: 0xa85783), width: 1)
     }
-    func datePickerValueChanged() {
-        print("value changed")
-        let components = datePicker.calendar.dateComponents([.year, .month, .day],
-                                                     from: datePicker.date)
-        year = components.year
-        month = components.month
-        day = components.day
-        
-        print(year)
-        print(month)
-        print(day)
-    }
+//    func datePickerValueChanged() {
+//        print("value changed")
+//        let components = datePicker.calendar.dateComponents([.year, .month, .day],
+//                                                     from: datePicker.date)
+//        year = components.year
+//        month = components.month
+//        day = components.day
+//        
+//        print(year)
+//        print(month)
+//        print(day)
+//    }
     func hideKeyboard() {
         print("will hide keyboard now")
         view.endEditing(true)
@@ -108,7 +127,27 @@ class PublicServiceRequestVC: UIViewController, UITextViewDelegate, ChooseCatego
     func requestLog() {
         performSegue(withIdentifier: "RequestLog", sender: nil)
     }
+    @IBAction func dueToAction(_ sender: Any) {
+        
+        self.view.endEditing(true)
+        let picker = DateTimePicker.show()
+        picker.highlightColor = UIColor(red: 255.0/255.0, green: 138.0/255.0, blue: 138.0/255.0, alpha: 1)
+        
+        picker.completionHandler = { date in
+            let calendar = Calendar.current
+            let components = (calendar as NSCalendar).components([.day , .month , .year], from: date)
+            
+            self.year =  components.year
+            self.month = components.month
+            self.day = components.day
+            self.dueTo.setTitle("Due to: \(self.year!)/\(self.month!)/\(self.day!)", for: .normal)
+            print(self.year)
+            print(self.month)
+            print(self.day)
+        }
+    }
     func validateDate() -> Bool {
+        
         print("will validate date")
         let date = Date()
         let calendar = Calendar.current
@@ -176,14 +215,24 @@ class PublicServiceRequestVC: UIViewController, UITextViewDelegate, ChooseCatego
             }
         }
     }
-    func submitButtonAction() {
+    
+    @IBAction func submitButtonPressed(_ sender: Any) {
         print("will submit a public request")
-        if validateDate() {
-            print("corrent")
-            publicServiceCreation(choosenCategory, title: titleTextField.text!, description: serviceDescription.text!)
+        if let _ = isSpecial {
+            specialServiceRequest(titleTextField.text!, description: serviceDescription.text!, price: Float(priceTextField.text!)!)
         }else {
-            print("incorrect")
+            validateDate()
+            if /*validateDate()*/ true {
+                print("corrent")
+                publicServiceCreation(choosenCategory, title: titleTextField.text!, description: serviceDescription.text!)
+            }else {
+                print("incorrect")
+            }
         }
+        
+
+    }
+    func submitButtonAction() {
     }
     //TextView delegate functions
     /*
@@ -238,6 +287,45 @@ class PublicServiceRequestVC: UIViewController, UITextViewDelegate, ChooseCatego
     */
     
     //MARK: BACKEND
+    func specialServiceRequest(_ title: String, description: String, price: Float) {
+        
+        if let myToken = defaults.object(forKey: "userToken") as? String{
+            print(myToken)
+            let headers = [
+                "Authorization": myToken
+            ]
+            let URL = "\(AppDelegate.URL)/publicservice/"
+            
+            let service : [String: AnyObject] = [
+                "title" : title as AnyObject,
+                "description" : description as AnyObject,
+                "price": price as AnyObject,
+                "is_special" : true as AnyObject
+            ]
+            
+            let parameters = [
+                "service": service
+                ] as [String : Any]
+            Alamofire.request(URL, method: .post, parameters: parameters, headers: headers).responseJSON(completionHandler: { (response) in
+                print(response.request!)  // original URL request
+                print(response.response!) // URL response
+                print(response.data!)     // server data
+                print(response.result)   // result of response serialization
+                if let mydata = String(data: response.data!, encoding: String.Encoding.utf8) {
+                    print(mydata)
+                }
+                if let JSON = response.result.value {
+                    print("JSON: \(JSON)")
+                }
+                if response.response?.statusCode == 201 {
+                    // TODO: go to the detailed page of the offered service.
+                }else {
+                    print("could not create public service")
+                }
+                
+            })
+        }
+    }
     func publicServiceCreation(_ category: String, title: String, description: String) {
         /*
          

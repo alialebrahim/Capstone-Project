@@ -1,6 +1,7 @@
 PODS:
   - Alamofire (4.1.0)
   - Cosmos (7.0.0)
+  - DateTimePicker (1.0.3)
   - NVActivityIndicatorView (3.0)
   - RAMAnimatedTabBarController (2.0.13)
   - SwiftyJSON (3.0.0)
@@ -9,6 +10,7 @@ PODS:
 DEPENDENCIES:
   - Alamofire (~> 4.0)
   - Cosmos (~> 7.0)
+  - DateTimePicker
   - NVActivityIndicatorView
   - RAMAnimatedTabBarController (~> 2.0.13)
   - SwiftyJSON (= 3.0.0)
@@ -17,11 +19,12 @@ DEPENDENCIES:
 SPEC CHECKSUMS:
   Alamofire: e266cf991b933498df791e645e0d8ac294492153
   Cosmos: 2c8299147138758f6ebbb247cf1aeed77998bdf9
+  DateTimePicker: 23ca73cee22ff485e9e2fbfa4e4082845ce65e95
   NVActivityIndicatorView: 81953b5e65093ba79edf4fe7268e002039ca5268
   RAMAnimatedTabBarController: 2510f3b66954c3f77ea1042a35d34df8f5f3b604
   SwiftyJSON: f57b2b44bc166617372d1c70773591fe9f0f5fd4
   TextFieldEffects: ef594746f17997c813e07633f8ae5acaf9b04f27
 
-PODFILE CHECKSUM: 57fa8aabf6ceb3c4d03d76a71cf6e52da64fccb0
+PODFILE CHECKSUM: d37006a64ba7aa4bf31af7fd547196a6a22eccb4
 
 COCOAPODS: 1.1.1

@@ -279,7 +279,7 @@ class addService: UIViewController, UITextViewDelegate, iCarouselDelegate, iCaro
     }
     func addService() {
         //BACKEND REQUEST FUNCTION
-        offeredServiceCreation("food", title: titleTextField.text!, description: descriptionTextView.text!, price: priceTextField.text!)
+        offeredServiceCreation(myCategories[0], title: titleTextField.text!, description: descriptionTextView.text!, price: priceTextField.text!)
     }
     func adjustContentViewHeight() {
         var contentRect = CGRect.zero

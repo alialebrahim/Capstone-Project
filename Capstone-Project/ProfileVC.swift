@@ -25,6 +25,7 @@ class ProfileVC: UIViewController, UIScrollViewDelegate {
     @IBOutlet weak var profileImage: CircularImageView!
     @IBOutlet weak var username: UILabel!
     @IBOutlet weak var ratingStarsView: CosmosView!
+    @IBOutlet weak var specialServiceButton: UIButton!
     @IBOutlet weak var bioTextView: UITextView!
     @IBOutlet weak var workingFields: UILabel!
     @IBOutlet weak var providersMobileNumber: UIButton!
@@ -38,7 +39,6 @@ class ProfileVC: UIViewController, UIScrollViewDelegate {
     weak var delegate: ProfileDelegate?
     let defaults = UserDefaults.standard
     var providersPK: Int?
-    
     //MARK: ViewController lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -51,6 +51,11 @@ class ProfileVC: UIViewController, UIScrollViewDelegate {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         createRatingView()
+        if delegate == nil {
+            specialServiceButton.heightAnchor.constraint(equalToConstant: 0)
+            specialServiceButton.isHidden = true
+            
+        }
         //TODO: start loading anumation
         //TODO: web request to get profile information.
     }
@@ -60,10 +65,17 @@ class ProfileVC: UIViewController, UIScrollViewDelegate {
         LoadingView.addLoadingViewTo(self.view)
         navigationController?.setNavigationBarHidden(true, animated: false)
         LoadingView.startAnimatingWithMessage("Getting profile information")
-        Timer.schedule(delay: 5) { timer in
-            self.getProfileInfo()
+        if delegate != nil {
+            print("From seeker")
+            _ = Timer.schedule(delay: 5) { timer in
+                self.getProvider(withPK: self.providersPK!)
+            }
+        }else {
+            print("From provider")
+            _ = Timer.schedule(delay: 5) { timer in
+                self.getProfileInfo()
+            }
         }
-
     }
     
     //MARK: IBActions
@@ -97,9 +109,13 @@ class ProfileVC: UIViewController, UIScrollViewDelegate {
     }
     //MARK: Functions
     func setup() {
-        automaticallyAdjustsScrollViewInsets = false
-        scrollView.contentInset = UIEdgeInsets.zero
+        scrollView.contentInset.top = 0
         scrollView.isUserInteractionEnabled = true
+        self.automaticallyAdjustsScrollViewInsets = false
+        scrollView.contentInset = UIEdgeInsets.zero
+        scrollView.scrollIndicatorInsets = UIEdgeInsets.zero
+        scrollView.contentOffset = CGPoint(x: 0, y: 0)
+
         //TODO: obtain these information from the backend
         bioTextView.textAlignment = .justified
         bioTextView.isEditable = false
@@ -165,6 +181,14 @@ class ProfileVC: UIViewController, UIScrollViewDelegate {
 //        navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.whiteColor()]
   
     }
+    @IBAction func specialServiceAction(_ sender: Any) {
+        print("go to special form")
+        let storyboard = UIStoryboard(name: "Seeker", bundle: nil)
+        if let vc = storyboard.instantiateViewController(withIdentifier: "publicRequest") as? PublicServiceRequestVC {
+            vc.isSpecial = true
+            self.navigationController?.pushViewController(vc, animated: true)
+        }
+    }
     func OfferedServices() {
         if let pk = providersPK {
             performSegue(withIdentifier: "OfferedServicesVC", sender: pk);
@@ -224,6 +248,83 @@ class ProfileVC: UIViewController, UIScrollViewDelegate {
         }
     }
     //MARK: BACKEND 
+    func getProvider(withPK pk:Int) {
+        print("GETTING PROVIDER")
+        let URL = "\(AppDelegate.URL)/profile/"
+        if let myToken = defaults.object(forKey: "userToken") as? String{
+            print(myToken)
+            let headers = [
+                "Authorization": myToken
+            ]
+            let parameters = [
+                "pk" : pk
+            ]
+           
+            Alamofire.request(URL, method: .get, parameters: parameters, headers: headers).responseJSON(completionHandler: { (response) in
+                print("request")
+                print(response.request!)  // original URL request
+                print("response")
+                print(response.response!) // URL response
+                print("data")
+                print(response.data!)     // server data
+                print("result")
+                print(response.result)   // result of response serialization
+                
+                if let myResponse = response.response {
+                    if myResponse.statusCode == 200 {
+                        if let json = response.result.value {
+                            print("my json")
+                            print(json)
+                            let myJson = JSON(json)
+                            if let myUsername = myJson["username"].string {
+                                self.username.text = myUsername
+                            }
+                            if let myAbout = myJson["about"].string {
+                                self.bioTextView.text = myAbout
+                            }else{
+                                self.bioTextView.text = "no description"
+                            }
+                            if let phoneNo = myJson["phone_number"].string {
+                                self.providersMobileNumber.setTitle(phoneNo, for: UIControlState())
+                            }else {
+                                self.providersMobileNumber.setTitle("no phone number", for: UIControlState())
+                            }
+                            if let email = myJson["email"].string {
+                                self.providersEmailAddress.setTitle(email, for: UIControlState())
+                            }else {
+                                self.providersEmailAddress.setTitle("no email", for: UIControlState())
+                            }
+                            if let area = myJson["area"].string {
+                                self.address.text = "\(area)"
+                            }
+                            if  let street = myJson["street_address"].string {
+                                self.address.text = "\(self.address.text!) \(street)"
+                            }
+                            if let country = myJson["country"].string {
+                                self.address.text = "\(self.address.text!) \(country)"
+                            }
+                            if let category = myJson["category"].string {
+                                self.categories.text = "\(category)"
+                            }
+                            if let pk = myJson["pk"].int {
+                                print("providers pk is \(pk)")
+                                self.providersPK = pk
+                            }
+                        }
+                        //TODO: finish loading anumation
+                        if let mydata = String(data: response.data!, encoding: String.Encoding.utf8) {
+                            print("my data from getting profile request is \(mydata)")
+                        }
+                    }else {
+                        self.alertWithMessage("Could not load profile information, please try again")
+                    }
+                }
+            })
+
+        }
+        navigationController?.setNavigationBarHidden(false, animated: false)
+        LoadingView.stopAnimating()
+    }
     func getProfileInfo() {
         let URL = "\(AppDelegate.URL)/profile/"
         if let myToken = defaults.object(forKey: "userToken") as? String{
@@ -231,7 +332,17 @@ class ProfileVC: UIViewController, UIScrollViewDelegate {
             let headers = [
                 "Authorization": myToken
             ]
+            
             Alamofire.request(URL, method: .get, parameters: nil, encoding: JSONEncoding.default, headers: headers).responseJSON(completionHandler: { (response) in
+                print("request")
+                print(response.request!)  // original URL request
+                print("response")
+                print(response.response!) // URL response
+                print("data")
+                print(response.data!)     // server data
+                print("result")
+                print(response.result)   // result of response serialization
+
                 if let myResponse = response.response {
                     if myResponse.statusCode == 200 {
                         if let json = response.result.value {

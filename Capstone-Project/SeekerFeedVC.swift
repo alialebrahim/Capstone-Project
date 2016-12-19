@@ -29,6 +29,8 @@ class SeekerFeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource
     //MARK: ViewController lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+
+
         setupTablevVieW()
         configureNavigationBar()
         //TODO: delete this line of code - for testing only
@@ -64,10 +66,10 @@ class SeekerFeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         
         //Cell configuration.
         myCell.serviceTitle.text = service.title
-        myCell.servicePrice.text = "\(service.price)"
-        myCell.serviceCurrency.text = "KWD"
-        
+        myCell.servicePrice.text = "\(service.price) KWD"
+        myCell.categoryImageView.image = self.imageForCategory(category: service.category)
         myCell.serviceDescription.text = service.description
+        print(service.description)
         return myCell
     }
     
@@ -239,11 +241,46 @@ class SeekerFeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource
             }
         }
     }
+    func imageForCategory(category: String) -> UIImage{
+        
+        var image:UIImage!
+        switch(category) {
+        case "cleaning":
+            image = UIImage(named: "cleaning.png")
+        case "food":
+            image = UIImage(named: "food.png")
+        case "errands":
+            image = UIImage(named: "errands.png")
+        case "pet":
+            image = UIImage(named: "pet.png")
+        case "real estate":
+            image = UIImage(named: "real_estate.png")
+        case "beauty":
+            image = UIImage(named: "beauty.png")
+        case "Others":
+            image = UIImage(named: "Others.png")
+        default :
+            image = UIImage(named: "other.png")
+        }
+        return image;
+        
+    }
     //BACKEND
     func gettingOfferedService() {
         //TODO: add loading animation only for the first time.
         let URL = "\(AppDelegate.URL)/offeredservice/"
-        Alamofire.request(URL, method: .get, parameters: nil, encoding: JSONEncoding.default, headers: nil).responseJSON { (response) in
+        Alamofire.request(URL, method: .get, parameters: nil, encoding: JSONEncoding.default).responseJSON { (response) in
+            print("request")
+            print(response.request!)  // original URL request
+            print("response")
+            print(response.response!) // URL response
+            print("data")
+            if let data = response.data {
+                let json = String(data: data, encoding: String.Encoding.utf8)
+                print(json!)
+            }
+            print("result")
+            print(response.result)   // result of response serialization
             if let myResponse = response.response {
                 if myResponse.statusCode == 200 {
                     if let json = response.result.value {

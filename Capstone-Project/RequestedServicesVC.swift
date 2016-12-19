@@ -7,7 +7,8 @@
 //
 
 import UIKit
-
+import Alamofire
+import SwiftyJSON
 class RequestedServicesVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, RequestServiceCellDelegate, ServicesVCDelegate{
     
     //MARK: IBOutlets
@@ -15,6 +16,7 @@ class RequestedServicesVC: UIViewController, UICollectionViewDelegate, UICollect
     @IBOutlet weak var requestNumberLabel: UILabel!
     
     //MARK: Variables
+    let defaults = UserDefaults.standard
     var isFirstTimeTransform = true
     var cellWidth: CGFloat!
     var cellHeight: CGFloat!
@@ -34,6 +36,7 @@ class RequestedServicesVC: UIViewController, UICollectionViewDelegate, UICollect
             requestNumberLabel.isHidden = false
             requestNumberLabel.text = "\(1) of \(data.count)"
         }
+        myRequests()
         
     }
     //MARK: Functions
@@ -213,6 +216,55 @@ class RequestedServicesVC: UIViewController, UICollectionViewDelegate, UICollect
             requestNumberLabel.text = "\(1) of \(data.count)"
         }
     }
+    func alertWithMessage(_ message: String) {
+        let alertController = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "Ok", style: .default, handler: nil)
+        alertController.addAction(okAction)
+        
+        present(alertController, animated: true, completion: nil)
+    }
     //MARK: BACKEND
+    func myRequests() {
+        //TODO: add loading animation only for the first time.
+        let URL = "\(AppDelegate.URL)/provider/requests/"
+        if let myToken = defaults.object(forKey: "userToken") as? String{
+            let headers = [
+                "Authorization": myToken
+            ]
+            print(myToken)
+            Alamofire.request(URL, method: .get, parameters: nil, headers: headers).responseJSON(completionHandler: { (response) in
+                print("request")
+                print(response.request!)  // original URL request
+                print("response")
+                print(response.response!) // URL response
+                print("data")
+                if let data = response.data {
+                    let json = String(data: data, encoding: String.Encoding.utf8)
+                    print(json!)
+                }
+                print("result")
+                print(response.result)   // result of response serialization
+                if let myResponse = response.response {
+                    if myResponse.statusCode == 200 {
+                        if let json = response.result.value {
+                            print(json)
+//                            self.offeredServices = JSON(json)
+//                            self.jsonIntoArrayOfObjects()
+//                            self.refreshControl.endRefreshing()
+//                            self.tableView.reloadData()
+                        }
+                    }else {
+                        self.alertWithMessage("There was a problem getting offered services\n please try again")
+                        //self.refreshControl.endRefreshing()
+                    }
+                }else {
+                    self.alertWithMessage("There was a problem getting offered services\n please try again")
+                    //self.refreshControl.endRefreshing()
+                }
+            
+            })
+        }
+        
+    }
     
 }

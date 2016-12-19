@@ -12,5 +12,5 @@ target 'Capstone-Project' do
   pod 'Cosmos', '~> 7.0'
   pod 'RAMAnimatedTabBarController', "~> 2.0.13" 
   pod 'NVActivityIndicatorView'
-  
+  pod 'DateTimePicker'
 end

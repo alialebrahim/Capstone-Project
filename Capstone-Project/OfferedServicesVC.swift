@@ -64,7 +64,12 @@ class OfferedServicesVC: UIViewController, UITableViewDelegate, UITableViewDataS
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         print("im here")
-        gettingOfferedService()
+        if delegate != nil {
+            getProviderServices(withPK: providersPK!)
+        }else {
+            gettingOfferedService()
+        }
+        
         
     }
     
@@ -169,15 +174,40 @@ class OfferedServicesVC: UIViewController, UITableViewDelegate, UITableViewDataS
         //Cell configuration.
         myCell.serviceTitle.text = service.title
         myCell.servicePrice.text = "\(service.price)"
-        myCell.serviceCurrency.text = "KWD"
-//        myCell.priceView.backgroundColor = UIColor(hex: 0xa85783)
+
+    //        myCell.priceView.backgroundColor = UIColor(hex: 0xa85783)
         myCell.serviceDescription.text = service.description
+        myCell.categoryImageView.image = self.imageForCategory(category: service.category)
         return myCell
 //        myCell.servicePrice.text = "\(tableData[indexPath.row])"
 //        myCell.serviceCurrency.text = "KWD"
 //        myCell.serviceTitle.text = "Building iOS Application"
 //        myCell.serviceDescription.text = "This is a service description This is a service description This is a service description This is a service description This is a service description This is a service description This is a service description This is a service description This is a service description"
 //        return myCell
+    }
+    func imageForCategory(category: String) -> UIImage{
+        
+        var image:UIImage!
+        switch(category) {
+            case "cleaning":
+                image = UIImage(named: "cleaning.png")
+            case "food":
+                image = UIImage(named: "food.png")
+            case "errands":
+                image = UIImage(named: "errands.png")
+            case "pet":
+                image = UIImage(named: "pet.png")
+            case "real estate":
+                image = UIImage(named: "real_estate.png")
+            case "beauty":
+                image = UIImage(named: "beauty.png")
+            case "Others":
+                image = UIImage(named: "Others.png")
+            default :
+                image = UIImage(named: "other.png")
+        }
+        return image;
+        
     }
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true
@@ -213,7 +243,20 @@ class OfferedServicesVC: UIViewController, UITableViewDelegate, UITableViewDataS
         var service: OfferedServiceModel!
         service = servicesObject[indexPath.row]
         let id = service.id!
-        performSegue(withIdentifier: "OfferedServiceDetails", sender: id)
+        if delegate != nil {
+            let storyboard = UIStoryboard(name: "Seeker", bundle: nil)
+            if let vc = storyboard.instantiateViewController(withIdentifier: "offeredDetails") as? OfferedServiceDetails {
+                let choosenService = offeredServices![indexPath.row]
+                vc.myService = choosenService
+                navigationController?.pushViewController(vc,animated: true)
+            }
+            
+            
+            //getProviderServices(withPK: providersPK!)
+        }else {
+            performSegue(withIdentifier: "OfferedServiceDetails", sender: id)
+        }
+        //performSegue(withIdentifier: "OfferedServiceDetails", sender: id)
     }
     //MARK: Functions
     func alertWithMessage(_ message: String) {
@@ -249,15 +292,43 @@ class OfferedServicesVC: UIViewController, UITableViewDelegate, UITableViewDataS
         }
     }
     //MARK: BACKEND
-    func gettingOfferedService() {
+    func getProviderServices(withPK pk: Int) {
         //TODO: add loading animation only for the first time.
         let URL = "\(AppDelegate.URL)/providerservices/"
         let parameter = [
-            "providerpk": 46
+            "providerpk": pk
         ]
         Alamofire.request(URL, method: .get, parameters: parameter).responseJSON { (response) in
             if let myResponse = response.response {
                 if myResponse.statusCode == 200 {
+                    print(":P:P")
+                    if let json = response.result.value {
+                        self.offeredServices = JSON(json)
+                        self.jsonIntoArrayOfObjects()
+                        self.refreshControl.endRefreshing()
+                        self.tableView.reloadData()
+                        self.animateTableViewCells()
+                    }
+                }else {
+                    self.alertWithMessage("There was a problem getting offered services\n please try again")
+                    self.refreshControl.endRefreshing()
+                }
+            }else {
+                self.alertWithMessage("There was a problem getting offered services\n please try again")
+                self.refreshControl.endRefreshing()
+            }
+        }
+    }
+    func gettingOfferedService() {
+        //TODO: add loading animation only for the first time.
+        let URL = "\(AppDelegate.URL)/providerservices/"
+        let parameter = [
+            "providerpk": defaults.object(forKey: "userPK") as! Int
+        ]
+        Alamofire.request(URL, method: .get, parameters: parameter).responseJSON { (response) in
+            if let myResponse = response.response {
+                if myResponse.statusCode == 200 {
+                    print(":P:P")
                     if let json = response.result.value {
                         self.offeredServices = JSON(json)
                         self.jsonIntoArrayOfObjects()

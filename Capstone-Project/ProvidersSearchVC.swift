@@ -38,11 +38,13 @@ class ProvidersSearchVC: UIViewController, UITableViewDelegate, UITableViewDataS
         return users.count
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: CellID)
-        return cell!
+        let cell = tableView.dequeueReusableCell(withIdentifier: CellID) as! ProviderCell
+        cell.username.text = users[indexPath.row].username
+        cell.about.text = users[indexPath.row].about
+        return cell
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        performSegue(withIdentifier: "SearchedProvider", sender: nil)
+        performSegue(withIdentifier: "SearchedProvider", sender: indexPath.row)
     }
     //MARK: Functions
     func setup(){
@@ -82,7 +84,14 @@ class ProvidersSearchVC: UIViewController, UITableViewDelegate, UITableViewDataS
             }
         }
     }
-    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "SearchedProvider" {
+            if let vc = segue.destination as? SearchedProviderVC {
+                let index = sender as! Int
+                vc.pk = users[index].id
+            }
+        }
+    }
     //BACKEND
     func searchUsers(_ myCategory: String) {
         let URL = "\(AppDelegate.URL)/search/"
@@ -98,9 +107,17 @@ class ProvidersSearchVC: UIViewController, UITableViewDelegate, UITableViewDataS
                 if let mydata = String(data: response.data!, encoding: String.Encoding.utf8) {
                     print("my data is \(mydata)")
                 }
-                print(response.request!)
-                print(response.response!)
-                print(response.result)
+                print("request")
+                print(response.request!)  // original URL request
+                print("response")
+                print(response.response!) // URL response
+                print("data")
+                if let data = response.data {
+                    let json = String(data: data, encoding: String.Encoding.utf8)
+                    print(json!)
+                }
+                print("result")
+                print(response.result)   // result of response serialization
                 if let myResponse = response.response {
                     if myResponse.statusCode == 200 {
                         if let json = response.result.value {

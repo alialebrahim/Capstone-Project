@@ -174,6 +174,9 @@ class LoginVC: UIViewController, SubmitButtonDelegate {
          }
          *****************************************************/
     }
+    func storePK(_ pk: Int) {
+        defaults.set(pk, forKey: "userPK")
+    }
     func validateIput(_ email: UITextField, password: UITextField) -> Bool {
         var isValid = true
         if let myEmail = email.text {
@@ -219,6 +222,10 @@ class LoginVC: UIViewController, SubmitButtonDelegate {
                         if let myToken = myJson["token"].string {
                             print(myToken)
                             self.storeToken(myToken)
+                            if let pk = myJson["pk"].int {
+                                print(pk)
+                                self.storePK(pk)
+                            }
                             if let myType = myJson["usertype"].string {
                                 print(myType)
                                 if myType == "seeker" {

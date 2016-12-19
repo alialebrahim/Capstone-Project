@@ -10,8 +10,8 @@ import UIKit
 
 class PredefinedServicesCell: UITableViewCell {
 
+    @IBOutlet weak var categoryImageView: UIImageView!
     @IBOutlet weak var servicePrice: UILabel!
-    @IBOutlet weak var serviceCurrency: UILabel!
     @IBOutlet weak var serviceTitle: UILabel!
     @IBOutlet weak var serviceDescription: UILabel!
     @IBOutlet weak var containerView: UIView!
@@ -37,8 +37,7 @@ class PredefinedServicesCell: UITableViewCell {
         priceView.addBottomBorderWithColor(UIColor.white, width: 1)
         priceView.addTopBorderWithColor(UIColor.white, width: 1)
         priceView.backgroundColor = UIColor(hex: 0xa85783)
-        servicePrice.textColor = UIColor.white
-        serviceCurrency.textColor = UIColor.white
+//        servicePrice.textColor = UIColor.white
         serviceDescription.textAlignment = .justified
         serviceDescription.textColor = UIColor(hex: 0x404040)
         self.backgroundColor = UIColor.clear

@@ -173,7 +173,7 @@ class OfferedServiceDetailsP: UIViewController, UITableViewDelegate, UITableView
                 "servicepk": 0
             ]
         }
-        Alamofire.request(URL, method: .post, parameters: parameter, encoding: JSONEncoding.default, headers: nil).responseJSON { (response) in
+        Alamofire.request(URL, method: .get, parameters: parameter).responseJSON { (response) in
             if let myResponse = response.response {
                 if myResponse.statusCode == 200 {
                     if let json = response.result.value {
@@ -188,9 +188,11 @@ class OfferedServiceDetailsP: UIViewController, UITableViewDelegate, UITableView
                          
                          */
                         if let myTitle = myJson["service"]["title"].string {
-                            self.navigationItem.title = myTitle
+                            print(myTitle)
+                            //self.titleTextField.text = myTitle
                         }else {
-                            self.navigationItem.title = "no title"
+                            print("no title")
+                            //self.titleTextField.text = "no title"
                         }
                         if let myDescription = myJson["service"]["description"].string {
                             self.descriptionTextView.text = myDescription
@@ -209,8 +211,8 @@ class OfferedServiceDetailsP: UIViewController, UITableViewDelegate, UITableView
             }else {
                 self.alertWithMessage("There was a problem getting offered services\n please try again")
             }
-
         }
+
 //        Alamofire.request(.GET, URL, parameters: parameter).responseJSON { response in
 //            if let myResponse = response.response {
 //                if myResponse.statusCode == 200 {

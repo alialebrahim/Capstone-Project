@@ -165,6 +165,15 @@ class OfferedServiceDetails: UIViewController, iCarouselDelegate, iCarouselDataS
                 "servicepk": pk
             ]
             Alamofire.request(URL, method: .post, parameters: parameters, headers: headers).responseJSON(completionHandler: { (response) in
+                print("request")
+                print(response.request!)  // original URL request
+                print("response")
+                print(response.response!) // URL response
+                print("data")
+                print(response.data!)     // server data
+                print("result")
+                print(response.result)   // result of response serialization
+
                 if response.response?.statusCode == 201 {
                     if let json = response.result.value {
                         print("my json")

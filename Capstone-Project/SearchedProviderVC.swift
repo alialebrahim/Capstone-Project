@@ -13,7 +13,7 @@ class SearchedProviderVC: UIViewController, ProfileDelegate, OfferedServicesDele
     //MARK: IBOutlets
     @IBOutlet weak var contentView: UIView!
     @IBOutlet weak var segmentedControl: CustomSegmentedControl!
-    
+    var pk: Int!
     //MARK: Variables
     var currentViewController: UIViewController?
     
@@ -43,10 +43,12 @@ class SearchedProviderVC: UIViewController, ProfileDelegate, OfferedServicesDele
             case 0:
                 let vc = storyboard.instantiateViewController(withIdentifier: "ProviderProfile") as! ProfileVC
                 vc.delegate = self
+                vc.providersPK = pk
                 return vc
             case 1:
                 let vc = storyboard.instantiateViewController(withIdentifier: "OfferedServices") as! OfferedServicesVC
                 vc.delegate = self
+                vc.providersPK = pk
                 return vc
             default: break
         }

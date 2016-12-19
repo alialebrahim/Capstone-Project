@@ -62,6 +62,7 @@
 		414777821D63936D0097D34D /* ProvidersSearchVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 414777811D63936D0097D34D /* ProvidersSearchVC.swift */; };
 		414777841D63938E0097D34D /* ProviderCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 414777831D63938E0097D34D /* ProviderCell.xib */; };
 		4164DC5E1DDEFB330011F1E6 /* profileModal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4164DC5D1DDEFB330011F1E6 /* profileModal.swift */; };
+		4183FF5F1DF180C800BAF64A /* logModal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4183FF5E1DF180C700BAF64A /* logModal.swift */; };
 		418CA4291D64A0B7007852F6 /* SearchedProviderVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 418CA4281D64A0B7007852F6 /* SearchedProviderVC.swift */; };
 		41A8A78C1D87F50D00F7E1AC /* PublicServiceCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 41A8A78B1D87F50D00F7E1AC /* PublicServiceCell.xib */; };
 		41A8A78E1D8800B800F7E1AC /* PublicServiceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41A8A78D1D8800B800F7E1AC /* PublicServiceCell.swift */; };
@@ -141,6 +142,7 @@
 		414777811D63936D0097D34D /* ProvidersSearchVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProvidersSearchVC.swift; sourceTree = "<group>"; };
 		414777831D63938E0097D34D /* ProviderCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ProviderCell.xib; sourceTree = "<group>"; };
 		4164DC5D1DDEFB330011F1E6 /* profileModal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = profileModal.swift; sourceTree = "<group>"; };
+		4183FF5E1DF180C700BAF64A /* logModal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = logModal.swift; sourceTree = "<group>"; };
 		418CA4281D64A0B7007852F6 /* SearchedProviderVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchedProviderVC.swift; sourceTree = "<group>"; };
 		41A8A78B1D87F50D00F7E1AC /* PublicServiceCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PublicServiceCell.xib; sourceTree = "<group>"; };
 		41A8A78D1D8800B800F7E1AC /* PublicServiceCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PublicServiceCell.swift; sourceTree = "<group>"; };
@@ -331,6 +333,7 @@
 				41294A5E1DD5B2C00045C557 /* Bid.swift */,
 				41B1DF461DD8FF8800E5BF95 /* serviceWithBidCell.swift */,
 				4164DC5D1DDEFB330011F1E6 /* profileModal.swift */,
+				4183FF5E1DF180C700BAF64A /* logModal.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -518,6 +521,7 @@
 				41ACDE151D86C94A00CA7438 /* RequestLogVC.swift in Sources */,
 				4136DB731D59CB060030A685 /* CustomSearchController.swift in Sources */,
 				4136DB701D59CB060030A685 /* Reachability.swift in Sources */,
+				4183FF5F1DF180C800BAF64A /* logModal.swift in Sources */,
 				41294A5B1DD5A2100045C557 /* PublicServiceModel.swift in Sources */,
 				4136DB511D59CAB50030A685 /* AvailableServiceHoursVC.swift in Sources */,
 				4136DB3B1D59CA280030A685 /* AppDelegate.swift in Sources */,
