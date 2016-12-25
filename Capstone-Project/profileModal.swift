@@ -10,16 +10,16 @@ import Foundation
 
 class Profile {
     var username: String
-    var about: String
-    var rating: Float
-    var country: String
-    var street: String
-    var area: String
-    var category: String
-    var phoneNumber: String
-    var email: String
+    var about: String?
+    var rating: Float?
+    var country: String?
+    var street: String?
+    var area: String?
+    var category: String?
+    var phoneNumber: String?
+    var email: String?
     var id: Int
-    init(username:String,about:String,rating:Float,country:String,street:String,area:String,category:String,phoneNumber:String,email:String,id:Int) {
+    init(username:String,about:String?,rating:Float?,country:String?,street:String?,area:String?,category:String?,phoneNumber:String?,email:String?,id:Int) {
         self.username = username
         self.about = about
         self.rating = rating

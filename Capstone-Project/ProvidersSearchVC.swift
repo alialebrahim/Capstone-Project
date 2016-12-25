@@ -78,7 +78,7 @@ class ProvidersSearchVC: UIViewController, UITableViewDelegate, UITableViewDataS
                 //TODO: use due date
                 let id = usersProfile[index]["pk"].int
                 //TODO: apply type safety
-                let user = Profile(username: username!, about: about!, rating: 0, country: country!, street: street!, area: area!, category: category!, phoneNumber: phone!, email: email!, id: id!)
+                let user = Profile(username: username!, about: about, rating: 0, country: country, street: street, area: area, category: category, phoneNumber: phone, email: email, id: id!)
                 users.append(user)
                 
             }

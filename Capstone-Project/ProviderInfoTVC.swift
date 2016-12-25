@@ -241,6 +241,7 @@ class ProviderInfoTVC: UITableViewController, EditProvidersProfileDelegate {
                             }
                             if let category = myJson["category"].string {
                                 self.categoryButton.setTitle(category, for: UIControlState())
+                                self.providersCategories.append(category)
                             }
                         
                             
