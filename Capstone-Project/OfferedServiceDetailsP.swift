@@ -26,7 +26,7 @@ class OfferedServiceDetailsP: UIViewController, UITableViewDelegate, UITableView
     //MARK: Vaiables
     let defaults = UserDefaults.standard
     var CellID = "timeCell"
-    var timeData = ["sdkbfksdh"]
+    var timeData = ["service is avaialble at any time"]
     var serviceImages = [UIImage]()
     var serviceID: Int?
     var isSeeker = false

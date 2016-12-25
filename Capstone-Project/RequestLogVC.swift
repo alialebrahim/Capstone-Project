@@ -61,21 +61,27 @@ class RequestLogVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         
         if let myService = service as? OfferedServiceModel {
             cell?.title.text = myService.title
-            cell?.status.text = myService.status
+            cell?.status.text = "Status: "+myService.status!
             cell?.provider.setTitle(myService.provider!, for: .normal)
             cell?.provider.isEnabled = false
             cell?.provider.setTitleColor(UIColor.darkText, for: .normal)
             cell?.timeCreated.text = myService.created!
+            cell?.timeDone.text = "Due to: -"
         }else if let myService = service as? specialServiceModel{
             cell?.title.text = myService.title
-            cell?.status.text = myService.status
+            cell?.status.text = "Status: "+myService.status!
             cell?.provider.setTitle(myService.provider!, for: .normal)
             cell?.provider.isEnabled = false
             cell?.provider.setTitleColor(UIColor.darkText, for: .normal)
             cell?.timeCreated.text = myService.created!
+            if let due = myService.dueDate {
+                cell?.timeDone.text = "Due to: "+due
+            }else {
+                cell?.timeDone.text = "Due to: -"
+            }
         }else if let myService = service as? PublicServiceModel {
             cell?.title.text = myService.title
-            cell?.status.text = myService.status
+            cell?.status.text = "Status: "+myService.status!
             if let provider = myService.provider {
                 cell?.provider.setTitle(provider, for: .normal)
             }else {
@@ -84,6 +90,11 @@ class RequestLogVC: UIViewController, UITableViewDelegate, UITableViewDataSource
             cell?.provider.isEnabled = false
             cell?.provider.setTitleColor(UIColor.darkText, for: .normal)
             cell?.timeCreated.text = myService.created!
+            if let due = myService.dueDate {
+                cell?.timeDone.text = "Due to: "+due
+            }else {
+                cell?.timeDone.text = "Due to: -"
+            }
         }
         
         return cell!
@@ -165,11 +176,12 @@ class RequestLogVC: UIViewController, UITableViewDelegate, UITableViewDataSource
                     let dueData = myLog[index]["service"]["due_date"].string
                     let id = myLog[index]["id"].int
                     //TODO: apply type safety
-                    let service = PublicServiceModel(category: category!, price: price!, title: title!, description: description!, id: id!,due: " ", bidding: bidding)
+                    let service = PublicServiceModel(category: category!, price: price!, title: title!, description: description!, id: id!,due: dueData, bidding: bidding)
                     service.idd = myLog["public"][index]["service"]["id"].int
                     service.status = myLog[index]["service"]["status"].string
                     service.created = myLog[index]["service"]["created"].string
                     service.provider = myLog[index]["provider"].string
+                    service.dueDate = myLog[index]["service"]["due_date"].string
                     logObjects.append(service)
                 }else if myLog[index]["type"].string == "special" {
                     let title = myLog[index]["title"].string
@@ -181,6 +193,7 @@ class RequestLogVC: UIViewController, UITableViewDelegate, UITableViewDataSource
                     service.provider = myLog[index]["provider"].string
                     service.created = myLog[index]["created"].string
                     service.status = myLog[index]["status"].string
+                    service.dueDate = myLog[index]["due_to"].string
                     logObjects.append(service)
                 }
             }

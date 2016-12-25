@@ -49,7 +49,7 @@ class ShowBids: UITableViewController {
         //let cell = tableView.dequeueReusableCell(withIdentifier: "bidDetail", for: indexPath.row)
         let cell = tableView.dequeueReusableCell(withIdentifier: "bidDetail")!
         cell.textLabel?.text = myService.bids?[indexPath.row].username
-        cell.detailTextLabel?.text = "\(myService.bids?[indexPath.row].bid!)"
+        cell.detailTextLabel?.text = "\(myService.bids![indexPath.row].bid!) KWD"
 
         return cell
     }
