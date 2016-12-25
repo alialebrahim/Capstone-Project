@@ -43,6 +43,7 @@ class CategoriesVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         return categoriesArray
     }()
     var categoriesString = [String]()
+    var myCategory = ""
     var savedCategory = [String]()
     let CellID = "CategoryCell"
     weak var delegate: CategoriesVCDelegate?
@@ -76,7 +77,7 @@ class CategoriesVC: UIViewController, UITableViewDelegate, UITableViewDataSource
     func setupTableView() {
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.allowsMultipleSelection = true
+        //tableView.allowsMultipleSelection = true
     }
     func checkMarkSavedCategories() {
         for category in savedCategory {
@@ -127,6 +128,7 @@ class CategoriesVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         if tableView.cellForRow(at: indexPath)?.accessoryType != .checkmark {
             print("checked")
             tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark
+            myCategory = categories[indexPath.row].rawValue
             categoriesString.append(categories[indexPath.row].rawValue)
             print(categoriesString)
            

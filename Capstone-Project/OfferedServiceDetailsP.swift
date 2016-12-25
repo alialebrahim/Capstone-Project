@@ -13,6 +13,7 @@ class OfferedServiceDetailsP: UIViewController, UITableViewDelegate, UITableView
 
     //MARK: IBOutlets
     @IBOutlet weak var picturesView: iCarousel!
+    @IBOutlet weak var request: UIButton!
     @IBOutlet weak var tableView: UITableView! //cell height = 45
     @IBOutlet weak var availableServiceDaysLabel: UILabel!
     @IBOutlet weak var priceLabel: UILabel!
@@ -23,14 +24,21 @@ class OfferedServiceDetailsP: UIViewController, UITableViewDelegate, UITableView
     
     @IBOutlet weak var tableViewHeight: NSLayoutConstraint!
     //MARK: Vaiables
+    let defaults = UserDefaults.standard
     var CellID = "timeCell"
-    var timeData = [1,2,3,4,5,67,8,8]
+    var timeData = ["sdkbfksdh"]
     var serviceImages = [UIImage]()
     var serviceID: Int?
+    var isSeeker = false
+    var myService: OfferedServiceModel!
     //MARK: ViewController lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
+        if !isSeeker {
+            request.heightAnchor.constraint(equalToConstant: 0)
+            request.isHidden = true
+        }
         // Do any additional setup after loading the view.
     }
     override func viewDidAppear(_ animated: Bool) {
@@ -38,6 +46,9 @@ class OfferedServiceDetailsP: UIViewController, UITableViewDelegate, UITableView
         adjustContentViewHeight()
         if let id = serviceID {
             offeredServiceDetails(id)
+        }
+        if isSeeker {
+            
         }
         
     }
@@ -49,13 +60,17 @@ class OfferedServiceDetailsP: UIViewController, UITableViewDelegate, UITableView
         setupTableViewHeight()
     }
     
+    @IBAction func requestAction(_ sender: Any) {
+        requestOfferedServiceWithPK(serviceID!)
+    }
     //MARK: Functions
     func setup() {
         automaticallyAdjustsScrollViewInsets = false
         view.backgroundColor = UIColor.white
         setupNavigationBar()
         setupTableView()
-        
+        priceLabel.text = "Price: "
+        descriptionTextView.text = "Service description will be here"
         picturesView.delegate = self
         picturesView.dataSource = self
         picturesView.type = .rotary
@@ -76,8 +91,11 @@ class OfferedServiceDetailsP: UIViewController, UITableViewDelegate, UITableView
     }
     func setupNavigationBar() {
         navigationItem.title = "Service Title"
-        let editBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editService))
-        navigationItem.rightBarButtonItem = editBarButtonItem
+        if !isSeeker {
+                let editBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editService))
+            navigationItem.rightBarButtonItem = editBarButtonItem
+
+        }
     }
     func setupTableView() {
         tableView.delegate = self
@@ -103,10 +121,11 @@ class OfferedServiceDetailsP: UIViewController, UITableViewDelegate, UITableView
         return timeData.count
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: CellID)
-        cell?.textLabel?.text = "\(timeData[indexPath.row])"
-        cell?.selectionStyle  = .none
-        return cell!
+        //let cell = tableView.dequeueReusableCell(withIdentifier: CellID)
+        let cell = tableView.dequeueReusableCell(withIdentifier: CellID, for: indexPath)
+        cell.textLabel?.text = "\(timeData[indexPath.row])"
+        cell.selectionStyle  = .none
+        return cell
     }
     
     //MARK: iCarousel Delegate Function (for services images)
@@ -177,22 +196,13 @@ class OfferedServiceDetailsP: UIViewController, UITableViewDelegate, UITableView
             if let myResponse = response.response {
                 if myResponse.statusCode == 200 {
                     if let json = response.result.value {
+                        print(json)
                         let myJson = JSON(json)
-                        /*
-                         
-                         let title = myOfferedServices[index]["service"]["title"].string
-                         let description = myOfferedServices[index]["service"]["description"].string
-                         let category = myOfferedServices[index]["category"].string
-                         let price = myOfferedServices[index]["service"]["price"].float
-                         let id = myOfferedServices[index]["id"].int
-                         
-                         */
                         if let myTitle = myJson["service"]["title"].string {
                             print(myTitle)
-                            //self.titleTextField.text = myTitle
+                            self.navigationItem.title = myTitle
                         }else {
-                            print("no title")
-                            //self.titleTextField.text = "no title"
+                            self.navigationItem.title = "Untitled"
                         }
                         if let myDescription = myJson["service"]["description"].string {
                             self.descriptionTextView.text = myDescription
@@ -200,9 +210,26 @@ class OfferedServiceDetailsP: UIViewController, UITableViewDelegate, UITableView
                             self.descriptionTextView.text = "no description"
                         }
                         if let myPrice = myJson["service"]["price"].float {
-                            self.priceLabel.text = "\(myPrice)"
+                            self.priceLabel.text = "Price: \(myPrice) KWD"
                         }else {
                             self.descriptionTextView.text = "no price"
+                        }
+                        if let days = myJson["days"].string {
+                            self.availableServiceDaysLabel.text = "Service is available every: "+days
+                        }else {
+                            self.availableServiceDaysLabel.text = "Service is available all week"
+                        }
+                        if let from = myJson["from_datetime"].string {
+                            self.timeData+=["Available From:"]
+                            self.timeData+=[from]
+                            if let to = myJson["to_datetime"].string{
+                                self.timeData+=["to:"]
+                                self.timeData+=[to]
+                            }
+                            self.tableView.reloadData()
+                        }else {
+                            self.timeData.append("Service is available at all times")
+                            self.tableView.reloadData()
                         }
                     }
                 }else {
@@ -212,43 +239,51 @@ class OfferedServiceDetailsP: UIViewController, UITableViewDelegate, UITableView
                 self.alertWithMessage("There was a problem getting offered services\n please try again")
             }
         }
-
-//        Alamofire.request(.GET, URL, parameters: parameter).responseJSON { response in
-//            if let myResponse = response.response {
-//                if myResponse.statusCode == 200 {
-//                    if let json = response.result.value {
-//                        let myJson = JSON(json)
-//                        /*
-//                         
-//                         let title = myOfferedServices[index]["service"]["title"].string
-//                         let description = myOfferedServices[index]["service"]["description"].string
-//                         let category = myOfferedServices[index]["category"].string
-//                         let price = myOfferedServices[index]["service"]["price"].float
-//                         let id = myOfferedServices[index]["id"].int
-//                         
-//                         */
-//                        if let myTitle = myJson["service"]["title"].string {
-//                            self.navigationItem.title = myTitle
-//                        }else {
-//                            self.navigationItem.title = "no title"
-//                        }
-//                        if let myDescription = myJson["service"]["description"].string {
-//                            self.descriptionTextView.text = myDescription
-//                        }else {
-//                            self.descriptionTextView.text = "no description"
-//                        }
-//                        if let myPrice = myJson["service"]["price"].float {
-//                            self.priceLabel.text = "\(myPrice)"
-//                        }else {
-//                            self.descriptionTextView.text = "no price"
-//                        }
-//                    }
-//                }else {
-//                    self.alertWithMessage("There was a problem getting offered services\n please try again")
-//                }
-//            }else {
-//                self.alertWithMessage("There was a problem getting offered services\n please try again")
-//            }
-//        }
+        self.tableView.reloadData()
+    }
+    func requestOfferedServiceWithPK(_ pk: Int) {
+        let URL = "\(AppDelegate.URL)/request/"
+        if let myToken = defaults.object(forKey: "userToken") as? String{
+            print(myToken)
+            let headers = [
+                "Authorization": myToken
+            ]
+            let parameters = [
+                "servicepk": pk
+            ]
+            Alamofire.request(URL, method: .post, parameters: parameters, headers: headers).responseJSON(completionHandler: { (response) in
+                print("request")
+                print(response.request!)  // original URL request
+                print("response")
+                print(response.response!) // URL response
+                print("data")
+                print(response.data!)     // server data
+                print("result")
+                print(response.result)   // result of response serialization
+                
+                if response.response?.statusCode == 201 {
+                    if let json = response.result.value {
+                        print("my json")
+                        print(json)
+                        let myJson = JSON(json)
+                        print(myJson)
+                        let alertController = UIAlertController(title: "Thank You", message: "Thank you for requesting this service", preferredStyle: .alert)
+                        let okAction = UIAlertAction(title: "Ok", style: .default, handler: nil)
+                        alertController.addAction(okAction)
+                        self.present(alertController, animated: true, completion: nil)
+                    }
+                    
+                    if let mydata = String(data: response.data!, encoding: String.Encoding.utf8) {
+                        print("my data from getting profile request is \(mydata)")
+                    }
+                }else {
+                    self.alertWithMessage("Could not request this service")
+                    if let mydata = String(data: response.data!, encoding: String.Encoding.utf8) {
+                        print("my data from getting profile request is \(mydata)")
+                    }
+                }
+            })
+            
+        }
     }
 }

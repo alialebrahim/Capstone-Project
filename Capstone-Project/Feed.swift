@@ -123,7 +123,7 @@ class Feed: UIViewController, UITableViewDelegate, UITableViewDataSource {
             if let vc = segue.destination as? PublicServiceViewController {
                 //TODO: apply type safety
                 vc.myService = myService
-                vc.withBid = sender as? Bool
+                vc.withBid = (sender as? Bool)!
                 
             }
         }
@@ -139,13 +139,13 @@ class Feed: UIViewController, UITableViewDelegate, UITableViewDataSource {
                     let providerBid = myPublicService["feed"][index]["bid_set"][myIndex]["bid"].int
                     let bidder = myPublicService["feed"][index]["bid_set"][myIndex]["bidder"].int
                     let id = myPublicService["feed"][index]["bid_set"][myIndex]["id"].int
-                    print("provider bid")
-                    print(providerBid)
-                    print("bidder")
-                    print(bidder)
-                    print("id")
-                    print(id)
-                    let myBid = Bid(bid: providerBid!, bidder: bidder!, id: id!)
+                    var myBid: Bid!
+                    if let username = myPublicService[index]["bid_set"][myIndex]["username"].string {
+                        myBid = Bid(bid: providerBid!, bidder: bidder!, id: id!, username: username)
+                    }else {
+                        myBid = Bid(bid: providerBid!, bidder: bidder!, id: id!, username: "")
+                    }
+                    
                     bidding.append(myBid)
                     
                 }
@@ -158,7 +158,9 @@ class Feed: UIViewController, UITableViewDelegate, UITableViewDataSource {
                 let dueData = myPublicService["feed"][index]["service"]["due_date"].string
                 let id = myPublicService["feed"][index]["id"].int
                 //TODO: apply type safety
-                let service = PublicServiceModel(category: category!, price: price!, title: title!, description: description!, id: id!,due: " ", bidding: bidding)
+                let service = PublicServiceModel(category: category!, price: price!, title: title!, description: description!, id: id!,due: dueData, bidding: bidding)
+                service.status = myPublicService["feed"][index]["service"]["status"].string
+                service.created = myPublicService["feed"][index]["service"]["created"].string
                 publicServices.append(service)
                 
             }
@@ -169,13 +171,8 @@ class Feed: UIViewController, UITableViewDelegate, UITableViewDataSource {
                     let providerBid = myPublicService["bids"][index]["bid_set"][myIndex]["bid"].int
                     let bidder = myPublicService["bids"][index]["bid_set"][myIndex]["bidder"].int
                     let id = myPublicService["bids"][index]["bid_set"][myIndex]["id"].int
-                    let myBid = Bid(bid: providerBid!, bidder: bidder!, id: id!)
-                    print("provider bid")
-                    print(providerBid)
-                    print("bidder")
-                    print(bidder)
-                    print("id")
-                    print(id)
+                    let username = myPublicService["bids"][index]["bid_Set"][myIndex]["username"].string
+                    let myBid = Bid(bid: providerBid!, bidder: bidder!, id: id!, username: "")
                     bidding.append(myBid)
                     
                 }
@@ -190,8 +187,10 @@ class Feed: UIViewController, UITableViewDelegate, UITableViewDataSource {
                 let service = PublicServiceModel(category: category!, price: price!, title: title!, description: description!, id: id!,due: " ", bidding: bidding)
                 let myBid = myPublicService["bids"][index]["bid"].int
                 service.providerBid = myBid
-                providerBidServices.append(service)
-                
+                service.status = myPublicService["bids"][index]["service"]["status"].string
+                service.created = myPublicService["bids"][index]["service"]["created"].string
+                service.dueDate = myPublicService["bids"][index]["service"]["due_date"].string
+                providerBidServices.append(service)                
             }
         }
     }
@@ -234,29 +233,6 @@ class Feed: UIViewController, UITableViewDelegate, UITableViewDataSource {
                     }
                 }
             })
-            
-//            Alamofire.request(.GET, URL, parameters: nil, headers: headers, encoding: .json).responseJSON { response in
-//                if let myResponse = response.response {
-//                    if myResponse.statusCode == 200 {
-//                        if let json = response.result.value {
-//                            print("my json")
-//                            print(json)
-//                            self.publicServicesJSON = JSON(json)
-//                            self.jsonIntoArrayOfPublicObjects()
-//                            self.jsonIntoArrayOfBidObjects()
-//                            self.tableView.reloadData()
-//                        }
-//                        //TODO: finish loading animation
-////                        if let mydata = String(data: response.data!, encoding: NSUTF8StringEncoding) {
-////                            print("my data from getting profile request is \(mydata)")
-////                        }
-//                    }else {
-//                        self.alertWithMessage("Could not load Feed information, please try again")
-//                    }
-//                }
-//            }
         }
-//        navigationController?.setNavigationBarHidden(false, animated: false)
-//        LoadingView.stopAnimating()
     }
 }

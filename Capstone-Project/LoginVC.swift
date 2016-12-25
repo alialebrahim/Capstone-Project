@@ -32,8 +32,6 @@ class LoginVC: UIViewController, SubmitButtonDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
-
-        
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)

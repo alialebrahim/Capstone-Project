@@ -48,7 +48,8 @@ class addService: UIViewController, UITextViewDelegate, iCarouselDelegate, iCaro
     var pictureThatWillBeDeleted: UIImageView!
     var right = true
     var serviceID: Int?
-    var myCategories = [String]()
+    var myCategories = ["other"]
+    var firstTime: Bool!
     //MARK: ViewController lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -60,6 +61,8 @@ class addService: UIViewController, UITextViewDelegate, iCarouselDelegate, iCaro
             2-arow images are both hidden from the storyboard.
          */
         setup()
+        firstTime = true
+        categoryLabel.text = myCategories[0]
         carouselView.clipsToBounds = false
         configureNavigationBar()
     }
@@ -275,7 +278,8 @@ class addService: UIViewController, UITextViewDelegate, iCarouselDelegate, iCaro
         let title = titleTextField.text
         let description = descriptionTextView.text
         let price = priceTextField.text
-        updatingOfferedService(title!, description: description!, price: price!)
+        let category = myCategories[0]
+        updatingOfferedService(title!, description: description!, price: price!, category: category)
     }
     func addService() {
         //BACKEND REQUEST FUNCTION
@@ -422,6 +426,7 @@ class addService: UIViewController, UITextViewDelegate, iCarouselDelegate, iCaro
     //MARK: Categories vc delegate functions 
     func shouldDismissCategoriesView(_ categories: [String]) {
         myCategories = categories
+        print(myCategories)
         //categoryButton.setTitle(myCategories[0], forState: .Normal)
         categoryLabel.text = myCategories[0]
         dimView.removeFromSuperview()
@@ -471,23 +476,6 @@ class addService: UIViewController, UITextViewDelegate, iCarouselDelegate, iCaro
                     self.alertWithMessage("could not create offered service, please try again")
                 }
             })
-//            Alamofire.request(.POST, URL, parameters: parameters as? [String : AnyObject], headers: headers, encoding: .json).responseJSON { response in
-//                //            print(response.request)  // original URL request
-//                print(response.response) // URL response
-//                print(response.data)     // server data
-//                print(response.result)   // result of response serialization
-//                if let dataString = String(data: response.data!, encoding: String.Encoding.utf8) {
-//                    print(dataString)
-//                }
-//                if let JSON = response.result.value {
-//                    print("JSON: \(JSON)")
-//                }
-//                if response.response?.statusCode == 201 {
-//                    self.navigationController?.popViewController(animated: true)
-//                }else {
-//                    self.alertWithMessage("could not create offered service, please try again")
-//                }
-//            }
         }
     }
     func offeredServiceDetails(_ id: Int?) {
@@ -509,15 +497,7 @@ class addService: UIViewController, UITextViewDelegate, iCarouselDelegate, iCaro
                 if myResponse.statusCode == 200 {
                     if let json = response.result.value {
                         let myJson = JSON(json)
-                        /*
-                         
-                         let title = myOfferedServices[index]["service"]["title"].string
-                         let description = myOfferedServices[index]["service"]["description"].string
-                         let category = myOfferedServices[index]["category"].string
-                         let price = myOfferedServices[index]["service"]["price"].float
-                         let id = myOfferedServices[index]["id"].int
-                         
-                         */
+                        print(json)
                         if let myTitle = myJson["service"]["title"].string {
                             self.titleTextField.text = myTitle
                         }else {
@@ -533,6 +513,14 @@ class addService: UIViewController, UITextViewDelegate, iCarouselDelegate, iCaro
                         }else {
                             self.descriptionTextView.text = "no price"
                         }
+                        if self.firstTime! {
+                            if let serviceCategory = myJson["category"].string {
+                                self.myCategories[0] = serviceCategory
+                                self.categoryLabel.text = self.myCategories[0]
+                            }
+                            self.firstTime = false
+                        }
+                        
                     }
                 }else {
                     self.alertWithMessage("There was a problem getting offered services\n please try again")
@@ -541,50 +529,8 @@ class addService: UIViewController, UITextViewDelegate, iCarouselDelegate, iCaro
                 self.alertWithMessage("There was a problem getting offered services\n please try again")
             }
         }
-//        Alamofire.request(.GET, URL, parameters: parameter).responseJSON { response in
-//            if let myResponse = response.response {
-//                if myResponse.statusCode == 200 {
-//                    if let json = response.result.value {
-//                        let myJson = JSON(json)
-//                        /*
-//                         
-//                         let title = myOfferedServices[index]["service"]["title"].string
-//                         let description = myOfferedServices[index]["service"]["description"].string
-//                         let category = myOfferedServices[index]["category"].string
-//                         let price = myOfferedServices[index]["service"]["price"].float
-//                         let id = myOfferedServices[index]["id"].int
-//                         
-//                         */
-//                        if let myTitle = myJson["service"]["title"].string {
-//                            self.titleTextField.text = myTitle
-//                        }else {
-//                            self.titleTextField.text = "no title"
-//                        }
-//                        if let myDescription = myJson["service"]["description"].string {
-//                            self.descriptionTextView.text = myDescription
-//                        }else {
-//                            self.descriptionTextView.text = "no description"
-//                        }
-//                        if let myPrice = myJson["service"]["price"].float {
-//                            self.priceTextField.text = "\(myPrice)"
-//                        }else {
-//                            self.descriptionTextView.text = "no price"
-//                        }
-//                    }
-//                }else {
-//                    self.alertWithMessage("There was a problem getting offered services\n please try again")
-//                }
-//            }else {
-//                self.alertWithMessage("There was a problem getting offered services\n please try again")
-//            }
-//        }
     }
-    /*
-        offered service
-        put method
-        service pk
-     */
-    func updatingOfferedService(_ title: String, description: String, price: String) {
+    func updatingOfferedService(_ title: String, description: String, price: String,category: String) {
         if let myToken = defaults.object(forKey: "userToken") as? String {
             print("token-> \"\(myToken)\"")
             let headers = [
@@ -599,6 +545,7 @@ class addService: UIViewController, UITextViewDelegate, iCarouselDelegate, iCaro
             ]
             print("service pk is \(serviceID!)")
             let parameters = [
+                "category": category,
                 "service": service,
                 "servicepk":serviceID!,
                 "serviceimage_set": imagesDictonaryList
@@ -616,29 +563,12 @@ class addService: UIViewController, UITextViewDelegate, iCarouselDelegate, iCaro
                     print("JSON: \(JSON)")
                 }
                 if response.response?.statusCode == 200 {
-                    self.navigationController?.popViewController(animated: true)
+                    _ = self.navigationController?.popViewController(animated: true)
                 }else {
                     self.alertWithMessage("could not create offered service, please try again")
                 }
 
             })
-//            Alamofire.request(.PUT, URL, parameters: parameters as? [String : AnyObject], headers: headers, encoding: .json).responseJSON { response in
-//                //            print(response.request)  // original URL request
-//                print(response.response) // URL response
-//                print(response.data)     // server data
-//                print(response.result)   // result of response serialization
-//                if let dataString = String(data: response.data!, encoding: String.Encoding.utf8) {
-//                    print(dataString)
-//                }
-//                if let JSON = response.result.value {
-//                    print("JSON: \(JSON)")
-//                }
-//                if response.response?.statusCode == 200 {
-//                    self.navigationController?.popViewController(animated: true)
-//                }else {
-//                    self.alertWithMessage("could not create offered service, please try again")
-//                }
-//            }
         }
     }
     func imagesToBase64(_ images: [UIImage]) -> [String]{

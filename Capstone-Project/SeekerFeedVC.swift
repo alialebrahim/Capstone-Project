@@ -74,8 +74,20 @@ class SeekerFeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        choosenService = offeredServices![indexPath.row]
-        performSegue(withIdentifier: "OfferedServicesDetails", sender: nil)
+        navigationController?.setNavigationBarHidden(false, animated: true)
+        var myService: OfferedServiceModel!
+        if shouldShowSearchResult {
+            myService = filteredServicesObjects[indexPath.row] as! OfferedServiceModel
+        }else {
+            myService = servicesObject[indexPath.row] as! OfferedServiceModel
+        }
+        let storyboard = UIStoryboard(name: "Provider", bundle: nil)
+        let vc = storyboard.instantiateViewController(withIdentifier: "offeredDetails") as! OfferedServiceDetailsP
+        vc.serviceID = myService.id!
+        vc.isSeeker = true
+        navigationController?.pushViewController(vc, animated: true)
+        
+        //performSegue(withIdentifier: "OfferedServicesDetails", sender: nil)
         
     }
     
@@ -153,27 +165,7 @@ class SeekerFeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         shouldShowSearchResult = false
         tableView.reloadData()
     }
-    /*
-     {
-     "category" : "test category",
-     "id" : 35,
-     "service" : {
-     "status" : "pending",
-     "providerpk" : null,
-     "id" : 44,
-     "price" : 500,
-     "title" : "Title",
-     "due_date" : null,
-     "created" : "2016-09-23T08:40:27Z",
-     "seekerpk" : null,
-     "description" : "Shared self feel headless wehef",
-     "is_special" : false
-     },
-     "serviceimage_set" : [
-     
-     ]
-     }
-     */
+    
     func jsonIntoArrayOfObjects() {
         servicesObject = [OfferedServiceModel]()
         if let myOfferedServices = offeredServices {
@@ -298,24 +290,6 @@ class SeekerFeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource
                 self.refreshControl.endRefreshing()
             }
         }
-//        Alamofire.request(.GET, URL, parameters: nil, encoding: .json).responseJSON { response in
-//            if let myResponse = response.response {
-//                if myResponse.statusCode == 200 {
-//                    if let json = response.result.value {
-//                        self.offeredServices = JSON(json)
-//                        self.jsonIntoArrayOfObjects()
-//                        self.refreshControl.endRefreshing()
-//                        self.tableView.reloadData()
-//                    }
-//                }else {
-//                    self.alertWithMessage("There was a problem getting offered services\n please try again")
-//                    self.refreshControl.endRefreshing()
-//                }
-//            }else {
-//                self.alertWithMessage("There was a problem getting offered services\n please try again")
-//                self.refreshControl.endRefreshing()
-//            }
-//        }
         
     }
 

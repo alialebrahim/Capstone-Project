@@ -23,7 +23,9 @@ class RequestedServiceCell: UICollectionViewCell {
     @IBOutlet weak var requestDateLabel: UILabel!
     @IBOutlet weak var serviceTitleLabel: UILabel!
     @IBOutlet weak var requestNumberLabel: UILabel!
+    @IBOutlet weak var requestDescription: UILabel!
     
+    @IBOutlet weak var username: UIButton!
     //MARK: Variables
     weak var delegate: RequestServiceCellDelegate?
     

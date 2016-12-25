@@ -35,10 +35,13 @@ class ProfileVC: UIViewController, UIScrollViewDelegate {
     @IBOutlet weak var remainingTasksView: UIView!
     @IBOutlet weak var completedTasksView: UIView!
     @IBOutlet weak var categories: UILabel!
+    @IBOutlet weak var remaining: UILabel!
+    @IBOutlet weak var completed: UILabel!
     //MARK: Variables
     weak var delegate: ProfileDelegate?
     let defaults = UserDefaults.standard
     var providersPK: Int?
+    let ratingView = CosmosView()
     //MARK: ViewController lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -56,8 +59,6 @@ class ProfileVC: UIViewController, UIScrollViewDelegate {
             specialServiceButton.isHidden = true
             
         }
-        //TODO: start loading anumation
-        //TODO: web request to get profile information.
     }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -162,7 +163,8 @@ class ProfileVC: UIViewController, UIScrollViewDelegate {
         providersMobileNumber.setTitle("", for: UIControlState())
         providersEmailAddress.setTitle("", for: UIControlState())
         address.text = ""
-
+        remaining.text = "0"
+        completed.text = "0"
         /**/
     }
     func configureNavigationBar() {
@@ -186,6 +188,7 @@ class ProfileVC: UIViewController, UIScrollViewDelegate {
         let storyboard = UIStoryboard(name: "Seeker", bundle: nil)
         if let vc = storyboard.instantiateViewController(withIdentifier: "publicRequest") as? PublicServiceRequestVC {
             vc.isSpecial = true
+            vc.pk = providersPK!
             self.navigationController?.pushViewController(vc, animated: true)
         }
     }
@@ -201,14 +204,13 @@ class ProfileVC: UIViewController, UIScrollViewDelegate {
     }
     func createRatingView() {
         let color = UIColor(hex: 0x404040)
-        let ratingView = CosmosView()
         ratingView.settings.updateOnTouch = false
         ratingView.settings.fillMode = .half
         ratingView.settings.emptyBorderColor = color
         ratingView.settings.filledBorderColor = color
         ratingView.settings.filledColor = color
         ratingView.settings.textColor = color
-        ratingView.text = "(0)" //TODO: obtain from the backend
+//        ratingView.text = "(0)" //TODO: obtain from the backend
         ratingView.rating = 0 //TODO: obtain this from the backend
         ratingView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(ratingView)
@@ -310,6 +312,15 @@ class ProfileVC: UIViewController, UIScrollViewDelegate {
                                 print("providers pk is \(pk)")
                                 self.providersPK = pk
                             }
+                            if let myRating = myJson["rate"].double {
+                                self.ratingView.rating = myRating
+                            }
+                            if let noWorking = myJson["workingon"].int {
+                                self.remaining.text = "\(noWorking)"
+                            }
+                            if let noRemaining = myJson["done"].int {
+                                self.completed.text = "\(noRemaining)"
+                            }
                         }
                         //TODO: finish loading anumation
                         if let mydata = String(data: response.data!, encoding: String.Encoding.utf8) {
@@ -383,6 +394,15 @@ class ProfileVC: UIViewController, UIScrollViewDelegate {
                                 print("providers pk is \(pk)")
                                 self.providersPK = pk
                             }
+                            if let myRating = myJson["rate"].double {
+                                self.ratingView.rating = myRating
+                            }
+                            if let noWorking = myJson["workingon"].int {
+                                self.remaining.text = "\(noWorking)"
+                            }
+                            if let noRemaining = myJson["done"].int {
+                                self.completed.text = "\(noRemaining)"
+                            }
                         }
                         //TODO: finish loading anumation
                         if let mydata = String(data: response.data!, encoding: String.Encoding.utf8) {
@@ -393,57 +413,7 @@ class ProfileVC: UIViewController, UIScrollViewDelegate {
                     }
                 }
             })
-//            Alamofire.request(.GET, URL, parameters: nil, headers: headers, encoding: .json).responseJSON { response in
-//                if let myResponse = response.response {
-//                    if myResponse.statusCode == 200 {
-//                        if let json = response.result.value {
-//                            print("my json")
-//                            print(json)
-//                            let myJson = JSON(json)
-//                            if let myUsername = myJson["username"].string {
-//                                self.username.text = myUsername
-//                            }
-//                            if let myAbout = myJson["about"].string {
-//                                self.bioTextView.text = myAbout
-//                            }else{
-//                                self.bioTextView.text = "no description"
-//                            }
-//                            if let phoneNo = myJson["phone_number"].string {
-//                                self.providersMobileNumber.setTitle(phoneNo, for: UIControlState())
-//                            }else {
-//                                self.providersMobileNumber.setTitle("no phone number", for: UIControlState())
-//                            }
-//                            if let email = myJson["email"].string {
-//                                self.providersEmailAddress.setTitle(email, for: UIControlState())
-//                            }else {
-//                                self.providersEmailAddress.setTitle("no email", for: UIControlState())
-//                            }
-//                            if let area = myJson["area"].string {
-//                                self.address.text = "\(area)"
-//                            }
-//                            if  let street = myJson["street_address"].string {
-//                                self.address.text = "\(self.address.text!) \(street)"
-//                            }
-//                            if let country = myJson["country"].string {
-//                                self.address.text = "\(self.address.text!) \(country)"
-//                            }
-//                            if let category = myJson["category"].string {
-//                                self.categories.text = "\(category)"
-//                            }
-//                            if let pk = myJson["pk"].int {
-//                                print("providers pk is \(pk)")
-//                                self.providersPK = pk
-//                            }
-//                        }
-//                        //TODO: finish loading anumation
-//                        if let mydata = String(data: response.data!, encoding: String.Encoding.utf8) {
-//                            print("my data from getting profile request is \(mydata)")
-//                        }
-//                    }else {
-//                        self.alertWithMessage("Could not load profile information, please try again")
-//                    }
-//                }
-//            }
+
         }
         navigationController?.setNavigationBarHidden(false, animated: false)
         LoadingView.stopAnimating()

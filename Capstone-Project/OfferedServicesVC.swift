@@ -23,6 +23,7 @@ class OfferedServicesVC: UIViewController, UITableViewDelegate, UITableViewDataS
     let cellID = "ServiceCell"
     let cellSpacingHeight: CGFloat = 10
     var providersPK: Int?
+    var firstTime: Bool?
     weak var delegate: OfferedServicesDelegate?
     let addServiceLabel: UILabel = {
         let label = UILabel()
@@ -64,6 +65,7 @@ class OfferedServicesVC: UIViewController, UITableViewDelegate, UITableViewDataS
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         print("im here")
+        refreshControl.beginRefreshing()
         if delegate != nil {
             getProviderServices(withPK: providersPK!)
         }else {
@@ -89,6 +91,7 @@ class OfferedServicesVC: UIViewController, UITableViewDelegate, UITableViewDataS
 //        let colors = [UIColor(hex: 0xB39DDB), UIColor(hex: 0x7E57C2)]
 //        self.view.setGradientBackground(colors)
         self.view.backgroundColor = UIColor.white
+        firstTime = true
     }
     func congigureNavigationBar() {
         navigationItem.title = "Offered Services"
@@ -118,21 +121,25 @@ class OfferedServicesVC: UIViewController, UITableViewDelegate, UITableViewDataS
         let cells = tableView.visibleCells
         let tableHeight: CGFloat = tableView.bounds.size.height
         
-        for i in cells {
-            let cell: UITableViewCell = i as UITableViewCell
-            cell.transform = CGAffineTransform(translationX: 0, y: tableHeight)
-        }
         
         var index = 0
-        
-        for myCell in cells {
-            let cell: UITableViewCell = myCell as UITableViewCell
-            UIView.animate(withDuration: 1.5, delay: 0.05 * Double(index), usingSpringWithDamping: 0.8, initialSpringVelocity: 0, options: [], animations: {
-                cell.transform = CGAffineTransform(translationX: 0, y: 0);
-                }, completion: nil)
+        if firstTime! {
+            for i in cells {
+                let cell: UITableViewCell = i as UITableViewCell
+                cell.transform = CGAffineTransform(translationX: 0, y: tableHeight)
+            }
             
-            index += 1
+            for myCell in cells {
+                let cell: UITableViewCell = myCell as UITableViewCell
+                UIView.animate(withDuration: 1.5, delay: 0.05 * Double(index), usingSpringWithDamping: 0.8, initialSpringVelocity: 0, options: [], animations: {
+                    cell.transform = CGAffineTransform(translationX: 0, y: 0);
+                    }, completion: nil)
+                
+                index += 1
+            }
+            firstTime = false
         }
+        
     }
     func addService() {
         print("adding a service")
@@ -148,7 +155,11 @@ class OfferedServicesVC: UIViewController, UITableViewDelegate, UITableViewDataS
     }
     //handing tableview refreshing
     func refreshTableView() {
-        print("refreshing")
+        if delegate != nil {
+            getProviderServices(withPK: providersPK!)
+        }else {
+            gettingOfferedService()
+        }
         //do whatever needed to update tableview
         //then use
         //tableView.reloadData()
@@ -244,12 +255,18 @@ class OfferedServicesVC: UIViewController, UITableViewDelegate, UITableViewDataS
         service = servicesObject[indexPath.row]
         let id = service.id!
         if delegate != nil {
-            let storyboard = UIStoryboard(name: "Seeker", bundle: nil)
-            if let vc = storyboard.instantiateViewController(withIdentifier: "offeredDetails") as? OfferedServiceDetails {
-                let choosenService = offeredServices![indexPath.row]
-                vc.myService = choosenService
-                navigationController?.pushViewController(vc,animated: true)
-            }
+            
+            let storyboard = UIStoryboard(name: "Provider", bundle: nil)
+            let vc = storyboard.instantiateViewController(withIdentifier: "offeredDetails") as! OfferedServiceDetailsP
+            vc.serviceID = id
+            vc.isSeeker = true
+            navigationController?.pushViewController(vc, animated: true)
+//            let storyboard = UIStoryboard(name: "Seeker", bundle: nil)
+//            if let vc = storyboard.instantiateViewController(withIdentifier: "offeredDetails") as? OfferedServiceDetails {
+//                let choosenService = offeredServices![indexPath.row]
+//                vc.myService = choosenService
+//                navigationController?.pushViewController(vc,animated: true)
+//            }
             
             
             //getProviderServices(withPK: providersPK!)
@@ -275,8 +292,12 @@ class OfferedServicesVC: UIViewController, UITableViewDelegate, UITableViewDataS
                 let category = myOfferedServices[index]["category"].string
                 let price = myOfferedServices[index]["service"]["price"].float
                 let id = myOfferedServices[index]["id"].int
+                let created = myOfferedServices[index]["service"]["created"].string
+                let status = myOfferedServices[index]["service"]["status"].string
                 //TODO: apply type safety
                 let service = OfferedServiceModel(category: category!, price: price!, title: title!, description: description!, id: id!)
+                service.created = created
+                service.status = status
                 servicesObject.append(service)
             }
         }
@@ -303,6 +324,7 @@ class OfferedServicesVC: UIViewController, UITableViewDelegate, UITableViewDataS
                 if myResponse.statusCode == 200 {
                     print(":P:P")
                     if let json = response.result.value {
+                        print(json)
                         self.offeredServices = JSON(json)
                         self.jsonIntoArrayOfObjects()
                         self.refreshControl.endRefreshing()
@@ -330,6 +352,7 @@ class OfferedServicesVC: UIViewController, UITableViewDelegate, UITableViewDataS
                 if myResponse.statusCode == 200 {
                     print(":P:P")
                     if let json = response.result.value {
+                        print(json)
                         self.offeredServices = JSON(json)
                         self.jsonIntoArrayOfObjects()
                         self.refreshControl.endRefreshing()

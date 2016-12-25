@@ -14,11 +14,14 @@ class PublicServiceModel {
     var title: String
     var description: String
     var id: Int?
-    var dueDate: String
+    var idd: Int?
+    var dueDate: String?
     var created: String?
     var bids: [Bid]?
     var providerBid: Int?
-    init(category:String, price: Float, title: String, description: String, id: Int, due: String, bidding: [Bid]) {
+    var seeker: String?
+    var provider: String?
+    init(category:String, price: Float, title: String, description: String, id: Int, due: String?, bidding: [Bid]) {
         self.category = category
         self.price = price
         self.title = title

@@ -33,10 +33,16 @@ class OfferedServiceModel {
     var category: String
     var status: String?
     var price: Float
+    var created: String?
     var title: String
     var description: String
     var images: [UIImage]?
     var id: Int?
+    var idd: Int?
+    var from: String?
+    var to: String?
+    var seeker: String?
+    var provider: String?
     init(category:String, price: Float, title: String, description: String, id: Int) {
         self.category = category
         self.price = price

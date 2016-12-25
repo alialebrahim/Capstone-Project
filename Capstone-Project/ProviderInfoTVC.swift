@@ -36,6 +36,7 @@ class ProviderInfoTVC: UITableViewController, EditProvidersProfileDelegate {
     var delegate: ProviderInfoTVCDelegate?
     let defaults = UserDefaults.standard
     var providersCategories = [String]()
+    
     //MARK: ViewController lifecycle.
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -128,7 +129,7 @@ class ProviderInfoTVC: UITableViewController, EditProvidersProfileDelegate {
             categoryButton.setTitleColor(UIColor.darkGray, for: UIControlState())
             var myCatgories = ""
             for category in categories {
-                myCatgories += "\(category),"
+                myCatgories += "\(category)"
             }
             categoryButton.setTitle(myCatgories, for: UIControlState())
         }
@@ -198,34 +199,7 @@ class ProviderInfoTVC: UITableViewController, EditProvidersProfileDelegate {
                 }
             
             })
-//            Alamofire.request(.PUT, URL, parameters: parameters, headers: headers, encoding: .json).responseJSON { response in
-//                print(response.request)  // original URL request
-//                print(response.response) // URL response
-//                print(response.data)     // server data
-//                print(response.result)   // result of response serialization
-//                
-//                if let requestData = response.data {
-//                    if let dataString = String(data: requestData, encoding: String.Encoding.utf8) {
-//                        print("data String : \(dataString)")
-//                    }
-//                }
-//                if let myResponse = response.response {
-//                    if (myResponse.statusCode) == 200 {
-//                        //delegate to dimiss EditProfileVC
-//                        self.delegate?.shouldStopAnimating()
-//                        self.delegate?.dismiss()
-//                    }else {
-//                        //TODO: delegate function to show alert on editProfileVC
-//                        print("did not set profile")
-//                        self.delegate?.showAlertWithMessage("could not update profile")
-//                        self.delegate?.shouldStopAnimating()
-//                    }
-//                }else {
-//                    print("did not set profile")
-//                    self.delegate?.showAlertWithMessage("could not update profile")
-//                    self.delegate?.shouldStopAnimating()
-//                }
-//            }
+
         }
         self.delegate?.shouldStopAnimating()
     }
@@ -268,6 +242,8 @@ class ProviderInfoTVC: UITableViewController, EditProvidersProfileDelegate {
                             if let category = myJson["category"].string {
                                 self.categoryButton.setTitle(category, for: UIControlState())
                             }
+                        
+                            
                         }
                         //TODO: finish loading anumation
                         if let mydata = String(data: response.data!, encoding: String.Encoding.utf8) {
@@ -279,49 +255,7 @@ class ProviderInfoTVC: UITableViewController, EditProvidersProfileDelegate {
                     self.delegate?.shouldStopAnimating()
                 }
             })
-            /*
-            Alamofire.request(URL, method: .get, parameters: nil, headers: headers, encoding: .json).responseJSON { response in
-                if let myResponse = response.response {
-                    if myResponse.statusCode == 200 {
-                        if let json = response.result.value {
-                            print("my json")
-                            print(json)
-                            let myJson = JSON(json)
-                            if let myUsername = myJson["username"].string {
-                                self.usernameTextField.text = myUsername
-                            }
-                            if let myAbout = myJson["about"].string {
-                                self.bioTextField.text = myAbout
-                            }
-                            if let phoneNo = myJson["phone_number"].string {
-                                self.phoneNumberTextField.text = phoneNo
-                            }
-                            if let email = myJson["email"].string {
-                                self.emailTextField.text = email
-                            }
-                            if let area = myJson["area"].string {
-                                self.areaTextField.text = "\(area)"
-                            }
-                            if  let street = myJson["street_address"].string {
-                                self.streetAddressTextField.text = "\(street)"
-                            }
-                            if let country = myJson["country"].string {
-                                self.countryTextField.text = "\(country)"
-                            }
-                            if let category = myJson["category"].string {
-                                self.categoryButton.setTitle(category, for: UIControlState())
-                            }
-                        }
-                        //TODO: finish loading anumation
-                        if let mydata = String(data: response.data!, encoding: String.Encoding.utf8) {
-                            print("my data from getting profile request is \(mydata)")
-                        }
-                    }else {
-                        self.delegate?.showAlertWithMessage("Could not load profile information, please try again")
-                    }
-                    self.delegate?.shouldStopAnimating()
-                }
-            }*/
+
         }
     }
     

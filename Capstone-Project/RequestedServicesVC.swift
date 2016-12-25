@@ -23,18 +23,20 @@ class RequestedServicesVC: UIViewController, UICollectionViewDelegate, UICollect
     let ANIMATION_SPEED = 0.25
     let TRANSFORM_CELL_VALUE = CGAffineTransform(scaleX: 0.8, y: 0.8)
     let CellID = "RequestedServiceCell"
-    var data = [0,1,2,3,4,5,6,7,8,9]
-    var noRequestLabel: UILabel!
+//    var data = [0,1,2,3,4,5,6,7,8,9]
+    var noRequestLabel = UILabel()
+    var requestsJSON: JSON?
+    var services = [AnyObject]()
     //MARK: ViewController lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
         //TODO: make this related to the backend request. do this after populating the array with objects from the backend
-        if data.isEmpty {
+        if services.isEmpty {
             noRequestsSetup()
         }else {
             requestNumberLabel.isHidden = false
-            requestNumberLabel.text = "\(1) of \(data.count)"
+            requestNumberLabel.text = "\(1) of \(services.count)"
         }
         myRequests()
         
@@ -58,15 +60,38 @@ class RequestedServicesVC: UIViewController, UICollectionViewDelegate, UICollect
     }
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
-        return data.count
+        return services.count
     }
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
     }
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CellID, for: indexPath) as! RequestedServiceCell
+        let service = services[indexPath.row]
+        
         cell.delegate = self
-        cell.requestNumberLabel.text = "Request #\(data[indexPath.row])"
-
+        cell.requestNumberLabel.text = "Request #\(indexPath.row)"
+        
+        if let myService = service as? OfferedServiceModel {
+            cell.serviceTitleLabel.text = myService.title
+            cell.requestDescription.text = myService.description
+            cell.priceLabel.text = "Price: \(myService.price) KWD"
+            cell.username.isEnabled = false
+            cell.username.setTitle(myService.seeker, for: .normal)
+            cell.dueToLabel.text = "Due to: -"
+        }else if let myService = service as? specialServiceModel{
+            cell.serviceTitleLabel.text = myService.title
+            cell.requestDescription.text = myService.description
+            cell.priceLabel.text = "Price: \(myService.price) KWD"
+            cell.username.isEnabled = false
+            cell.username.setTitle(myService.seeker, for: .normal)
+            if let dueto = myService.dueDate {
+                cell.dueToLabel.text = "Due to: "+dueto
+            }else {
+                cell.dueToLabel.text = "Due to: -"
+            }
+        }
+        
+        
         if indexPath.row == 0 && isFirstTimeTransform { //prevent to load scaling transform on the first cell for the first time only
             isFirstTimeTransform = false
         }else {
@@ -108,7 +133,7 @@ class RequestedServicesVC: UIViewController, UICollectionViewDelegate, UICollect
         scrollView.setContentOffset(CGPoint(x: CGFloat(newTargetOffset), y: 0), animated: true)
         
         var index = Int(newTargetOffset/pageWidth)
-        requestNumberLabel.text = "\(index+1) of \(data.count)"
+        requestNumberLabel.text = "\(index+1) of \(services.count)"
         if index == 0{
             var cell = collectionView.cellForItem(at: IndexPath(item: index, section: 0)) as? RequestedServiceCell
             //TODO: subclass UIButton to add index property instead of using tag property
@@ -154,7 +179,16 @@ class RequestedServicesVC: UIViewController, UICollectionViewDelegate, UICollect
                 // Note, this shouldn't happen - how did the user tap on a button that wasn't on screen?
                 return
             }
-            self.data.remove(at: indexPath.row)
+            let id: Int!
+            if let myService = self.services[indexPath.row] as? OfferedServiceModel {
+                id = myService.idd
+                self.acceptDeclineRequest(id, response: "accept")
+            }else if let myService = self.services[indexPath.row] as? specialServiceModel{
+                id = myService.id
+                self.acceptDeclineRequest(id, response: "accept")
+            }
+            
+            self.services.remove(at: indexPath.row)
             self.collectionView.deleteItems(at: [indexPath])
             
             self.collectionView.reloadData()
@@ -176,7 +210,15 @@ class RequestedServicesVC: UIViewController, UICollectionViewDelegate, UICollect
                 // Note, this shouldn't happen - how did the user tap on a button that wasn't on screen?
                 return
             }
-            self.data.remove(at: indexPath.row)
+            let id: Int!
+            if let myService = self.services[indexPath.row] as? OfferedServiceModel {
+                id = myService.idd
+                self.acceptDeclineRequest(id, response: "decline")
+            }else if let myService = self.services[indexPath.row] as? specialServiceModel{
+                id = myService.id!
+                self.acceptDeclineRequest(id, response: "decline")
+            }
+            self.services.remove(at: indexPath.row)
             self.collectionView.deleteItems(at: [indexPath])
             
             self.collectionView.reloadData()
@@ -206,14 +248,15 @@ class RequestedServicesVC: UIViewController, UICollectionViewDelegate, UICollect
     }
     //MARK: ServiceVC Delegate
     func didRefresh() {
-        //TODO: backend request
-        data = [11,1111,111,11,11]
+        myRequests()
+    }
+    func doneRequest() {
         collectionView.reloadData()
-        if !data.isEmpty {
+        if !services.isEmpty {
             isFirstTimeTransform = true
             requestNumberLabel.isHidden = false
             noRequestLabel.isHidden = true
-            requestNumberLabel.text = "\(1) of \(data.count)"
+            requestNumberLabel.text = "\(1) of \(services.count)"
         }
     }
     func alertWithMessage(_ message: String) {
@@ -223,7 +266,80 @@ class RequestedServicesVC: UIViewController, UICollectionViewDelegate, UICollect
         
         present(alertController, animated: true, completion: nil)
     }
+    func jsonIntoArrayOffered() {
+        if let myOfferedServices = requestsJSON {
+            for index in 0..<myOfferedServices["offered"].count {
+                let title = myOfferedServices["offered"][index]["service"]["title"].string
+                let description = myOfferedServices["offered"][index]["service"]["description"].string
+                let category = myOfferedServices["offered"][index]["category"].string
+                let price = myOfferedServices["offered"][index]["service"]["price"].float
+                let id = myOfferedServices["offered"][index]["id"].int
+                //TODO: apply type safety
+                let service = OfferedServiceModel(category: category!, price: price!, title: title!, description: description!, id: id!)
+                service.idd = myOfferedServices["offered"][index]["service"]["id"].int
+                service.seeker = myOfferedServices["offered"][index]["seeker_username"].string
+                
+//                servicesObject.append(service)
+                services.append(service)
+            }
+        }
+    }
+    func jsonIntoArraySpecial() {
+        if let special = requestsJSON {
+            for index in 0..<special["special"].count {
+                let title = special["special"][index]["title"].string
+                let description = special["special"][index]["description"].string
+                let price = special["special"][index]["price"].float
+                let id = special["special"][index]["id"].int
+                //TODO: apply type safety
+                let service = specialServiceModel(price: price!, title: title!, description: description!, id: id!, due: nil)
+                service.seeker = special["special"][index]["seeker_username"].string
+                service.dueDate = special["special"][index]["due_date"].string
+                services.append(service)
+            }
+        }
+    }
     //MARK: BACKEND
+    func acceptDeclineRequest(_ id: Int, response: String) {
+        //TODO: add loading animation only for the first time.
+        let URL = "\(AppDelegate.URL)/providerresponse/"
+        if let myToken = defaults.object(forKey: "userToken") as? String{
+            let headers = [
+                "Authorization": myToken
+            ]
+            let parameters = [
+                "pk": id,
+                "response": response
+            ] as [String : Any]
+            print(myToken)
+            Alamofire.request(URL, method: .post, parameters: parameters, headers: headers).responseJSON(completionHandler: { (response) in
+                print("request")
+                print(response.request!)  // original URL request
+                print("response")
+                print(response.response!) // URL response
+                print("data")
+                if let data = response.data {
+                    let json = String(data: data, encoding: String.Encoding.utf8)
+                    print(json!)
+                }
+                print("result")
+                print(response.result)   // result of response serialization
+                if let myResponse = response.response {
+                    if myResponse.statusCode == 200 {
+                        
+                    }else {
+                        self.alertWithMessage("There was a problem accpeting/declining\n please try again")
+                        //self.refreshControl.endRefreshing()
+                    }
+                }else {
+                    self.alertWithMessage("There was a problem requesting the server\n please try again")
+                    //self.refreshControl.endRefreshing()
+                }
+                
+            })
+        }
+        
+    }
     func myRequests() {
         //TODO: add loading animation only for the first time.
         let URL = "\(AppDelegate.URL)/provider/requests/"
@@ -248,17 +364,18 @@ class RequestedServicesVC: UIViewController, UICollectionViewDelegate, UICollect
                     if myResponse.statusCode == 200 {
                         if let json = response.result.value {
                             print(json)
-//                            self.offeredServices = JSON(json)
-//                            self.jsonIntoArrayOfObjects()
-//                            self.refreshControl.endRefreshing()
-//                            self.tableView.reloadData()
+                            self.services = []
+                            self.requestsJSON = JSON(json)
+                            self.jsonIntoArrayOffered()
+                            self.jsonIntoArraySpecial()
+                            self.doneRequest()
                         }
                     }else {
-                        self.alertWithMessage("There was a problem getting offered services\n please try again")
+                        self.alertWithMessage("There was a problem getting requests services\n please try again")
                         //self.refreshControl.endRefreshing()
                     }
                 }else {
-                    self.alertWithMessage("There was a problem getting offered services\n please try again")
+                    self.alertWithMessage("There was a problem connecting to the server\n please try again")
                     //self.refreshControl.endRefreshing()
                 }
             

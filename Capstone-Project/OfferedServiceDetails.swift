@@ -23,27 +23,7 @@ class OfferedServiceDetails: UIViewController, iCarouselDelegate, iCarouselDataS
     var serviceImages = [UIImage]()
     var myService: JSON?
     let defaults = UserDefaults.standard
-    /*
-     
-     "serviceimage_set" : [
-     
-     ],
-     "service" : {
-     "status" : "pending",
-     "providerpk" : null,
-     "id" : 49,
-     "price" : 111,
-     "title" : "Title",
-     "due_date" : null,
-     "created" : "2016-09-23T10:20:13Z",
-     "seekerpk" : null,
-     "description" : "Still sfkh lush kf kid k do kdhf lad fjv don broth off f\nFrog df\nDelhi d\nLeft v",
-     "is_special" : false
-     },
-     "id" : 38,
-     "category" : "test category"
-     
-     */
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
@@ -191,27 +171,7 @@ class OfferedServiceDetails: UIViewController, iCarouselDelegate, iCarouselDataS
                     }
                 }
             })
-//            Alamofire.request(.POST, URL, parameters: parameters, headers: headers).responseJSON { response in
-//                
-//                if response.response?.statusCode == 201 {
-//                    if let json = response.result.value {
-//                        print("my json")
-//                        print(json)
-//                        let myJson = JSON(json)
-//                        print(myJson)
-//                    }
-//                    
-//                    if let mydata = String(data: response.data!, encoding: String.Encoding.utf8) {
-//                        print("my data from getting profile request is \(mydata)")
-//                    }
-//                }else {
-//                    if let mydata = String(data: response.data!, encoding: String.Encoding.utf8) {
-//                        print("my data from getting profile request is \(mydata)")
-//                    }
-//                }
-//                
-//                
-//            }
+
         }
     }
 }

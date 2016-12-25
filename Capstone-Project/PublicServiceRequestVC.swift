@@ -26,6 +26,8 @@ class PublicServiceRequestVC: UIViewController, UITextViewDelegate, ChooseCatego
     var year: Int!
     var month: Int!
     var day: Int!
+    var pk: Int!
+    var dueString: String?
     var choosenCategory: String = Categories.Others.rawValue
     let defaults = UserDefaults.standard
 //    var submitRequestButton: UIButton = {
@@ -66,23 +68,6 @@ class PublicServiceRequestVC: UIViewController, UITextViewDelegate, ChooseCatego
         self.view.addGestureRecognizer(keyboardGesture)
         
         
-//        datePicker.addTarget(self, action: #selector(datePickerValueChanged), for: .valueChanged)
-//        
-//        let components = datePicker.calendar.dateComponents([.year, .month, .day],
-//                                                        from: datePicker.date)
-//        year = components.year
-//        month = components.month
-//        day = components.day
-//        
-//        print(year)
-//        print(month)
-//        print(day)
-        
-//        self.view.addSubview(submitRequestButton)
-//        submitRequestButton.addTarget(self, action: #selector(submitButtonAction), for: .touchUpInside)
-//        submitRequestButton.topAnchor.constraint(equalTo: datePicker.bottomAnchor, constant: 20).isActive = true
-//        submitRequestButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
-        
         //textview placeholder setup
         serviceDescription.delegate = self
         serviceDescription.text = "Description"
@@ -103,18 +88,6 @@ class PublicServiceRequestVC: UIViewController, UITextViewDelegate, ChooseCatego
         titleTextField.addBottomBorderWithColor(UIColor(hex: 0xa85783), width: 1)
         priceTextField.addBottomBorderWithColor(UIColor(hex: 0xa85783), width: 1)
     }
-//    func datePickerValueChanged() {
-//        print("value changed")
-//        let components = datePicker.calendar.dateComponents([.year, .month, .day],
-//                                                     from: datePicker.date)
-//        year = components.year
-//        month = components.month
-//        day = components.day
-//        
-//        print(year)
-//        print(month)
-//        print(day)
-//    }
     func hideKeyboard() {
         print("will hide keyboard now")
         view.endEditing(true)
@@ -141,6 +114,8 @@ class PublicServiceRequestVC: UIViewController, UITextViewDelegate, ChooseCatego
             self.month = components.month
             self.day = components.day
             self.dueTo.setTitle("Due to: \(self.year!)/\(self.month!)/\(self.day!)", for: .normal)
+            self.dueString = "\(self.year!)/\(self.month!)/\(self.day!)"
+            print(self.dueString!)
             print(self.year)
             print(self.month)
             print(self.day)
@@ -215,20 +190,32 @@ class PublicServiceRequestVC: UIViewController, UITextViewDelegate, ChooseCatego
             }
         }
     }
-    
+    func alertWithMessage(_ message: String) {
+        let alertController = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "Ok", style: .default, handler: nil)
+        alertController.addAction(okAction)
+        
+        present(alertController, animated: true, completion: nil)
+    }
     @IBAction func submitButtonPressed(_ sender: Any) {
-        print("will submit a public request")
-        if let _ = isSpecial {
-            specialServiceRequest(titleTextField.text!, description: serviceDescription.text!, price: Float(priceTextField.text!)!)
+        if dueString == nil {
+            alertWithMessage("Please choose a due date")
         }else {
-            validateDate()
-            if /*validateDate()*/ true {
-                print("corrent")
-                publicServiceCreation(choosenCategory, title: titleTextField.text!, description: serviceDescription.text!)
+                //TODO: validate
+            print("will submit a public request")
+            if let _ = isSpecial {
+                specialServiceRequest(titleTextField.text!, description: serviceDescription.text!, price: Float(priceTextField.text!)!)
             }else {
-                print("incorrect")
+                validateDate()
+                if /*validateDate()*/ true {
+                    print("corrent")
+                    publicServiceCreation(choosenCategory, title: titleTextField.text!, description: serviceDescription.text!)
+                }else {
+                    print("incorrect")
+                }
             }
         }
+        
         
 
     }
@@ -300,13 +287,15 @@ class PublicServiceRequestVC: UIViewController, UITextViewDelegate, ChooseCatego
                 "title" : title as AnyObject,
                 "description" : description as AnyObject,
                 "price": price as AnyObject,
-                "is_special" : true as AnyObject
+                "providerpk": pk! as AnyObject,
+                "is_special": true as AnyObject,
+                "due_date": dueString as AnyObject
             ]
             
             let parameters = [
                 "service": service
                 ] as [String : Any]
-            Alamofire.request(URL, method: .post, parameters: parameters, headers: headers).responseJSON(completionHandler: { (response) in
+            Alamofire.request(URL, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers).responseJSON(completionHandler: { (response) in
                 print(response.request!)  // original URL request
                 print(response.response!) // URL response
                 print(response.data!)     // server data
@@ -318,29 +307,21 @@ class PublicServiceRequestVC: UIViewController, UITextViewDelegate, ChooseCatego
                     print("JSON: \(JSON)")
                 }
                 if response.response?.statusCode == 201 {
-                    // TODO: go to the detailed page of the offered service.
+                    let alertController = UIAlertController(title: "Thank You", message: "Thank you for submiting this service", preferredStyle: .alert)
+                    let okAction = UIAlertAction(title: "Ok", style: .default, handler: nil)
+                    alertController.addAction(okAction)
+                    self.present(alertController, animated: true, completion: nil)
                 }else {
                     print("could not create public service")
+                    let alertController = UIAlertController(title: "Error", message: "Could not complete your request\nPlease try again later", preferredStyle: .alert)
+                    let okAction = UIAlertAction(title: "Ok", style: .default, handler: nil)
+                    alertController.addAction(okAction)
+                    self.present(alertController, animated: true, completion: nil)
                 }
-                
             })
         }
     }
     func publicServiceCreation(_ category: String, title: String, description: String) {
-        /*
-         
-         “category”: string (defaulted to “other”)
-         “service”: {
-         “title” : string
-         “description” : big string
-         “price” : float
-         “status” : string (defaulted to “pending”)
-         “due_date” : models.DateTimeField(null=True, blank=True)
-         “created” : automatically set to the current server time
-         “is_special” : boolean (defaulted to “false)
-         }
-         
-         */
         
         if let myToken = defaults.object(forKey: "userToken") as? String{
             print(myToken)
@@ -353,7 +334,7 @@ class PublicServiceRequestVC: UIViewController, UITextViewDelegate, ChooseCatego
             let service : [String: AnyObject] = [
                 "title" : title as AnyObject,
                 "description" : description as AnyObject,
-                "is_special" : false as AnyObject
+                "due_date": dueString as AnyObject
             ]
             
             let parameters = [
@@ -373,28 +354,19 @@ class PublicServiceRequestVC: UIViewController, UITextViewDelegate, ChooseCatego
                 }
                 if response.response?.statusCode == 201 {
                     // TODO: go to the detailed page of the offered service.
+                    let alertController = UIAlertController(title: "Thank You", message: "Thank you for submiting this service", preferredStyle: .alert)
+                    let okAction = UIAlertAction(title: "Ok", style: .default, handler: nil)
+                    alertController.addAction(okAction)
+                    self.present(alertController, animated: true, completion: nil)
                 }else {
                     print("could not create public service")
+                    let alertController = UIAlertController(title: "Error", message: "Could not complete your request\nPlease try again later", preferredStyle: .alert)
+                    let okAction = UIAlertAction(title: "Ok", style: .default, handler: nil)
+                    alertController.addAction(okAction)
+                    self.present(alertController, animated: true, completion: nil)
                 }
 
             })
-//            Alamofire.request(.POST, URL, parameters: parameters as? [String : AnyObject], headers: headers, encoding: .json).responseJSON { response in
-//                print(response.request)  // original URL request
-//                print(response.response) // URL response
-//                print(response.data)     // server data
-//                print(response.result)   // result of response serialization
-//                if let mydata = String(data: response.data!, encoding: String.Encoding.utf8) {
-//                    print(mydata)
-//                }
-//                if let JSON = response.result.value {
-//                    print("JSON: \(JSON)")
-//                }
-//                if response.response?.statusCode == 201 {
-//                    // TODO: go to the detailed page of the offered service.
-//                }else {
-//                    print("could not create public service")
-//                }
-//            }
             
         }
     }
